@@ -1,6 +1,6 @@
 const Room = require('../models/room')
 
-
+// tao phong chieu phim
 const createRoom = async(req, res) => {
     try {
         const { name, row, column } = req.body

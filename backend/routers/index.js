@@ -1,5 +1,3 @@
-
-
 const movieRouter = require('./movie')
 const roomRouter = require('./room')
 const seatRouter = require('./seat')
