@@ -5,9 +5,6 @@ const createRoom = async(req, res) => {
     try {
         const { name, row, column } = req.body
 
-        console.log('hello')
-        console.log(req.body)
-
         const response = await Room.create(req.body)
         res.json({
             success: response ? true : false,

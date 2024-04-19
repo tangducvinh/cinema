@@ -1,6 +1,9 @@
 const User = require('../models/user')
 const bcrypt = require('bcrypt')
 const { generateAccessToken, generateRefreshToken} = require('../middlewares/jwt')
+const crypto = require('crypto')
+const { generatePassword, hashPassword } = require('../ultis/password')
+const sendMail = require('../config/sendMail')
 
 // dang ky tai khoan
 const register = async(req, res) => {
@@ -9,8 +12,7 @@ const register = async(req, res) => {
 
         if (!email || !password || !name || !phone) return res.status(500).json('Missing input')
 
-        const salt = await bcrypt.genSalt(10)
-        const hashed = await bcrypt.hash(password, salt)
+        const hashed = hashPassword(password)
 
         const response = await User.create({
             email,
@@ -113,6 +115,78 @@ const getUser = async(req, res) => {
     }
 }
 
+// yeu cau thay doi mat khau
+const sendNewPassword = async(req, res) => {
+    try {
+        const { email } = req.body
+
+        if (!email) {
+            return res.status(500).json('Missing input')
+        }
+
+        const user = User.findOne({email})
+
+        if (!user) {
+            return res.status(500).json('Email didn\'t exists')
+        }
+
+        let newPassword = await generatePassword()
+        console.log({newPassword})
+        const hashed = await hashPassword(newPassword)
+        console.log(hashed)
+
+        await user.findOneAndUpdate({email}, {password: hashed}, {new: true})
+        
+        const html = `Yêu cầu lấy lại mật khẩu <br> Mật khẩu mới của bạn là: <strong>${newPassword}</strong>`
+        const data = {
+            email,
+            html,
+            subject: "Mật khẩu mới"
+        }
+        await sendMail(data)
+
+        return res.status(200).json({
+            success: true,
+            mes: 'Vui lòng chech email để lấy mật khẩu mới'
+        })
+
+    } catch(e) {
+        return res.status(500).json(e)
+    }
+}
+
+const changePassword = async(req, res) => {
+    try {
+        const { _id } = req.user
+        const { password, newPassword } = req.body
+
+
+        if (!password || !newPassword) {
+            return res.status(500).json('missing input')
+        }
+
+        const user = await User.findById({_id})
+
+        const validPassword = await bcrypt.compare(password, user.password)
+
+        console.log(validPassword)
+
+        if (!validPassword) {
+            return res.status(500).json('password wrong')
+        } else {
+            const hashed = await hashPassword(newPassword)
+            const response = await User.findByIdAndUpdate({_id}, {password: hashed}, {new: true})
+
+            return res.status(200).json({
+                success: response ? true : false,
+                mes: response ? 'Bạn đã thay đổi mật khẩu thành công' : 'Thực hiện thay đổi mật khẩu thất bại'
+            })
+        }
+    } catch(e) {
+        return res.status(500).json(e)
+    }
+}
+
 // lay danh sach nguoi dung
 const getAllUser = async(req, res) => {
     try {
@@ -152,4 +226,6 @@ module.exports = {
     refreshToken,
     logout,
     getUser,
+    sendNewPassword,
+    changePassword
 }

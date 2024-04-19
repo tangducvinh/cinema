@@ -17,7 +17,7 @@ const showSchema = new mongoose.Schema({
         {
             seatId: {type: mongoose.Types.ObjectId, ref: 'Seat'},
             name: {type: String},
-            status: {type: String},
+            status: {type: String, enum: ['sold']},
             userId: {type: mongoose.Types.ObjectId, ref: 'User'}
         }
     ]

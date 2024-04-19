@@ -4,9 +4,10 @@ const seatSchema = new mongoose.Schema({
     status: {
         type: String,
         required: true,
+        enum: ['activity', 'empty']
     },
     name: {
-        type: String, 
+        type: String,
         require: true
     },
     idRoom: {
