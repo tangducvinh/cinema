@@ -1,12 +1,2 @@
-import Header from "../Header/header";
-
-function DefaultLayout({ children }) {
-  return (
-    <div>
-      <Header />
-      {children}
-    </div>
-  );
-}
-
-export default DefaultLayout;
+export { default as DefaultLayout } from "./DefaultLayout";
+export { default as SliderLayout } from "./SliderLayout";
