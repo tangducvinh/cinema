@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FaEyeSlash } from "react-icons/fa";
 import { FaEye } from "react-icons/fa6";
+import Button from "../Button/Button";
 
 function SignIn() {
   const [isShowPassword, setIsShowPassword] = useState(false);
@@ -43,10 +44,6 @@ function SignIn() {
             {isShowPassword ? <FaEye /> : <FaEyeSlash />}
           </div>
         </div>
-      </div>
-
-      <div className="flex justify-center mt-3 pb-9">
-        <button>Đăng nhập</button>
       </div>
     </div>
   );

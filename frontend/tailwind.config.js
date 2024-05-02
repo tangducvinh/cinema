@@ -11,6 +11,14 @@ module.exports = {
         "[-290]": "290px",
         "[-500]": "500px",
       },
+      backgroundColor: {
+        "[-input]": "rgb(241 241 242)",
+        "[-primary]": "rgb(254, 44, 85)",
+        "[-button-text]": "rgba(22, 24, 35, 0.03)",
+        "[-button-primary]": "#F97316",
+        "[-white-fake]": "#f8f8f8",
+        "[-image-bg]": "rgba(0, 0, 0, 0.65)",
+      },
       textColor: {
         "[text-color]": "#4a4a4a",
 
