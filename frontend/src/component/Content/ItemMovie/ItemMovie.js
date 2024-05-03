@@ -2,6 +2,7 @@ import { useState } from "react";
 import Button from "../../Button/Button";
 import { GrTicket } from "react-icons/gr";
 import { FaRegCirclePlay } from "react-icons/fa6";
+import Image from "../../Image/Image";
 
 function ItemMovie({ data }) {
   const [hoverPoster, setHoverPoster] = useState(false);
@@ -16,7 +17,7 @@ function ItemMovie({ data }) {
           setHoverPoster(false);
         }}
       >
-        <img
+        <Image
           alt="oke"
           src="https://cdn.galaxycine.vn/media/2024/4/10/cai-gia-cua-hanh-phuc-3_1712733167355.jpg"
           className="w-[-290] h-[-435] object-cover rounded-xl "
@@ -24,15 +25,11 @@ function ItemMovie({ data }) {
         {hoverPoster && (
           <div className="w-[-290] h-[-435] absolute top-0 bg-black bg-opacity-60 object-cover rounded-xl flex flex-col items-center justify-center">
             <div className="mb-4">
-              <Button leftIcon={<GrTicket className="mr-2" />} primary small>
+              <Button leftIcon={<GrTicket />} primary small>
                 Mua vé
               </Button>
             </div>
-            <Button
-              leftIcon={<FaRegCirclePlay className="mr-2" />}
-              outline
-              small
-            >
+            <Button leftIcon={<FaRegCirclePlay />} outline small>
               Trailer
             </Button>
           </div>

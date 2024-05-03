@@ -35,6 +35,9 @@ module.exports = {
         "[-8]": "8px",
         "[-50%]": "50%",
       },
+      boxShadow: {
+        "[-wrapper]": "rgba(0, 0, 0, 0.12) 0px 2px 12px",
+      },
     },
   },
   plugins: [],
