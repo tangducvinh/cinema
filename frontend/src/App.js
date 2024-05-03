@@ -1,9 +1,12 @@
-import logo from "./logo.svg";
+// import logo from "./logo.svg";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import { publicRouters } from "./routers";
 import { DefaultLayout } from "./component/Layout";
 import { Fragment } from "react";
+
+import ManagerLayout from './component/Layout/ManagerLayout'
+import { ManagerAccount, ManagerMovie, ManagerShow } from './pages/Manager'
 
 function App() {
   return (
@@ -31,7 +34,16 @@ function App() {
               />
             );
           })}
+
+          <Route path='manager' element={<ManagerLayout />}>
+              <Route path='movie' element={<ManagerMovie />} />
+              
+              <Route path='show' element={<ManagerShow />} />
+              <Route path='account' element={<ManagerAccount />} />
+
+          </Route>
         </Routes>
+          
       </div>
     </Router>
   );
