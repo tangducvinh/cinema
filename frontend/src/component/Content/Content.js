@@ -5,7 +5,7 @@ function Content({ data }) {
     <div>
       <div class="grid grid-cols-4 gap-4">
         {data.map((item) => {
-          return <ItemMovie />;
+          return <ItemMovie data={item} />;
         })}
       </div>
     </div>

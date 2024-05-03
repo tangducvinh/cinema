@@ -19,7 +19,7 @@ function ItemMovie({ data }) {
       >
         <Image
           alt="oke"
-          src="https://cdn.galaxycine.vn/media/2024/4/10/cai-gia-cua-hanh-phuc-3_1712733167355.jpg"
+          src={`${process.env.REACT_APP_IMAGE_URL}${data.poster_path}`}
           className="w-[-290] h-[-435] object-cover rounded-xl "
         />
         {hoverPoster && (
@@ -35,7 +35,7 @@ function ItemMovie({ data }) {
           </div>
         )}
       </div>
-      <h1 className="text-[-18] font-medium mt-2">Cái giá của hạnh phúc</h1>
+      <h1 className="text-[-18] font-medium mt-2">{data.original_title}</h1>
     </div>
   );
 }

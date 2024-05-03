@@ -8,18 +8,6 @@ import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 
 function App() {
-  // useEffect(() => {
-  //   fecth();
-  // });
-
-  const fecth = async () => {
-    const res = await axios.get(
-      `${process.env.REACT_APP_API_URl}/movie/list/showing`
-    );
-    return res.data;
-  };
-  const query = useQuery({ queryKey: ["ListShowingMovies"], queryFn: fecth });
-  console.log("querry ", query);
   return (
     <Router>
       <div className="App">

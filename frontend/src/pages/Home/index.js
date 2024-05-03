@@ -1,25 +1,39 @@
 import { useEffect, useState } from "react";
 import Content from "../../component/Content/Content";
 import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 function Home() {
   const [showDangChieu, setShowDangChieu] = useState(true);
-  const listFilm = [
+
+  const listMovie = [
     {
-      name: "Phim số 1",
+      title: "Phim 1",
     },
     {
-      name: "Phim số 2",
+      title: "Phim 1",
     },
     {
-      name: "Phim số 3",
+      title: "Phim 1",
     },
     {
-      name: "Phim số 4",
+      title: "Phim 1",
     },
     {
-      name: "Phim số 5",
+      title: "Phim 1",
     },
   ];
+  const fecth = async () => {
+    const res = await axios.get(
+      `${process.env.REACT_APP_API_URl}/movie/list/showing`
+    );
+    return res.data;
+  };
+
+  const { data: listShowing } = useQuery({
+    queryKey: ["ListShowingMovies"],
+    queryFn: fecth,
+  });
+  console.log("list ", listShowing);
 
   return (
     <div className="mt-10">
@@ -53,7 +67,7 @@ function Home() {
           Sắp chiếu
         </div>
       </div>
-      <Content data={listFilm} />
+      {listShowing !== undefined && <Content data={listShowing.data} />}
     </div>
   );
 }
