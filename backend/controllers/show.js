@@ -3,7 +3,7 @@ const Show = require('../models/show')
 // tao xuat chieu
 const createShow = async(req, res) => {
     try {
-        const { begin_time, roomId } = req.body
+        const { begin_time, roomId, end_time, movieId } = req.body
         
         const check = await Show.find({roomId, begin_time: {"$lte": new Date(begin_time)}, end_time: {"$gte": new Date(begin_time)},})
         console.log(check.length)

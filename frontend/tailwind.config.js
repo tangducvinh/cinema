@@ -24,6 +24,9 @@ module.exports = {
 
         "[text-primary]": "#F97316",
       },
+      colors: {
+        main: "#F97316",
+      },
       fontSize: {
         "[-16]": "16px",
         "[-14]": "14px",
@@ -34,9 +37,6 @@ module.exports = {
         "[-92]": "92px",
         "[-8]": "8px",
         "[-50%]": "50%",
-      },
-      boxShadow: {
-        "[-wrapper]": "rgba(0, 0, 0, 0.12) 0px 2px 12px",
       },
     },
   },
