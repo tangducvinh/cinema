@@ -21,16 +21,6 @@ function Home() {
     },
   ];
 
-  useEffect(() => {
-    fecth();
-  });
-
-  const fecth = async () => {
-    const res = await axios.get(
-      `${process.env.REACT_APP_API_URl}/movie/list/showing`
-    );
-    console.log("res", res.data);
-  };
   return (
     <div className="mt-10">
       <div className="flex items-center mb-10">
