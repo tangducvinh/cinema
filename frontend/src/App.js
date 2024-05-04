@@ -7,6 +7,9 @@ import { Fragment, useEffect } from "react";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 
+import ManagerLayout from './component/Layout/ManagerLayout'
+import { ManagerAccount, ManagerMovie, ManagerShow } from './pages/Manager'
+
 function App() {
   return (
     <Router>
@@ -32,6 +35,14 @@ function App() {
               />
             );
           })}
+
+          <Route path='manager' element={<ManagerLayout />}>
+              <Route path='movie' element={<ManagerMovie />} />
+
+              <Route path='show' element={<ManagerShow />} />
+              <Route path='account' element={<ManagerAccount />} />
+
+          </Route>
         </Routes>
       </div>
     </Router>
