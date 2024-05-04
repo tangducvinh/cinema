@@ -6,13 +6,11 @@ const publicRouters = [
   {
     path: "/",
     component: Home,
-    layout: SliderLayout,
   },
   {
     path: "/detail",
     component: Detail,
   },
 ];
-
 
 export { publicRouters };

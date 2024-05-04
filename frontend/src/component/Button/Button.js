@@ -13,6 +13,7 @@ function Button({
   icon,
   leftIcon,
   rightIcon,
+  hoverPrimary,
   ...passProp
 }) {
   let Comp = "button";
@@ -53,7 +54,11 @@ function Button({
       "border-yellow-600 text-yellow-600 mr-0 w-32 hover:bg-[-button-primary] hover:text-white"
     );
   }
-
+  if (hoverPrimary) {
+    hoverButton = classNames(
+      "mr-2 mb-0.5 rounded-lg hover:text-[text-primary] hover:border-yellow-400 py-1 h-7"
+    );
+  }
   if (big && primary) {
     hoverButton = classNames(
       "bg-[-button-primary] border-none text-white hover:opacity-90 w-full"

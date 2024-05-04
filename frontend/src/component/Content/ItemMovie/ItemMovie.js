@@ -3,13 +3,21 @@ import Button from "../../Button/Button";
 import { GrTicket } from "react-icons/gr";
 import { FaRegCirclePlay } from "react-icons/fa6";
 import Image from "../../Image/Image";
+import { useNavigate } from "react-router-dom";
 
 function ItemMovie({ data }) {
   const [hoverPoster, setHoverPoster] = useState(false);
+  const navigate = useNavigate();
+  const handleDetailMovie = () => {
+    navigate("/detail");
+  };
+  const handleDetailMovie1 = () => {
+    navigate("/detail1");
+  };
   return (
     <div className="mb-5">
       <div
-        className="w-[-290] h-[-435] object-cover rounded-xl relative"
+        className="w-[-290] h-[-435] object-cover rounded-xl relative "
         onMouseEnter={() => {
           setHoverPoster(true);
         }}
@@ -23,7 +31,10 @@ function ItemMovie({ data }) {
           className="w-[-290] h-[-435] object-cover rounded-xl "
         />
         {hoverPoster && (
-          <div className="w-[-290] h-[-435] absolute top-0 bg-black bg-opacity-60 object-cover rounded-xl flex flex-col items-center justify-center">
+          <div
+            className="w-[-290] h-[-435] absolute top-0 bg-black bg-opacity-60 object-cover rounded-xl flex flex-col items-center justify-center"
+            onClick={handleDetailMovie}
+          >
             <div className="mb-4">
               <Button leftIcon={<GrTicket />} primary small>
                 Mua vé
