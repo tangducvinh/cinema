@@ -68,7 +68,10 @@ function Home() {
         </div>
       </div>
       {listShowing !== undefined && <Content data={listShowing.data} />}
-      <div>HELLO WORLD</div>
+
+
+        {/* code ngu */}
+      {/* <div>HELLO WORLD</div> */}
     </div>
   );
 }
