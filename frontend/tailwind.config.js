@@ -5,11 +5,15 @@ module.exports = {
       height: {
         "[-500]": "500px",
         "[-435]": "435px",
+        "[-398]": "398px",
       },
       width: {
         "[-1500]": "1500px",
         "[-290]": "290px",
         "[-500]": "500px",
+        "[-860]": "860px",
+        "[-278]": "278px",
+        "[-882]": "882px",
       },
       backgroundColor: {
         "[-input]": "rgb(241 241 242)",
@@ -62,7 +66,10 @@ module.exports = {
             opacity: '1'
           }
         }
-      }
+      },
+      boxShadow: {
+        trailer: "0 0 75px 86px rgba(0, 0 , 0, 0.6) inset",
+      },
     },
   },
   plugins: [],
