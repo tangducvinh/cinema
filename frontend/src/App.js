@@ -38,10 +38,8 @@ function App() {
 
           <Route path='manager' element={<ManagerLayout />}>
               <Route path='movie' element={<ManagerMovie />} />
-
               <Route path='show' element={<ManagerShow />} />
               <Route path='account' element={<ManagerAccount />} />
-
           </Route>
         </Routes>
       </div>

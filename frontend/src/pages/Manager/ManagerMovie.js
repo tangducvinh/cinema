@@ -1,10 +1,61 @@
 import { MdClear } from "react-icons/md"
-import { useState } from 'react'
+import { useState, useEffect, Fragment } from 'react'
+import { useDebounce } from 'use-debounce'
+import { useDispatch } from 'react-redux'
 
 import { ItemMovieInfor } from '../../component/itemInfor'
+import * as apis from '../../apis'
+import { setChidlren } from '../../redux/slides/appSlice'
+import { FormAddMovie } from '../../component/forms'
+
+// all: tất cả
+// showing: đang chiếu
+// soon: sắp chiếu
+
+const type = [
+    {
+        name: 'Tất cả',
+        value: 'all'
+    },
+    {
+        name: 'Đang chiếu',
+        value: 'showing'
+    },
+    {
+        name: 'Sắp chiếu',
+        value: 'soon'
+    }
+]
 
 const ManagerMovie = () => {
+    const dispatch = useDispatch()
     const [ value, setValue ] = useState()
+    const [ dataAllMovie, setDataAllMovie ] = useState()
+    const [ status, setStatus ] = useState(type[0].value)
+    const [ text ] = useDebounce(value, 800)
+
+    const fecthAllMovie = async(data) => {
+        const response = await apis.getAllMoives(data)
+
+        if (response?.success) {
+            setDataAllMovie(response.data)
+        }
+    }
+
+    useEffect(() => {
+        const dataPass = {}
+        if (text) {
+            dataPass.title = text
+        }
+
+        fecthAllMovie(dataPass)
+    }, [text])
+
+    // xử lí thêm phim
+    const handleAddMovie = () => {
+        dispatch(setChidlren(<FormAddMovie />))
+    }
+
     return (
         <div className="w-full">
             <h2 className="font-medium text-2xl">Danh sách các phim</h2>
@@ -28,15 +79,18 @@ const ManagerMovie = () => {
                             </span>}
                     </form>
 
-                    <select className="ml-3">
-                        <option>Tất cả</option>
-                        <option>Đang chiếu</option>
-                        <option>Sắp chiếu</option>
+                    <select value={status} onChange={(e) => setStatus(e.target.value)} className="ml-3">
+                        {type.map((item) => (
+                            <option key={item.value} value={item.value}>{item.name}</option>
+                        ))}
                     </select>
                 </div>
 
                 <div>
-                    <button className="bg-blue-500 px-3 text-sm py-2 rounded-md text-white font-medium">Thêm phim</button>
+                    <button 
+                        className="bg-blue-500 px-3 text-sm py-2 rounded-md text-white font-medium"
+                        onClick={handleAddMovie}
+                    >Thêm phim</button>
                 </div>
             </div>
 
@@ -50,10 +104,32 @@ const ManagerMovie = () => {
             </ul>
 
             <div>
-                <ItemMovieInfor id={'#93243'} name={'Avatar Dòng chảy nước'} runtime={'140 phút'} status={1}/>
-                <ItemMovieInfor id={'#93243'} name={'Avatar Dòng chảy nước'} runtime={'140 phút'} status={2}/>
-                <ItemMovieInfor id={'#93243'} name={'Avatar Dòng chảy nước'} runtime={'140 phút'} status={2}/>
-                <ItemMovieInfor id={'#93243'} name={'Avatar Dòng chảy nước'} runtime={'140 phút'} status={1}/>
+                {/* <ItemMovieInfor id={'#93243'} name={'Avatar Dòng chảy nước'} runtime={'140 phút'} status={1}/> */}
+                {status === 'all' ?
+                    dataAllMovie?.map((item, index) => (
+                        <Fragment key={index}>
+                            <ItemMovieInfor 
+                                id={item?.id} 
+                                name={item?.original_title} 
+                                runtime={item?.runtime} 
+                                status={item?.status === 'showing' ? 1 : 2}
+                                image={item?.poster_path}
+                            />
+                        </Fragment>
+                    ))  
+                    :
+                    dataAllMovie?.filter(item => item.status === status)?.map((item, index) => (
+                        <Fragment key={index}>
+                            <ItemMovieInfor 
+                                id={item?.id} 
+                                name={item?.original_title} 
+                                runtime={item?.runtime} 
+                                status={item?.status === 'showing' ? 1 : 2}
+                                image={item?.poster_path}
+                            />
+                        </Fragment>
+                    ))
+                }
             </div>
         </div>
     )

@@ -26,6 +26,7 @@ module.exports = {
       },
       colors: {
         main: "#F97316",
+        'overlay': 'rgba(0, 0, 0, 0.7)'
       },
       fontSize: {
         "[-16]": "16px",
@@ -46,6 +47,21 @@ module.exports = {
         '5': '5 5 0%',
         '6': '6 6 0%',
         '7': '7 7 0%',
+      },
+      animation: {
+        'back-up': 'back-up 0.3s ease-in'
+      },
+      keyframes: {
+        'back-up': {
+          'from': {
+            transform: 'translateY(50px)',
+            opacity: '0'
+          },
+          'to': {
+            transform: 'translateY(0px)',
+            opacity: '1'
+          }
+        }
       }
     },
   },

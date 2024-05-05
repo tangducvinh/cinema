@@ -34,6 +34,27 @@ const getListMovie = async(req, res) => {
     }
 }
 
+const getAllMovie = async(req, res) => {
+    try {
+        const queries = { ...req.query }
+
+        const query = {}
+
+        if (queries?.title) {
+            query.original_title = {$regex: queries.title, $options: 'i'}
+        }
+
+        const response = await Movie.find(query)
+
+        return res.status(200).json({
+            success: response ? true : false,
+            data: response ? response : 'no data'
+        })
+    } catch(e) {
+        res.status(500).json(e)
+    }
+}
+
 // thay doi trang thai phim sap chieu, dang chieu
 const updateStatusMovie = async(req, res) => {
     try {
@@ -72,7 +93,8 @@ module.exports = {
     createMovie,
     getListMovie,
     updateStatusMovie,
-    deleteMovie
+    deleteMovie,
+    getAllMovie
 }
 
 
