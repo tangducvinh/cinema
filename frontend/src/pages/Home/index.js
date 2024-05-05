@@ -6,35 +6,36 @@ import Slider from "../../component/Layout/SliderLayout/Slider/Slider";
 function Home() {
   const [showDangChieu, setShowDangChieu] = useState(true);
 
-  const listMovie = [
-    {
-      title: "Phim 1",
-    },
-    {
-      title: "Phim 1",
-    },
-    {
-      title: "Phim 1",
-    },
-    {
-      title: "Phim 1",
-    },
-    {
-      title: "Phim 1",
-    },
-  ];
-  const fecth = async () => {
+  const fecthShowing = async () => {
     const res = await axios.get(
       `${process.env.REACT_APP_API_URl}/movie/list/showing`
+    );
+    return res.data;
+  };
+  const fecthSoon = async () => {
+    const res = await axios.get(
+      `${process.env.REACT_APP_API_URl}/movie/list/soon`
     );
     return res.data;
   };
 
   const { data: listShowing } = useQuery({
     queryKey: ["ListShowingMovies"],
-    queryFn: fecth,
+    queryFn: fecthShowing,
   });
-  console.log("list ", listShowing);
+  const { data: listSoon } = useQuery({
+    queryKey: ["ListSoons"],
+    queryFn: fecthSoon,
+  });
+  console.log("list showing ", listShowing);
+  console.log("list soon", listSoon);
+  const handleShowingTrue = () => {
+    setShowDangChieu(true);
+  };
+  const handleShowingFalse = () => {
+    setShowDangChieu(false);
+  };
+
   const sliders = [
     {
       url: "https://cdn.galaxycine.vn/media/2024/4/26/roundup-2048_1714102300441.jpg",
@@ -60,9 +61,7 @@ function Home() {
                 ? `textblue-950 border-b-2 border-b-blue-950`
                 : `text-gray-400 border-b-2 border-b-gray-300`
             }`}
-            onClick={() => {
-              setShowDangChieu(true);
-            }}
+            onClick={handleShowingTrue}
           >
             Đang chiếu
           </div>
@@ -73,14 +72,20 @@ function Home() {
                 ? `text-gray-400 border-b-2 border-b-gray-300`
                 : `textblue-950 border-b-2 border-b-blue-950`
             }`}
-            onClick={() => {
-              setShowDangChieu(false);
-            }}
+            onClick={handleShowingFalse}
           >
             Sắp chiếu
           </div>
         </div>
-        {listShowing !== undefined && <Content data={listShowing.data} />}
+        {showDangChieu ? (
+          <div>
+            {listShowing !== undefined && <Content data={listShowing.data} />}
+          </div>
+        ) : (
+          <div>
+            {listSoon !== undefined && <Content data={listSoon.data} />}
+          </div>
+        )}
 
         {/* code ngu */}
         {/* <div>HELLO WORLD</div> */}

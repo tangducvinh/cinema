@@ -4,20 +4,25 @@ import { GrTicket } from "react-icons/gr";
 import { FaRegCirclePlay } from "react-icons/fa6";
 import Image from "../../Image/Image";
 import { useNavigate } from "react-router-dom";
+import Trailer from "../../trailer/trailer";
 
 function ItemMovie({ data }) {
   const [hoverPoster, setHoverPoster] = useState(false);
+  const [trailer, setTrailer] = useState(false);
   const navigate = useNavigate();
   const handleDetailMovie = () => {
-    navigate("/detail");
+    navigate(`/detail/${data.id}`);
   };
-  const handleDetailMovie1 = () => {
-    navigate("/detail1");
+  const handleTrailer = () => {
+    setTrailer(!trailer);
   };
   return (
     <div className="mb-5">
+      {trailer && (
+        <Trailer keyFrame={data.video[0].key} onClick={handleTrailer} />
+      )}
       <div
-        className="w-[-290] h-[-435] object-cover rounded-xl relative "
+        className="w-[-290] h-[-435] object-cover rounded-xl relative"
         onMouseEnter={() => {
           setHoverPoster(true);
         }}
@@ -25,22 +30,32 @@ function ItemMovie({ data }) {
           setHoverPoster(false);
         }}
       >
-        <Image
-          alt="oke"
-          src={`${process.env.REACT_APP_IMAGE_URL}${data.poster_path}`}
-          className="w-[-290] h-[-435] object-cover rounded-xl "
-        />
+        <div className="relative w-full h-full" onClick={handleDetailMovie}>
+          <Image
+            alt="oke"
+            src={`${process.env.REACT_APP_IMAGE_URL}${data.poster_path}`}
+            className="w-[-290] h-[-435] object-cover rounded-xl "
+          />
+          <div className="absolute w-full h-full top-0 hover:bg-black hover:bg-opacity-45 rounded-xl "></div>
+        </div>
         {hoverPoster && (
-          <div
-            className="w-[-290] h-[-435] absolute top-0 bg-black bg-opacity-60 object-cover rounded-xl flex flex-col items-center justify-center"
-            onClick={handleDetailMovie}
-          >
+          <div className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 z-20 traslate-y-1/2 flex flex-col items-center justify-center">
             <div className="mb-4">
-              <Button leftIcon={<GrTicket />} primary small>
+              <Button
+                leftIcon={<GrTicket />}
+                primary
+                small
+                onClick={handleDetailMovie}
+              >
                 Mua vé
               </Button>
             </div>
-            <Button leftIcon={<FaRegCirclePlay />} outline small>
+            <Button
+              leftIcon={<FaRegCirclePlay />}
+              outline
+              small
+              onClick={handleTrailer}
+            >
               Trailer
             </Button>
           </div>

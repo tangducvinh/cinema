@@ -8,7 +8,7 @@ const publicRouters = [
     component: Home,
   },
   {
-    path: "/detail",
+    path: "/detail/:mid",
     component: Detail,
   },
 ];
