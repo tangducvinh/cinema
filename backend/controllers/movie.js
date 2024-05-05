@@ -15,6 +15,22 @@ const createMovie = async(req, res) => {
     }
 }
 
+// lay thong tin cua 1 phim
+const getMovie = async(req, res) => {
+    const { mid } = req.params
+
+    try {
+        const response = await Movie.findOne({id: mid})
+
+        return res.status(200).json({
+            success: response ? true : false,
+            data: response ? response : 'no data'
+        })
+    } catch(e) {
+        return res.status(500).json(e)
+    }
+}
+
 // lay danh sach cac phim
 const getListMovie = async(req, res) => {
     try {
@@ -73,6 +89,22 @@ const updateStatusMovie = async(req, res) => {
     }
 }
 
+const updateMovie = async(req, res) => {
+    try {
+
+        const response = await Movie.findOneAndUpdate({id: req.body.id}, req.body, {new: true})
+
+        return res.status(200).json({
+            success: response ? true : false,
+            data: response ? response : 'no data',
+            mes: response ? 'Cập nhật phim thành công' : 'Cập nhật phim thất bại'
+        })
+
+    } catch(e) {
+        return res.status(500).json(e)
+    }
+}
+
 // xoa phim 
 const deleteMovie = async(req, res) => {
     try {
@@ -94,7 +126,9 @@ module.exports = {
     getListMovie,
     updateStatusMovie,
     deleteMovie,
-    getAllMovie
+    getAllMovie,
+    getMovie,
+    updateMovie,
 }
 
 

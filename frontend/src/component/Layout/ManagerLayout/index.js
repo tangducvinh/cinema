@@ -12,7 +12,7 @@ const ManagerLayout = () => {
     const { children } = useSelector(state => state.app)
     return (
         <div className='relative'>
-            {children && <ShowModal children={<FormAddMovie />} />}
+            {children && <ShowModal children={children} />}
 
             <Header />
 
