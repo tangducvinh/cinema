@@ -51,7 +51,7 @@ function Detail() {
                 <Image
                   className="w-[-860] h-[-500] object-cover"
                   alt="trailer"
-                  src={`${process.env.REACT_APP_IMAGE_URL}${detailMovie.backdrop_path}`}
+                  src={detailMovie.backdrop_path?.slice(0, 4) === 'http' ? detailMovie.backdrop_path : `${process.env.REACT_APP_IMAGE_URL}${detailMovie.backdrop_path}`}
                 />
                 <div
                   className="absolute w-[-860] h-[-500] top-0 shadow-trailer flex justify-center items-center"
@@ -70,7 +70,7 @@ function Detail() {
                       <Image
                         className="w-[-278] h-[-398] object-cover"
                         alt="poster"
-                        src={`${process.env.REACT_APP_IMAGE_URL}${detailMovie.poster_path}`}
+                        src={detailMovie.poster_path.slice(0, 4) === 'http' ? detailMovie.poster_path : `${process.env.REACT_APP_IMAGE_URL}${detailMovie.poster_path}`}
                       />
                     </div>
                     <div className="flex flex-col justify-end  flex-1">

@@ -17,4 +17,21 @@ export const updateMovie = async(data) => await axios({
     data
 })
 
+export const uploadImage = async(data) => await axios({
+    url: 'movie/upload-image',
+    method: 'put',
+    data
+})
+
+export const createMovie = async(data) => await axios({
+    url: 'movie/create',
+    method: 'post',
+    data
+})
+
+export const deleteMovie = async(id) => await axios({
+    url: 'movie/' + id,
+    method: 'delete'
+})
+
 

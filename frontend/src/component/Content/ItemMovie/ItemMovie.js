@@ -33,7 +33,7 @@ function ItemMovie({ data }) {
         <div className="relative w-full h-full" onClick={handleDetailMovie}>
           <Image
             alt="oke"
-            src={`${process.env.REACT_APP_IMAGE_URL}${data.poster_path}`}
+            src={data.poster_path.slice(0, 4) === 'http' ? data.poster_path : `${process.env.REACT_APP_IMAGE_URL}${data.poster_path}`}
             className="w-[-290] h-[-435] object-cover rounded-xl "
           />
           <div className="absolute w-full h-full top-0 hover:bg-black hover:bg-opacity-45 rounded-xl "></div>

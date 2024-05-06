@@ -1,13 +1,16 @@
 import { MdClear, MdPostAdd } from 'react-icons/md'
+import { FaTrash } from "react-icons/fa"
 import { useDispatch } from 'react-redux'
 import { FiUpload } from "react-icons/fi"
 import { useEffect, useState, useRef } from 'react'
 import moment from 'moment'
 import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
+import swal from 'sweetalert'
 
-import { setChidlren } from '../../redux/slides/appSlice'
+import { setChidlren, setRenderManagerMovie } from '../../redux/slides/appSlice'
 import * as apis from '../../apis'
+import { getBase64 } from '../../component/utils/helpers'
 
 const FormAddMovie = ({ id }) => {
     const dispatch = useDispatch()
@@ -23,7 +26,12 @@ const FormAddMovie = ({ id }) => {
     const [ valueStatus, setValueStatus ] = useState('soon')
     const [ valueGenre, setValueGenre ] = useState()
     const [ valueDirector, setValueDirector ] = useState()
-
+    const [ valuePoster, setValuePoster ] = useState()
+    const [ valueBackground, setValueBackground ] = useState()
+    const [ valueImages, setValueImages ] = useState([])
+    const [ showTrash, setShowTrash ] = useState()
+    const [ valuePosterSave, setValuePosterSave ] = useState()
+    const [ valueBackgroundSave, setValueBackgroundSave ] = useState()
 
     const [ dataMovie, setDataMovie ] = useState({
         id: '',
@@ -40,7 +48,7 @@ const FormAddMovie = ({ id }) => {
         status: '',
         tagline: '',
         video: [],
-        images: [],
+        // images: [],
         cast: [],
         director: [],
     })
@@ -63,7 +71,7 @@ const FormAddMovie = ({ id }) => {
                 status: response.data.status,
                 tagline: response.data.tagline,
                 video: response.data.video,
-                images: response.data.images,
+                // images: response.data.images,
                 cast: response.data.cast,
                 director: response.data.director
             })
@@ -76,6 +84,9 @@ const FormAddMovie = ({ id }) => {
             setValueStatus(response.data.status)
             setValueGenre(response.data.genres.map(item => item).toString())
             setValueDirector(response.data.director.toString())
+            setValuePoster(response.data.poster_path)
+            setValueBackground(response.data.backdrop_path)
+            // setValueImages(response.data.images)
         }
     }
 
@@ -96,33 +107,104 @@ const FormAddMovie = ({ id }) => {
         return containerElement.current.removeEventListener('click', handleHiddenCalendar)
     }, [])
 
+    //handle get file input poster
+    const handleFilePoster = async(e) => {
+        if (e.target.files[0]) {
+            const url = await getBase64(e.target.files[0])
+            setValuePoster(url)
+
+            // handle get url online image
+            const uploadData = new FormData()
+            uploadData.append("file", e.target.files[0], "file")
+    
+            const response = await apis.uploadImage(uploadData)
+            if (response.success) {
+                setValuePosterSave(response.data.path)
+            }
+        }
+    }
+
+    // hanlde get file input background
+    const handleFileBackground = async(e) => {
+        if (e.target.files[0]) {
+            const url = await getBase64(e.target.files[0])
+            setValueBackground(url)
+
+            // handle get url online image
+            const uploadData = new FormData()
+            uploadData.append("file", e.target.files[0], "file")
+    
+            const response = await apis.uploadImage(uploadData)
+            if (response.success) {
+                setValueBackgroundSave(response.data.path)
+            }
+        }
+    }
+
+    // handle get files images
+    // const handleFileImages = async(e) => {
+    //     if (e.target.files) {
+    //         for (let file of e.target.files) {
+    //             const url = await getBase64(file)
+    //             setValueImages(prev => [...prev, url])
+    //         }
+    //     }
+    // }
+
+    // // handle delate image
+    // const handleDeleteImage = (index) => {
+    //     const newData = [...valueImages]
+    //     newData.splice(index, 1)
+    //     setValueImages(newData)
+    // }
+
+    // handle submit form
     const handleSubmit = async() => {
         const dataPass = {...dataMovie}
-
-        const dataCompany = await valueCompany.split(',').map((item) => ({name: item.trim()}))
-        // await setDataMovie(prev => ({...prev, product_company: dataCompany}))
-        // await setDataMovie(prev => ({...prev, release_date: moment(valueCalendar).format('YYYY/MM/DD')}))
-        // await setDataMovie(prev => ({...prev, spoken_language: spokenLanguage.split(',')}))
-        const dataVideo = await valueKeyVideo.split(',').map((item) => ({key: item.trim()}))
-        // await setDataMovie(prev => ({...prev, video: dataVideo}))
-        const dataCast = valueNameCast.split(',').map((item) => ({name: item.trim()}))
-        // await setDataMovie(prev => ({...prev, cast: dataCast}))
-        // await setDataMovie(prev => ({...prev, status: valueStatus}))
-        // await setDataMovie(prev => ({...prev, genres: valueGenre.trim().split(',')}))
-        // await setDataMovie(prev => ({...prev, director: valueDirector.trim().split(',')}))
-
+        const dataCompany = await valueCompany.split(',').map((item) => ({name: item?.trim()}))
+        const dataVideo = await valueKeyVideo.split(',').map((item) => ({key: item?.trim()}))
+        const dataCast = valueNameCast.split(',').map((item) => ({name: item?.trim()}))
         dataPass.product_company = dataCompany
         dataPass.release_date = moment(valueCalendar).format('YYYY/MM/DD')
-        dataPass.spoken_language = spokenLanguage.trim().split(',')
+        dataPass.spoken_language = spokenLanguage?.trim().split(',')
         dataPass.video = dataVideo
         dataPass.cast = dataCast
         dataPass.status = valueStatus
-        dataPass.genres = valueGenre.trim().split(',')
-        dataPass.director = valueDirector.trim().split(',')
+        dataPass.genres = valueGenre?.trim().split(',')
+        dataPass.director = valueDirector?.trim().split(',')
+        // dataPass.images = valueImages
+        dataPass.backdrop_path = valueBackgroundSave
+        dataPass.poster_path = valuePosterSave
 
-        const response = await apis.updateMovie(dataPass)
+        const convertToArray = Object.entries(dataPass)
+        console.log(convertToArray)
+        for (let i = 0; i < convertToArray.length; i++) {
+            if (convertToArray[i][1]?.length === 0) {
+                swal('Error', 'Vui lòng nhập đầy đủ thông tin', 'error')
+                return
+            }
+        }
 
-        console.log(response)
+        if (id) {
+            const response = await apis.updateMovie(dataPass)
+            
+            swal(response.success ? 'Updated' : 'Error', response.mes || 'Đã có lỗi xảy ra', response.success ? 'success' : 'error')
+            if (response.success) {
+                dispatch(setChidlren(null))
+                dispatch(setRenderManagerMovie())
+            }
+        } else {
+            const response = await apis.createMovie(dataPass)
+
+            console.log(response)
+
+            swal(response.success ? 'Created' : 'Error', response.mes || 'Đã có lỗi xảy ra', response.success ? 'success' : 'error')
+            if (response.success) {
+                dispatch(setChidlren(null))
+                dispatch(setRenderManagerMovie())
+            }
+        }
+
     }
 
     return (
@@ -132,7 +214,7 @@ const FormAddMovie = ({ id }) => {
             ref={containerElement}
         >
             <div className="w-full bg-main justify-center relative py-4 flex items-center" >
-                <h2 className="text-xl text-center font-bold">{id ? 'Thêm thông tin phim mới' : 'Cập nhật thông tin phim'}</h2>
+                <h2 className="text-xl text-center font-bold">{!id ? 'Thêm thông tin phim mới' : 'Cập nhật thông tin phim'}</h2>
 
                 <button 
                     className='absolute right-[10px] hover:text-red-500'
@@ -143,37 +225,52 @@ const FormAddMovie = ({ id }) => {
             <div className='overflow-y-scroll h-[730px]'>
                 <div className='mt-4 p-4 relative flex gap-4'>
                     <div>
-                        <img className='w-[750px] h-[300px] object-cover border-[1px] shadow-sm rounded-md' src={`${process.env.REACT_APP_IMAGE_URL}${dataMovie.backdrop_path}`}></img>
+                        <img className='w-[750px] h-[400px] object-cover border-[1px] shadow-sm rounded-md' src={valueBackground?.slice(0, 4) === 'http' ? valueBackground : valueBackground?.slice(0, 4) === 'data' ? valueBackground : `${process.env.REACT_APP_IMAGE_URL}${valueBackground}`}></img>
 
-                        <img className='absolute bottom-0 w-[200px] h-[250px] object-cover rounded-md ml-5' src={`${process.env.REACT_APP_IMAGE_URL}${dataMovie.poster_path}`}></img>
+                        <img className='absolute bottom-0 w-[200px] h-[250px] object-cover rounded-md ml-5' src={valuePoster?.slice(0, 4) === 'http' ? valuePoster : valuePoster?.slice(0, 4) === 'data' ? valuePoster : `${process.env.REACT_APP_IMAGE_URL}${valuePoster}`}></img>
                     </div>
 
                     <div className='mt-auto'>
                         <div>
                             <label htmlFor='poster' className='font-medium flex items-center gap-4 cursor-pointer'><FiUpload size='25px' /> Chọn ảnh poster</label>
-                            <input className='hidden' id='poster' type='file'></input>
+                            <input className='hidden' id='poster' type='file' onChange={handleFilePoster}></input>
                         </div>
 
                         <div className='mt-6'>
                             <label htmlFor='ground' className='font-medium flex items-center gap-4 cursor-pointer'><FiUpload size='25px' /> Chọn ảnh bìa</label>
-                            <input className='hidden' id='ground' type='file'></input>
+                            <input className='hidden' id='ground' type='file' onChange={handleFileBackground}></input>
                         </div>
                     </div>
                 </div>
 
-                <div className='px-4 pt-7 pb-4'>
+                {/* <div className='px-4 pt-7 pb-4'>
                     <div className='flex items-center gap-3'>
-                        {/* <img className='w-[60px] h-[60px] rounded-sm object-cover' src='https://th.bing.com/th/id/R.40bb16d113fec1d642bfcbe193f017d5?rik=PPoebEIsQKCRgg&pid=ImgRaw&r=0'></img> */}
-                        {dataMovie.images.map((item, index) => (
-                            <img key={index} className='w-[60px] h-[60px] rounded-sm object-cover' src={`${process.env.REACT_APP_IMAGE_URL}${item}`}></img>
+                        {valueImages?.map((item, index) => (
+                            <div 
+                                className='w-[60px] h-[60px] rounded-sm hover:cursor-pointer relative overflow-hidden'
+                                onMouseEnter={() => setShowTrash(index)}
+                                onClick={() => handleDeleteImage(index)}
+                            >
+                                <img 
+                                    key={index} 
+                                    className='w-full h-full rounded-sm object-cover'
+                                    src={item.slice(0, 4) === 'data' ? item : `${process.env.REACT_APP_IMAGE_URL}${item}`}
+                                ></img>
+
+                                <div className='absolute inset-0 z-10 hover:bg-overlay flex items-center justify-center'>
+                                    {showTrash === index && 
+                                        <FaTrash size="20px" color='red'/>
+                                    }
+                                </div>
+                            </div>
                         ))}
                     </div>
 
                     <div className='mt-6'>
-                        <label htmlFor='ground' className='font-medium flex items-center gap-4 cursor-pointer'><FiUpload size='25px' />Chọn ảnh</label>
-                        <input className='hidden' id='ground' type='file'></input>
+                        <label htmlFor='image' className='font-medium flex items-center gap-4 cursor-pointer'><FiUpload size='25px' />Chọn ảnh</label>
+                        <input className='hidden' id='image' type='file' multiple onChange={handleFileImages}></input>
                     </div>
-                </div>
+                </div> */}
 
                 <div className='p-4'>
                     <div className='flex justify-between gap-4'>
@@ -332,7 +429,7 @@ const FormAddMovie = ({ id }) => {
                     <button 
                         className='bg-main py-2 mx-auto font-medium rounded-md w-[500px]'
                         onClick={handleSubmit}
-                    >Thêm</button>
+                    >{id ? 'Cập nhật' : 'Thêm'}</button>
                 </div>
             </div>
         </div>

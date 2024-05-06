@@ -1,7 +1,7 @@
 import { MdClear } from "react-icons/md"
 import { useState, useEffect, Fragment } from 'react'
 import { useDebounce } from 'use-debounce'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { ItemMovieInfor } from '../../component/itemInfor'
 import * as apis from '../../apis'
@@ -29,6 +29,7 @@ const type = [
 
 const ManagerMovie = () => {
     const dispatch = useDispatch()
+    const { renderManagerMovie } = useSelector(state => state.app)
     const [ value, setValue ] = useState()
     const [ dataAllMovie, setDataAllMovie ] = useState()
     const [ status, setStatus ] = useState(type[0].value)
@@ -49,7 +50,7 @@ const ManagerMovie = () => {
         }
 
         fecthAllMovie(dataPass)
-    }, [text])
+    }, [text, renderManagerMovie])
 
     // xử lí thêm phim
     const handleAddMovie = () => {
@@ -70,7 +71,7 @@ const ManagerMovie = () => {
                             onChange={(e) => setValue(e.target.value)}
                         >
                         </input>
-                        {value !== '' && 
+                        {value && 
                             <span 
                                 className="absolute translate-y-[50%] cursor-pointer right-[10px]"
                                 onClick={() => setValue('')}
@@ -97,8 +98,9 @@ const ManagerMovie = () => {
             <ul className="flex items-center bg-[#eb9651] px-4 py-2 w-full mt-3 rounded-sm">
                 <li className="w-[100px] font-semibold">ID</li>
                 <li className="w-[42px]"></li>
-                <li className="flex-1 font-semibold">Tên phim</li>
+                <li className="flex-2 font-semibold">Tên phim</li>
                 <li className="flex-1 font-semibold">Thời lượng</li>
+                <li className="flex-1 font-semibold">Ngày phát hành</li>
                 <li className="flex-1 font-semibold">Trạng thái</li>
                 <li className="w-[52px]"></li>
             </ul>
@@ -114,6 +116,7 @@ const ManagerMovie = () => {
                                 runtime={item?.runtime} 
                                 status={item?.status === 'showing' ? 1 : 2}
                                 image={item?.poster_path}
+                                release={item?.release_date}
                             />
                         </Fragment>
                     ))  
@@ -126,6 +129,7 @@ const ManagerMovie = () => {
                                 runtime={item?.runtime} 
                                 status={item?.status === 'showing' ? 1 : 2}
                                 image={item?.poster_path}
+                                release={item?.release_date}
                             />
                         </Fragment>
                     ))

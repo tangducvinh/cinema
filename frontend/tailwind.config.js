@@ -30,7 +30,8 @@ module.exports = {
       },
       colors: {
         main: "#F97316",
-        'overlay': 'rgba(0, 0, 0, 0.7)'
+        'overlay': 'rgba(0, 0, 0, 0.7)',
+        'overlay-red': 'rgba(176, 60, 66, 0.8)',
       },
       fontSize: {
         "[-16]": "16px",

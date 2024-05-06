@@ -1,29 +1,67 @@
-import { useState } from 'react'
+import { useState, useEffect, Fragment } from 'react'
 import { MdClear } from 'react-icons/md'
+import swal from 'sweetalert'
 
 import { ItemShowInfor } from '../../component/itemInfor'
+import * as apis from '../../apis'
 
+
+
+const totalRoom = [
+    {
+        name: 'Phòng 1',
+    },
+    {
+        name: 'Phòng 2',
+    },
+    {
+        name: 'Phòng 3',
+    },
+    {
+        name: 'Phòng 4',
+    },
+    {
+        name: 'Phòng 5',
+    },
+]
 
 const ManagerShow = () => {
-    const totalRoom = [
-        {
-            name: 'Phòng 1',
-        },
-        {
-            name: 'Phòng 2',
-        },
-        {
-            name: 'Phòng 3',
-        },
-        {
-            name: 'Phòng 4',
-        },
-        {
-            name: 'Phòng 5',
-        },
-    ]
 
     const [ value, setValue ] = useState()
+    const [ dataShows, setDataShows ] = useState([])
+    const [ statusDelete, setStatusDelete ] = useState(false)
+
+    const fecthDataShow = async(day) => {
+        const response = await apis.getAllShow(day)
+
+        if (response?.success) {
+            setDataShows(response.data)
+        }
+    }
+
+    useEffect(() => {
+        fecthDataShow({day: '2024-05-06'})
+    }, [statusDelete])
+
+    // handle delete show 
+    const handleDeleteShow = async(_id) => {
+        const willDelete = await swal({
+            title: "Xoá phim",
+            text: "Bạn có chắn chắc muốn xoá phim không?",
+            icon: "warning",
+            dangerMode: true,
+            buttons: true,
+        });
+           
+        if (willDelete) {
+            const response = await apis.deleteShow(_id)
+
+            swal(response.success ? "Deleted!" : "Error", response.mes || 'Đã có lỗi xảy ra', response.success ? 'success' : 'error')
+            if (response.success) {
+                setStatusDelete(prev => !prev)
+            }
+        }
+    }
 
     return (
         <div className="w-full">
@@ -37,7 +75,7 @@ const ManagerShow = () => {
                     onChange={(e) => setValue(e.target.value)}
                 >
                 </input>
-                {value !== '' && 
+                {value && 
                     <span 
                         className="absolute translate-y-[50%] cursor-pointer right-[10px]"
                         onClick={() => setValue('')}
@@ -88,16 +126,29 @@ const ManagerShow = () => {
             </ul>
 
             <div>
-                <ItemShowInfor 
-                    id={324243} 
-                    name={'Avatar dòng chảy nước'} 
-                    runtime={'120 phút'} 
-                    timeStart={'2h30'} 
-                    timeEnd={'3h'}
-                    roomName={'Phòng 1'}
-                    totalBlock={12}
-                    total={50}
-                />
+                {dataShows.length === 0 ?
+                    <div className='mt-[150px]'>
+                        <p className='text-center text-gray-500 font-medium'>Không có xuất chiếu nào ở đây</p>
+                    </div>
+                :
+                    dataShows.map((item, index) => (
+                        <Fragment>
+                            <ItemShowInfor 
+                                _id={item._id}
+                                id={item.movieId?.id} 
+                                name={item.movieId.original_title} 
+                                runtime={item.movieId.runtime} 
+                                timeStart={item.begin_time} 
+                                timeEnd={item.end_time}
+                                image={item.movieId.poster_path}
+                                roomName={item.roomId.name}
+                                totalBlock={12}
+                                total={50}
+                                onDelete={handleDeleteShow}
+                            />
+                        </Fragment>
+                    )) 
+                }
             </div>
         </div>
     )

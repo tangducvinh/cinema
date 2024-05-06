@@ -7,7 +7,8 @@ const createMovie = async(req, res) => {
 
         return res.status(200).json({
             success: response ? true : false,
-            data: response ? response : 'no data'
+            data: response ? response : 'no data',
+            mes: response ? 'Tạo phim mới thành công' : 'Tạo phim mới thất bại'
         })
 
     } catch(e) {
@@ -82,7 +83,7 @@ const updateStatusMovie = async(req, res) => {
 
         return res.status(200).json({
             success: response ? true : false,
-            data: response ? response : 'no data'
+            data: response ? response : 'no data',
         })
     } catch(e) {
         res.status(500).json(e)
@@ -108,16 +109,28 @@ const updateMovie = async(req, res) => {
 // xoa phim 
 const deleteMovie = async(req, res) => {
     try {
-        const { mid } = req.params
-
-        const response = await Movie.findByIdAndDelete({_id: mid})
+        const { id } = req.params
+        const response = await Movie.findOneAndDelete({id: id})
 
         return res.status(200).json({
             success: response ? true : false,
-            mes: response ? 'Delete movie successfully' : 'Delete movie failed'
+            mes: response ? 'Thực hiện xoá phim thành công' : 'Đã có lỗi gì đó'
         })
     } catch(e) {
         res.status(500).json(e)
+    }
+}
+
+// update image
+const uploadImage = async(req, res) => {
+    try {
+        console.log('hello')
+        return res.status(200).json({
+            success: req.file ? true : false,
+            data: req.file ? req.file : 'no data'
+        })
+    } catch(e) {
+        return res.status(500).json(e)
     }
 }
 
@@ -129,6 +142,7 @@ module.exports = {
     getAllMovie,
     getMovie,
     updateMovie,
+    uploadImage,
 }
 
 
