@@ -27,8 +27,7 @@ function Home() {
     queryKey: ["ListSoons"],
     queryFn: fecthSoon,
   });
-  console.log("list showing ", listShowing);
-  console.log("list soon", listSoon);
+
   const handleShowingTrue = () => {
     setShowDangChieu(true);
   };

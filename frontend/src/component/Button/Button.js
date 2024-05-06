@@ -4,6 +4,7 @@ function Button({
   to,
   href,
   onClick,
+  disabled,
   children,
   text,
   primary,
@@ -20,6 +21,7 @@ function Button({
 
   const props = {
     onClick,
+    disabled,
     ...passProp,
   };
 
@@ -61,7 +63,7 @@ function Button({
   }
   if (big && primary) {
     hoverButton = classNames(
-      "bg-[-button-primary] border-none text-white hover:opacity-90 w-full"
+      "bg-[-button-primary] border-none text-white hover:opacity-90 w-full disabled:bg-gray-600 disabled:opacity-50 disabled:pointer"
     );
   }
   if (big && outline) {

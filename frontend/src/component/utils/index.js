@@ -1,6 +1,6 @@
-export const calender = () => {
-  function getDatesInVietnamese() {
-    const currentDate = new Date();
+export const calender = (dateString) => {
+  function getDatesInVietnamese(dateString) {
+    const currentDate = new Date(dateString);
     const tomorrow = new Date(currentDate.getTime() + 24 * 60 * 60 * 1000);
     const dayAfterTomorrow = new Date(
       currentDate.getTime() + 2 * 24 * 60 * 60 * 1000
@@ -32,7 +32,7 @@ export const calender = () => {
   }
 
   // Sử dụng hàm để lấy mảng ngày
-  const datesArray = getDatesInVietnamese();
+  const datesArray = getDatesInVietnamese(dateString);
 
   return datesArray;
 };
@@ -60,4 +60,9 @@ export const convertCalender = (dateString) => {
     return formattedDate;
   }
   return convertDateToVietnameseFormat(dateString);
+};
+
+export const converTimeShow = (dateString) => {
+  var mydate = new Date(dateString);
+  return mydate.getUTCHours() + " : " + mydate.getUTCMinutes();
 };

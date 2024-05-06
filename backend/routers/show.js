@@ -1,4 +1,4 @@
-const router = require('express').Router()
+const router = require("express").Router();
 
 const { createShow, getListShow, getShowDetail, updateBlockSeat, getAllShow, deleteShow } = require('../controllers/show')
 
@@ -9,4 +9,4 @@ router.get('/all', getAllShow)
 router.put('/block-seat', updateBlockSeat)
 router.delete('/:sid', deleteShow)
 
-module.exports = router
+module.exports = router;
