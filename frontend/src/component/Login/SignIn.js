@@ -1,9 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaEyeSlash } from "react-icons/fa";
 import { FaEye } from "react-icons/fa6";
 import Button from "../Button/Button";
-
+import * as UserServices from "../../services/UserServices";
+import { useMutationHooks } from "../../hooks/useMutationHook";
+import Loading from "../LoadingComponent/Loading";
+import Swal from "sweetalert2";
 function SignIn() {
+  const mutationSingIn = useMutationHooks((data) =>
+    UserServices.signInUser(data)
+  );
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -13,6 +19,29 @@ function SignIn() {
   };
   const handleOnChangePassword = (e) => {
     setPassword(e.target.value);
+  };
+
+  const { data, isPending, isSuccess, isError } = mutationSingIn;
+  useEffect(() => {
+    if (isSuccess) {
+      Swal.fire({
+        text: "Đăng nhập thành công!",
+        icon: "success",
+      });
+      console.log("data", data);
+      // localStorage.setItem("access_token ", data.accessToken);
+    } else if (isError) {
+      Swal.fire({
+        text: "Thất bại!",
+        icon: "warning",
+      });
+    }
+  }, [isSuccess, isError]);
+  const handleSignIn = () => {
+    mutationSingIn.mutate({
+      account: email,
+      password: password,
+    });
   };
 
   return (
@@ -43,6 +72,20 @@ function SignIn() {
           >
             {isShowPassword ? <FaEye /> : <FaEyeSlash />}
           </div>
+        </div>
+        <div className="mt-4 mb-3">
+          <Loading isLoading={isPending}>
+            <div className="flex justify-center border-b border-b-gray-400">
+              <Button
+                primary
+                big
+                disabled={!email || !password}
+                onClick={handleSignIn}
+              >
+                ĐĂNG NHẬP
+              </Button>
+            </div>
+          </Loading>
         </div>
       </div>
     </div>

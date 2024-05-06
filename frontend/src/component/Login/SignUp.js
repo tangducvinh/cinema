@@ -2,26 +2,64 @@ import { useEffect, useState } from "react";
 import { FaEyeSlash } from "react-icons/fa";
 import { FaEye } from "react-icons/fa6";
 import Button from "../Button/Button";
-
+import * as UserServices from "../../services/UserServices";
+import { useMutationHooks } from "../../hooks/useMutationHook";
+import Loading from "../LoadingComponent/Loading";
+import Swal from "sweetalert2";
 function SignUp() {
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [isShowConfirmPassword, setIsShowConfirmPassword] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [validatePass, setValidatePass] = useState(false);
+  const [validateEmail, setValidateEmail] = useState(false);
 
   const handleOnChangeEmail = (e) => {
     setEmail(e.target.value);
+    setValidateEmail(false);
   };
   const handleOnChangeName = (e) => {
     setName(e.target.value);
   };
   const handleOnChangePassword = (e) => {
     setPassword(e.target.value);
+    setValidatePass(false);
   };
   const handleOnChangeConfirmPassword = (e) => {
     setConfirmPassword(e.target.value);
+    setValidatePass(false);
+  };
+  const handleOnChangePhone = (e) => {
+    setPhone(e.target.value);
+  };
+
+  const mutationSignUp = useMutationHooks((data) =>
+    UserServices.signUpUser(data)
+  );
+  const { isPending } = mutationSignUp;
+  const handleSignUp = () => {
+    const reg =
+      /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    console.log("email 123 ", !reg.test(email));
+    if (password !== confirmPassword) {
+      setValidatePass(true);
+    } else if (!reg.test(email)) {
+      setValidateEmail(true);
+    } else {
+      mutationSignUp.mutate({
+        name: name,
+        email: email,
+        password: password,
+        phone: phone,
+      });
+      Swal.fire({
+        text: "Bạn đã đăng kí thành công!",
+        icon: "success",
+      });
+    }
   };
 
   return (
@@ -42,6 +80,14 @@ function SignUp() {
           className="w-full px-3 leading-10 border border-gray-300 outline-none my-3 focus:border-black "
           onChange={(e) => handleOnChangeEmail(e)}
           value={email}
+        />
+        <p className="text-[-18] font-bold">Phone</p>
+        <input
+          type="text"
+          placeholder="số điện thoại"
+          className="w-full px-3 leading-10 border border-gray-300 outline-none my-3 focus:border-black "
+          onChange={(e) => handleOnChangePhone(e)}
+          value={phone}
         />
         <p className="text-[-18] font-bold">Password</p>
         <div className="relative">
@@ -78,6 +124,32 @@ function SignUp() {
           >
             {isShowConfirmPassword ? <FaEye /> : <FaEyeSlash />}
           </div>
+        </div>
+        <div>
+          {validatePass && (
+            <span className="text-red-600 italic">
+              Mất khẩu không trùng khớp
+            </span>
+          )}
+          {validateEmail && (
+            <span className="text-red-600 italic">Email không hợp lệ</span>
+          )}
+        </div>
+        <div className="mt-3 pb-9">
+          <Loading isLoading={isPending}>
+            <div className="flex justify-center  border-b border-b-gray-400">
+              <Button
+                primary
+                big
+                disabled={
+                  !name || !email || !password || !phone || !confirmPassword
+                }
+                onClick={handleSignUp}
+              >
+                HOÀN THÀNH
+              </Button>
+            </div>
+          </Loading>
         </div>
       </div>
     </div>

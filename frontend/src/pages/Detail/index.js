@@ -4,36 +4,62 @@ import { LuClock3 } from "react-icons/lu";
 import { FaRegCalendarMinus } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
 import Button from "../../component/Button/Button";
-import { calender, convertCalender } from "../../component/utils";
+import {
+  calender,
+  convertCalender,
+  converTimeShow,
+} from "../../component/utils";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import * as MovieServices from "../../services/MovieServices";
+import * as ShowServices from "../../services/ShowServices";
 import Trailer from "../../component/trailer/trailer";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import Content from "../../component/Content/Content";
+import ItemMovie from "../../component/Content/ItemMovie/ItemMovie";
 
 function Detail() {
   const [activeCalender, setActiveCalender] = useState(0);
   const [trailer, setTrailer] = useState(false);
-  const date = calender();
+  const date = calender("2024-04-13");
   const handleActiveCalender = (index) => {
     setActiveCalender(index);
   };
   const [detailMovie, setDetailMovie] = useState(null);
-
+  const [listShow, setListShow] = useState([]);
   const { mid } = useParams();
   const fetchDetailMovie = async (mid) => {
     const res = await MovieServices.getDetailMovie(mid);
     setDetailMovie(res.data);
   };
-
+  const fetchListShow = async (movieId, day) => {
+    const res = await ShowServices.getListShow(movieId, day);
+    setListShow(res.data);
+  };
   useEffect(() => {
     fetchDetailMovie(mid);
   }, [mid]);
-
-  console.log("detail ", detailMovie);
+  useEffect(() => {
+    if (detailMovie !== null) {
+      fetchListShow(detailMovie._id, date[`${activeCalender}`].slice(0, 10));
+    }
+  }, [detailMovie, activeCalender]);
   const handleTrailer = () => {
     setTrailer(!trailer);
   };
+  const fecthShowing = async () => {
+    const res = await axios.get(
+      `${process.env.REACT_APP_API_URl}/movie/list/showing`
+    );
+    return res.data;
+  };
+  const { data: listShowing } = useQuery({
+    queryKey: ["ListShowingMovies"],
+    queryFn: fecthShowing,
+  });
 
+  const navigate = useNavigate();
   return (
     <div>
       {detailMovie !== null && (
@@ -62,8 +88,8 @@ function Detail() {
               </div>
             </div>
 
-            <div className="mx-80 px-4 py-12 ">
-              <div className="flex relative  w-[-882]">
+            <div className="mx-80 flex  px-4 py-12">
+              <div className="flex  relative  w-[-882]">
                 <div className="absolute -top-24 ">
                   <div className="flex">
                     <div className="w-[-278] h-[-398]  border-2 border-white mr-6 border-b-0">
@@ -160,7 +186,7 @@ function Detail() {
                       )}`}
                     </p>
                   </div>
-                  <div className="mt-10">
+                  <div className="mt-10  mb-28">
                     <h1 className="inline-block leading-none px-2 border-l-4 border-l-blue-950 text-[-20] font-semibold mr-10">
                       Lịch chiếu phim
                     </h1>
@@ -183,7 +209,48 @@ function Detail() {
                         );
                       })}
                     </div>
+                    {listShow.length !== 0 && (
+                      <div className="flex items-center mx-6 mt-3">
+                        <h1 className="mr-10">2D phụ đề</h1>
+                        <div className="flex ">
+                          {listShow.map((item) => {
+                            return (
+                              <button className="px-4 py-3 border border-gray-400 mr-2 rounded-lg hover:bg-blue-900  hover:text-white">
+                                {converTimeShow(item.begin_time)}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
                   </div>
+                </div>
+              </div>
+              <div className="">
+                <h1 className="uppercase inline-block leading-none px-2 border-l-4 border-l-blue-950 text-[-20] font-semibold mr-10">
+                  Phim đang chiếu
+                </h1>
+                <div className="mt-3 ml-3">
+                  {listShowing !== undefined && (
+                    <div>
+                      {listShowing.data.map((item, index) => {
+                        if (index <= 1) {
+                          return <ItemMovie data={item} />;
+                        }
+                      })}
+                    </div>
+                  )}
+                </div>
+                <div className="flex justify-end">
+                  <Button
+                    outline
+                    small
+                    onClick={() => {
+                      navigate("/");
+                    }}
+                  >
+                    Xem thêm
+                  </Button>
                 </div>
               </div>
             </div>

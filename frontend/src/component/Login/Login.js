@@ -25,11 +25,6 @@ function Login({ onClick }) {
         {handleLogin ? <SignIn /> : <SignUp />}
         {handleLogin ? (
           <div className="px-5">
-            <div className="flex justify-center mt-3 pb-9 border-b border-b-gray-400">
-              <Button primary big>
-                ĐĂNG NHẬP
-              </Button>
-            </div>
             <div className="flex flex-col items-center justify-center mt-4 pb-9">
               <h1 className="mb-3">Bạn chưa có tài khoản ?</h1>
               <Button
@@ -45,11 +40,6 @@ function Login({ onClick }) {
           </div>
         ) : (
           <div className="px-5">
-            <div className="flex justify-center mt-3 pb-9 border-b border-b-gray-400">
-              <Button primary big>
-                HOÀN THÀNH
-              </Button>
-            </div>
             <div className="flex flex-col items-center justify-center mt-4 pb-9">
               <h1 className="mb-3">Bạn đã có tài khoản ?</h1>
               <Button

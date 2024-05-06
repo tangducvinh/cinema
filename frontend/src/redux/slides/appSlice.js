@@ -9,8 +9,8 @@ export const appSlice = createSlice({
   initialState,
   reducers: {
     setChidlren: (state, action) => {
-        state.children = action.payload
-    }
+      state.children = action.payload;
+    },
   },
 });
 
