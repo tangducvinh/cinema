@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   children: null,
   renderManagerMovie: false,
+  renderManagerShow: false,
 };
 
 export const appSlice = createSlice({
@@ -15,11 +16,15 @@ export const appSlice = createSlice({
     setRenderManagerMovie: (state) => {
     
       state.renderManagerMovie = !state.renderManagerMovie
+    },
+    setRenderManagerShow: (state) => {
+    
+      state.renderManagerShow = !state.renderManagerShow
     }
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setChidlren, setRenderManagerMovie } = appSlice.actions;
+export const { setChidlren, setRenderManagerMovie, setRenderManagerShow } = appSlice.actions;
 
 export default appSlice.reducer;

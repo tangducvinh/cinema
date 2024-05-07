@@ -11,6 +11,11 @@ export const getMovieInfor = async(id) => await axios({
     method: 'get'
 })
 
+export const getListMovie = async(status) => await axios({
+    url: 'movie/list/'+ status,
+    method: 'get'
+})
+
 export const updateMovie = async(data) => await axios({
     url: 'movie/update',
     method: 'put',

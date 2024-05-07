@@ -1,10 +1,13 @@
 import { useState, useEffect, Fragment } from 'react'
 import { MdClear } from 'react-icons/md'
 import swal from 'sweetalert'
+import { useDispatch, useSelector } from 'react-redux'
+import moment from 'moment'
 
 import { ItemShowInfor } from '../../component/itemInfor'
 import * as apis from '../../apis'
-
+import { setChidlren } from '../../redux/slides/appSlice'
+import { FormAddShow } from '../../component/forms'
 
 
 const totalRoom = [
@@ -26,10 +29,13 @@ const totalRoom = [
 ]
 
 const ManagerShow = () => {
+    const dispatch = useDispatch()
+    const { renderManagerShow } = useSelector(state => state.app)
 
     const [ value, setValue ] = useState()
     const [ dataShows, setDataShows ] = useState([])
     const [ statusDelete, setStatusDelete ] = useState(false)
+    const [ valueDay, setValueDay ] = useState(moment(new Date).format('YYYY-MM-DD'))
 
     const fecthDataShow = async(day) => {
         const response = await apis.getAllShow(day)
@@ -40,8 +46,8 @@ const ManagerShow = () => {
     }
 
     useEffect(() => {
-        fecthDataShow({day: '2024-05-06'})
-    }, [statusDelete])
+        fecthDataShow({day: valueDay})
+    }, [statusDelete, valueDay, renderManagerShow])
 
     // handle delete show 
     const handleDeleteShow = async(_id) => {
@@ -61,6 +67,11 @@ const ManagerShow = () => {
                 setStatusDelete(prev => !prev)
             }
         }
+    }
+
+    const handleAddShow = async(_id) => {
+        dispatch(setChidlren(<FormAddShow />))
+        console.log(_id)
     }
 
     return (
@@ -110,7 +121,10 @@ const ManagerShow = () => {
                 </div>
 
                 <div>
-                    <button className="bg-blue-500 px-3 text-sm py-2 rounded-md text-white font-medium">Tạo xuất</button>
+                    <button 
+                        className="bg-blue-500 px-3 text-sm py-2 rounded-md text-white font-medium"
+                        onClick={handleAddShow}
+                    >Tạo xuất</button>
                 </div>
             </div>
 
@@ -126,12 +140,12 @@ const ManagerShow = () => {
             </ul>
 
             <div>
-                {dataShows.length === 0 ?
+                {dataShows?.length === 0 ?
                     <div className='mt-[150px]'>
                         <p className='text-center text-gray-500 font-medium'>Không có xuất chiếu nào ở đây</p>
                     </div>
                 :
-                    dataShows.map((item, index) => (
+                    dataShows?.map((item, index) => (
                         <Fragment>
                             <ItemShowInfor 
                                 _id={item._id}

@@ -15,7 +15,7 @@ const ItemShowInfor = ({id, _id, name, runtime, timeStart, timeEnd, roomName, to
                 <img className="w-[35px] h-[35px] rounded-sm mr-2 object-cover" src={image.slice(0, 4) === 'http' ? image : `${process.env.REACT_APP_IMAGE_URL}${image}`}></img>
             </li>
             <li className="flex-2 font-medium line-clamp-1">{name}</li>
-            <li className="flex-1 font-medium">{runtime}</li>
+            <li className="flex-1 font-medium">{`${runtime} phút`}</li>
             <li className="flex-1 font-semibold">{`${moment(timeStart).format('HH:mm')} - ${moment(timeEnd).format('HH:mm')}`}</li>
             <li className="flex-1 font-semibold">{roomName}</li>
             <li className="flex-1 font-semibold">{`${totalBlock}/${total}`}</li>

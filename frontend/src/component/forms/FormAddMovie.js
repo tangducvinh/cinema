@@ -204,7 +204,6 @@ const FormAddMovie = ({ id }) => {
                 dispatch(setRenderManagerMovie())
             }
         }
-
     }
 
     return (

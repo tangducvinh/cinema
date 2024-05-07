@@ -5,20 +5,21 @@ const createShow = async(req, res) => {
     try {
         const { begin_time, roomId, end_time, movieId } = req.body
 
-        // const check = await Show.find({roomId, begin_time: {"$lte": new Date(begin_time)}, end_time: {"$gte": new Date(begin_time)},})
-        // console.log(check.length)
-        // const check2 = await Show.find({roomId, begin_time: {"$lte": new Date(end_time)}, end_time: {"$gte": new Date(end_time)},})
         const check1 = await Show.find({roomId, begin_time: {"$lte": new Date(begin_time)}, end_time: {"$gte": new Date(begin_time)},})
         const check2 = await Show.find({roomId, begin_time: {"$lte": new Date(end_time)}, end_time: {"$gte": new Date(end_time)},})
         const check3 = await Show.find({roomId, begin_time: {"$gte": new Date(begin_time)}, end_time: {"$lte": new Date(end_time)},})
 
         
-        if(check1.length > 0 || check2.length > 0 || check3.length > 0) return res.status(500).json('Bi trung gio chieu')
+        if(check1.length > 0 || check2.length > 0 || check3.length > 0) return res.status(200).json({
+            success: false,
+            mes: 'Bị trùng giờ chiếu'
+        })
 
         const response = await Show.create(req.body)
         return res.status(200).json({
             success: response ? true : false,
-            data: response ? response : 'no data'
+            data: response ? response : 'no data',
+            mes: response ? 'Đã tạo xuất chiếu thành công' : 'Đã có lỗi xảy ra'
         })
     } catch(e) {
         res.status(500).json(e)
