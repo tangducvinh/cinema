@@ -63,6 +63,17 @@ export const convertCalender = (dateString) => {
 };
 
 export const converTimeShow = (dateString) => {
-  var mydate = new Date(dateString);
-  return mydate.getUTCHours() + " : " + mydate.getUTCMinutes();
+  try {
+    // Chuyển chuỗi ISO thành đối tượng Date
+    const dateObject = new Date(dateString);
+    // Trích xuất giờ và phút
+    const hour = dateObject.getUTCHours();
+    const minute = dateObject.getUTCMinutes();
+    // Trả về chuỗi định dạng giờ:phút
+    return `${hour.toString().padStart(2, "0")}:${minute
+      .toString()
+      .padStart(2, "0")}`;
+  } catch (error) {
+    return "Không thể trích xuất thời gian từ chuỗi đã cho.";
+  }
 };
