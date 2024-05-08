@@ -1,5 +1,6 @@
 import Home from "../pages/Home";
 import Detail from "../pages/Detail";
+import Booking from "../pages/Booking";
 import { SliderLayout } from "../component/Layout";
 
 const publicRouters = [
@@ -10,6 +11,10 @@ const publicRouters = [
   {
     path: "/detail/:mid",
     component: Detail,
+  },
+  {
+    path: "/booking",
+    component: Booking,
   },
 ];
 
