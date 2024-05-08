@@ -12,6 +12,12 @@ export const getAllShow = async(day) => await axios({
     method: 'get',
 })
 
+export const updateShow = async(data) => await axios({
+    url: 'show',
+    data,
+    method: 'put'
+})
+
 export const deleteShow = async(sid) => await axios({
     url: 'show/' + sid,
     method: 'delete'

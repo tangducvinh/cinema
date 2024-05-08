@@ -20,7 +20,10 @@ const showSchema = new mongoose.Schema({
             status: {type: String, enum: ['sold']},
             userId: {type: mongoose.Types.ObjectId, ref: 'User'}
         }
-    ]
+    ],
+    price: {
+        type: Number
+    }
 },{ timestamps: true})
 
 module.exports = mongoose.model('Show', showSchema)

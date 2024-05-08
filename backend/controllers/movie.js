@@ -61,6 +61,10 @@ const getAllMovie = async(req, res) => {
             query.original_title = {$regex: queries.title, $options: 'i'}
         }
 
+        if (queries?.status) {
+            query.status = queries.status
+        }
+
         const response = await Movie.find(query)
 
         return res.status(200).json({

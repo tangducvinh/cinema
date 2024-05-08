@@ -199,7 +199,18 @@ const changePassword = async (req, res) => {
 // lay danh sach nguoi dung
 const getAllUser = async (req, res) => {
   try {
-    const response = await User.find();
+    const { title } = req.query
+
+    const query = {}
+    if (title) {
+      if (title.slice(0, 1) === '0') {
+        query.phone = {$regex: title, $options: 'i'}
+      } else {
+        query.email = {$regex: title, $options: 'i'}
+      }
+    }
+
+    const response = await User.find(query);
 
     return res.status(200).json({
       success: response ? true : false,

@@ -20,7 +20,7 @@ const FormAddMovie = ({ id }) => {
     const [ valueCompany, setValueCompany ] = useState('')
     const [ valueCalendar, setValueCalendar ] = useState(new Date())
     const [ showCalendar, setShowCalendar ] = useState(false)
-    const [ spokenLanguage, setValueSpokenLanguage ] = useState('')
+    // const [ spokenLanguage, setValueSpokenLanguage ] = useState('')
     const [ valueKeyVideo, setValueKeyVideo ] = useState('')
     const [ valueNameCast, setValueNameCast ] = useState('')
     const [ valueStatus, setValueStatus ] = useState('soon')
@@ -44,7 +44,7 @@ const FormAddMovie = ({ id }) => {
         product_company: [],
         release_date: '',
         runtime: '',
-        spoken_language: [],
+        // spoken_language: [],
         status: '',
         tagline: '',
         video: [],
@@ -67,7 +67,7 @@ const FormAddMovie = ({ id }) => {
                 product_company: response.data.product_company,
                 release_date: response.data.release_date,
                 runtime: response.data.runtime,
-                spoken_language: response.data.spoken_language,
+                // spoken_language: response.data.spoken_language,
                 status: response.data.status,
                 tagline: response.data.tagline,
                 video: response.data.video,
@@ -78,7 +78,7 @@ const FormAddMovie = ({ id }) => {
 
             setValueCompany(response.data.product_company.map(item => item.name).toString())
             setValueCalendar(response.data.release_date)
-            setValueSpokenLanguage(response.data.spoken_language.map(item => item).toString())
+            // setValueSpokenLanguage(response.data.spoken_language.map(item => item).toString())
             setValueKeyVideo(response.data.video.map(item => item.key).toString())
             setValueNameCast(response.data.cast.map(item => item.name).toString())
             setValueStatus(response.data.status)
@@ -166,7 +166,7 @@ const FormAddMovie = ({ id }) => {
         const dataCast = valueNameCast.split(',').map((item) => ({name: item?.trim()}))
         dataPass.product_company = dataCompany
         dataPass.release_date = moment(valueCalendar).format('YYYY/MM/DD')
-        dataPass.spoken_language = spokenLanguage?.trim().split(',')
+        // dataPass.spoken_language = spokenLanguage?.trim().split(',')
         dataPass.video = dataVideo
         dataPass.cast = dataCast
         dataPass.status = valueStatus
@@ -208,8 +208,8 @@ const FormAddMovie = ({ id }) => {
 
     return (
         <div 
-            className='w-[1000px] h-[800px] mx-auto mt-[100px] rounded-[10px] overflow-hidden transition-all bg-white animate-back-up'
-            onClick={(e) => e.stopPropagation()}
+            className='w-[65%] mx-auto rounded-[10px] h-[90%] mt-[2%] overflow-hidden transition-all bg-white animate-back-up'
+            onMouseDown={(e) => e.stopPropagation()}
             ref={containerElement}
         >
             <div className="w-full bg-main justify-center relative py-4 flex items-center" >
@@ -221,15 +221,15 @@ const FormAddMovie = ({ id }) => {
                 ><MdClear size='30px'/></button>
             </div>
 
-            <div className='overflow-y-scroll h-[730px]'>
+            <div className='overflow-y-scroll h-full w-full pb-[50px]'>
                 <div className='mt-4 p-4 relative flex gap-4'>
-                    <div>
-                        <img className='w-[750px] h-[400px] object-cover border-[1px] shadow-sm rounded-md' src={valueBackground?.slice(0, 4) === 'http' ? valueBackground : valueBackground?.slice(0, 4) === 'data' ? valueBackground : `${process.env.REACT_APP_IMAGE_URL}${valueBackground}`}></img>
+                    <div className='flex-3'>
+                        <img className='w-[100%] h-[400px] object-cover border-[1px] shadow-sm rounded-md' src={valueBackground?.slice(0, 4) === 'http' ? valueBackground : valueBackground?.slice(0, 4) === 'data' ? valueBackground : `${process.env.REACT_APP_IMAGE_URL}${valueBackground}`}></img>
 
-                        <img className='absolute bottom-0 w-[200px] h-[250px] object-cover rounded-md ml-5' src={valuePoster?.slice(0, 4) === 'http' ? valuePoster : valuePoster?.slice(0, 4) === 'data' ? valuePoster : `${process.env.REACT_APP_IMAGE_URL}${valuePoster}`}></img>
+                        <img className='absolute bottom-0 w-[25%] h-[250px] object-cover rounded-md ml-5' src={valuePoster?.slice(0, 4) === 'http' ? valuePoster : valuePoster?.slice(0, 4) === 'data' ? valuePoster : `${process.env.REACT_APP_IMAGE_URL}${valuePoster}`}></img>
                     </div>
 
-                    <div className='mt-auto'>
+                    <div className='mt-auto flex-1'>
                         <div>
                             <label htmlFor='poster' className='font-medium flex items-center gap-4 cursor-pointer'><FiUpload size='25px' /> Chọn ảnh poster</label>
                             <input className='hidden' id='poster' type='file' onChange={handleFilePoster}></input>
@@ -272,7 +272,7 @@ const FormAddMovie = ({ id }) => {
                 </div> */}
 
                 <div className='p-4'>
-                    <div className='flex justify-between gap-4'>
+                    <div className='flex gap-4'>
                         <div>
                             <label className='font-medium'>ID Phim</label>
                             <input 
@@ -280,16 +280,6 @@ const FormAddMovie = ({ id }) => {
                                 placeholder='Nhập id' 
                                 value={dataMovie.id}
                                 onChange={(e) => (setDataMovie((prev) => ({...prev, id: e.target.value})))}
-                            ></input>
-                        </div>
-
-                        <div className='flex-1 flex items-center'>
-                            <label className='font-medium'>Tên phim</label>
-                            <input 
-                                className='ml-2 border-[1px] p-1 border-gray-300 rounded-md flex-1 outline-none' 
-                                placeholder='Nhập tên'
-                                value={dataMovie.original_title} 
-                                onChange={(e) => (setDataMovie((prev) => ({...prev, original_title: e.target.value})))}
                             ></input>
                         </div>
 
@@ -303,6 +293,17 @@ const FormAddMovie = ({ id }) => {
                             ></input>
                         </div>
                     </div>
+
+                    <div className='flex-1 flex items-center mt-4'>
+                        <label className='font-medium'>Tên phim</label>
+                        <input 
+                            className='ml-2 border-[1px] p-1 border-gray-300 rounded-md flex-1 outline-none' 
+                            placeholder='Nhập tên'
+                            value={dataMovie.original_title} 
+                            onChange={(e) => (setDataMovie((prev) => ({...prev, original_title: e.target.value})))}
+                        ></input>
+                    </div>
+                    
 
                     <div className='flex items-center w-full mt-4'>
                         <label className='font-medium'>Thể loại</label>
@@ -355,7 +356,7 @@ const FormAddMovie = ({ id }) => {
 
                             {showCalendar &&
                                 <div 
-                                    className='absolute left-[110px] bg-white p-4 shadow-lg' 
+                                    className='absolute left-[100%] bottom-[0px] bg-white p-4 shadow-lg' 
                                     ref={calendarElement}
                                 >
                                     <Calendar onChange={setValueCalendar} value={valueCalendar} />
@@ -383,7 +384,7 @@ const FormAddMovie = ({ id }) => {
                         </div>
                     </div>
 
-                    <div className='flex items-center gap-1 mt-6'>
+                    {/* <div className='flex items-center gap-1 mt-6'>
                         <label className='font-medium'>Ngôn ngữ nói:</label>
                         <input 
                             className='ml-2 border-gray-300 rounded-md border-[1px] flex-1 p-1 outline-none' 
@@ -391,7 +392,7 @@ const FormAddMovie = ({ id }) => {
                             value={spokenLanguage}
                             onChange={(e) => setValueSpokenLanguage(e.target.value)}
                         ></input>
-                    </div>
+                    </div> */}
 
                     <div className='flex items-center flex-1 mt-auto pt-4'>
                         <label className='font-medium'>Tagline</label>
@@ -422,6 +423,8 @@ const FormAddMovie = ({ id }) => {
                             onChange={(e) => setValueNameCast(e.target.value)} 
                         ></input>
                     </div>
+
+
                 </div>
 
                 <div className='flex justify-center mt-6 pb-[30px]'>

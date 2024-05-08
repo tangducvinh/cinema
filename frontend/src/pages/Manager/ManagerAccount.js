@@ -1,13 +1,33 @@
-import { useState } from 'react'
+import { useState, useEffect, Fragment } from 'react'
 import { MdClear } from 'react-icons/md'
+import { useDebounce } from 'use-debounce'
 
 import { ItemUserInfor } from '../../component/itemInfor'
-
+import * as apis from '../../apis'
 
 const ManagerAccount = () => {
-
-
     const [value, setValue ] = useState('')
+    const [ dataUsers, setDataUsers ] = useState([])
+    const [ textSearch ] = useDebounce(value, 800)
+
+    const fecthDataUsers = async(data) => {
+        const response = await apis.getAllUsers(data)
+
+        if (response.success) {
+            setDataUsers(response.data)
+        }
+    }
+
+    useEffect(() => {
+        const dataPass = {}
+        if (textSearch) {
+            dataPass.title = textSearch
+        }
+        fecthDataUsers(dataPass)
+    }, [textSearch])
+
+    console.log(dataUsers)
+
     return (
         <div className='w-full'>
             <h2 className="font-medium text-2xl">Danh sách tài khoản</h2>
@@ -17,7 +37,7 @@ const ManagerAccount = () => {
                     <form className="relative w-[300px]">
                         <input 
                             className="border-[2px] w-full shadow-sm px-2 py-1 rounded-md outline-none" 
-                            placeholder='Tìm kiếm theo email'
+                            placeholder='Tìm kiếm theo email hoặc số điện thoại'
                             value={value}
                             onChange={(e) => setValue(e.target.value)}
                         >
@@ -48,26 +68,18 @@ const ManagerAccount = () => {
                 <li className="w-[52px]"></li>
             </ul>
 
-            <ItemUserInfor 
-                name={'Tang Duc Vinh'}
-                email={'ducvinh100503@gmail.com'}
-                phone={'07775040328'}
-                role={9}
-            />
+            {dataUsers.map((item, index) => (
+                <Fragment>
+                    <ItemUserInfor 
+                        name={item.name}
+                        email={item.email}
+                        phone={item.phone}
+                        role={item.role}
+                        image={item.avatar}
+                    />
+                </Fragment>
+            ))}
 
-<ItemUserInfor 
-                name={'Tang Duc Vinh'}
-                email={'ducvinh100503@gmail.com'}
-                phone={'07775040328'}
-                role={9}
-            />
-
-<ItemUserInfor 
-                name={'Tang Duc Vinh'}
-                email={'ducvinh100503@gmail.com'}
-                phone={'07775040328'}
-                role={3}
-            />
         </div>
     )
 }

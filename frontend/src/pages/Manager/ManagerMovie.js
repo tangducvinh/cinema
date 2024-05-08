@@ -15,7 +15,7 @@ import { FormAddMovie } from '../../component/forms'
 const type = [
     {
         name: 'Tất cả',
-        value: 'all'
+        value: ''
     },
     {
         name: 'Đang chiếu',
@@ -48,9 +48,12 @@ const ManagerMovie = () => {
         if (text) {
             dataPass.title = text
         }
+        if (status) {
+            dataPass.status = status
+        }
 
         fecthAllMovie(dataPass)
-    }, [text, renderManagerMovie])
+    }, [text, renderManagerMovie, status])
 
     // xử lí thêm phim
     const handleAddMovie = () => {
@@ -106,8 +109,7 @@ const ManagerMovie = () => {
             </ul>
 
             <div>
-                {/* <ItemMovieInfor id={'#93243'} name={'Avatar Dòng chảy nước'} runtime={'140 phút'} status={1}/> */}
-                {status === 'all' ?
+                {/* {status === 'all' ?
                     dataAllMovie?.map((item, index) => (
                         <Fragment key={index}>
                             <ItemMovieInfor 
@@ -133,7 +135,19 @@ const ManagerMovie = () => {
                             />
                         </Fragment>
                     ))
-                }
+                } */}
+
+                    {dataAllMovie?.map((item, index) => (
+                        <Fragment key={index}>
+                            <ItemMovieInfor 
+                                id={item?.id} 
+                                name={item?.original_title} 
+                                runtime={item?.runtime} 
+                                status={item?.status === 'showing' ? 1 : 2}
+                                image={item?.poster_path}
+                                release={item?.release_date}
+                            />
+                        </Fragment>))}
             </div>
         </div>
     )

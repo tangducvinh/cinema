@@ -8,7 +8,7 @@ const ShowModal = ({children}) => {
     return (
         <div 
             className='bg-overlay fixed w-screen h-screen z-10'
-            onClick={() => dispatch(setChidlren(null))}
+            onMouseDown={() => dispatch(setChidlren(null))}
         >{children}</div>
     )
 }

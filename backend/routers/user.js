@@ -14,7 +14,7 @@ const {
 } = require("../controllers/user");
 
 // lay thong tin cua toan bo user
-router.get("/all", [verifyAccessToken, isAdmin], verifyAccessToken, getAllUser);
+router.get("/all", getAllUser);
 // lay thong tin cua 1 user
 router.get("/infor-user", [verifyAccessToken], getUser);
 router.post("/register", register);

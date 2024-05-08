@@ -1,8 +1,9 @@
-import { useState, useEffect, Fragment } from 'react'
+import { useState, useEffect, Fragment, useRef } from 'react'
 import { MdClear } from 'react-icons/md'
 import swal from 'sweetalert'
 import { useDispatch, useSelector } from 'react-redux'
 import moment from 'moment'
+import { Calendar } from 'react-calendar'
 
 import { ItemShowInfor } from '../../component/itemInfor'
 import * as apis from '../../apis'
@@ -10,44 +11,51 @@ import { setChidlren } from '../../redux/slides/appSlice'
 import { FormAddShow } from '../../component/forms'
 
 
-const totalRoom = [
-    {
-        name: 'Phòng 1',
-    },
-    {
-        name: 'Phòng 2',
-    },
-    {
-        name: 'Phòng 3',
-    },
-    {
-        name: 'Phòng 4',
-    },
-    {
-        name: 'Phòng 5',
-    },
-]
-
 const ManagerShow = () => {
     const dispatch = useDispatch()
     const { renderManagerShow } = useSelector(state => state.app)
+    
+    const calendarElement = useRef()
+    const containerElement = useRef()
 
     const [ value, setValue ] = useState()
     const [ dataShows, setDataShows ] = useState([])
     const [ statusDelete, setStatusDelete ] = useState(false)
-    const [ valueDay, setValueDay ] = useState(moment(new Date).format('YYYY-MM-DD'))
+
+    const [ showCalendar, setShowCalendar ] = useState(false)
+    const [ valueCalendar, setValueCalendar ] = useState(new Date)
+    const [ valueSelectRoom, setValueSelectRoom ] = useState('all')
+    const [ listRoom, setListRoom ] = useState([])
 
     const fecthDataShow = async(day) => {
         const response = await apis.getAllShow(day)
 
         if (response?.success) {
-            setDataShows(response.data)
+            if (value) {
+                setDataShows(response.data.filter(item => item.movieId.original_title.toLowerCase().includes(value)))
+            } else {
+                setDataShows(response.data)
+            }
         }
     }
 
+    const fecthListRoom = async(day) => {
+        const response = await apis.getListRoom()
+
+        if (response.success) {
+            setListRoom(response.data.map(item => ({roomId: item._id, name: item.name})))
+        }
+    }
+
+    // apis get all show
     useEffect(() => {
-        fecthDataShow({day: valueDay})
-    }, [statusDelete, valueDay, renderManagerShow])
+        fecthDataShow({day: moment(valueCalendar).format('YYYY-MM-DD')})
+    }, [statusDelete, valueCalendar, renderManagerShow, value])
+
+
+    useEffect(() => {
+        fecthListRoom()
+    }, [])
 
     // handle delete show 
     const handleDeleteShow = async(_id) => {
@@ -62,6 +70,8 @@ const ManagerShow = () => {
         if (willDelete) {
             const response = await apis.deleteShow(_id)
 
+            console.log(response)
+
             swal(response.success ? "Deleted!" : "Error", response.mes || 'Đã có lỗi xảy ra', response.success ? 'success' : 'error')
             if (response.success) {
                 setStatusDelete(prev => !prev)
@@ -69,13 +79,27 @@ const ManagerShow = () => {
         }
     }
 
+    //handle click out calendar is hidden
+    useEffect(() => {
+        const handleHiddenCalendar = (e) => {
+            if (!calendarElement.current?.contains(e.target)) {
+                setShowCalendar(false)
+            }
+        }
+
+        containerElement.current.addEventListener('click', (e) => handleHiddenCalendar(e))
+
+        return containerElement.current.removeEventListener('click', handleHiddenCalendar)
+    }, [])
+
     const handleAddShow = async(_id) => {
         dispatch(setChidlren(<FormAddShow />))
-        console.log(_id)
     }
 
+    console.log(valueSelectRoom)
+
     return (
-        <div className="w-full">
+        <div className="w-full" ref={containerElement}>
             <h2 className="font-medium text-2xl">Danh sách các xuất chiếu</h2>
 
             <form className="relative w-[300px] mt-4">
@@ -98,7 +122,7 @@ const ManagerShow = () => {
 
             <div className="my-4 flex items-center justify-between">
                 <div className='flex items-center gap-5'>
-                    <div>
+                    {/* <div>
                         <laber className='font-medium '>Chọn ngày: </laber>
 
                         <select>
@@ -106,9 +130,28 @@ const ManagerShow = () => {
                             <option>Ngày mai</option>
                             <option>Ngày kia</option>
                         </select>   
+                    </div> */}
+
+                    <div className='relative'>
+                        <label className='font-medium'>Chọn ngày</label>
+                        <input 
+                            onClick={() => setShowCalendar(!showCalendar)}
+                            className='ml-2 border-[1px] rounded-md p-1 border-gray-300 outline-none' 
+                            placeholder='Nhập ngày' 
+                            value={moment(valueCalendar).format('DD/MM/YYYY')}
+                        ></input>
+
+                        {showCalendar &&
+                            <div 
+                                className='absolute left-[100%] top-[100%] bg-white p-4 shadow-lg' 
+                                ref={calendarElement}
+                            >
+                                <Calendar onChange={setValueCalendar} value={valueCalendar} />
+                            </div>
+                        }
                     </div>
 
-                    <div>
+                    {/* <div>
                         <laber className='font-medium '>Chọn phòng: </laber>
 
                         <select>
@@ -117,6 +160,16 @@ const ManagerShow = () => {
                                 <option>{item.name}</option>
                             ))}
                         </select> 
+                    </div> */}
+
+                    <div>
+                        <label className='font-medium mr-2'>Chọn phòng: </label>
+                        <select value={valueSelectRoom} onChange={(e) => setValueSelectRoom(e.target.value)}>
+                            <option value='all'>Tất cả</option>
+                            {listRoom?.map((item, index) => (
+                                <option key={index} value={item.roomId}>{item.name}</option>
+                            ))}
+                        </select>
                     </div>
                 </div>
 
@@ -135,6 +188,7 @@ const ManagerShow = () => {
                 <li className="flex-1 font-semibold">Thời lượng</li>
                 <li className="flex-1 font-semibold">Thời gian chiếu</li>
                 <li className="flex-1 font-semibold">Tên phòng</li>
+                <li className="flex-1 font-semibold">Giá vé</li>
                 <li className="flex-1 font-semibold">Số chỗ</li>
                 <li className="w-[85px]"></li>
             </ul>
@@ -145,23 +199,53 @@ const ManagerShow = () => {
                         <p className='text-center text-gray-500 font-medium'>Không có xuất chiếu nào ở đây</p>
                     </div>
                 :
-                    dataShows?.map((item, index) => (
-                        <Fragment>
-                            <ItemShowInfor 
-                                _id={item._id}
-                                id={item.movieId?.id} 
-                                name={item.movieId.original_title} 
-                                runtime={item.movieId.runtime} 
-                                timeStart={item.begin_time} 
-                                timeEnd={item.end_time}
-                                image={item.movieId.poster_path}
-                                roomName={item.roomId.name}
-                                totalBlock={12}
-                                total={50}
-                                onDelete={handleDeleteShow}
-                            />
-                        </Fragment>
-                    )) 
+                    valueSelectRoom === 'all' ?
+                        dataShows?.map((item, index) => (
+                            <Fragment>
+                                <ItemShowInfor 
+                                    _id={item._id}
+                                    id={item.movieId?.id} 
+                                    name={item.movieId.original_title} 
+                                    runtime={item.movieId.runtime} 
+                                    timeStart={item.begin_time} 
+                                    timeEnd={item.end_time}
+                                    image={item.movieId.poster_path}
+                                    roomName={item.roomId.name}
+                                    totalBlock={12}
+                                    total={50}
+                                    onDelete={handleDeleteShow}
+                                    price={item?.price}
+                                    roomId={item?.roomId._id}
+                                    movieId={item?.movieId._id}
+                                />
+                            </Fragment>
+                        ))
+                        :
+                        dataShows?.filter(item => item.roomId._id === valueSelectRoom).length > 0 ?
+                            dataShows?.filter(item => item.roomId._id === valueSelectRoom)?.map((item, index) => (
+                                <Fragment>
+                                    <ItemShowInfor 
+                                        _id={item._id}
+                                        id={item.movieId?.id} 
+                                        name={item.movieId.original_title} 
+                                        runtime={item.movieId.runtime} 
+                                        timeStart={item.begin_time} 
+                                        timeEnd={item.end_time}
+                                        image={item.movieId.poster_path}
+                                        roomName={item.roomId.name}
+                                        totalBlock={12}
+                                        total={50}
+                                        onDelete={handleDeleteShow}
+                                        price={item?.price}
+                                        roomId={item?.roomId._id}
+                                        movieId={item?.movieId._id}
+                                    />
+                                </Fragment>
+                            )) 
+                            :
+                            <div className='mt-[150px]'>
+                                <p className='text-center text-gray-500 font-medium'>Không có xuất chiếu nào ở đây</p>
+                            </div>
                 }
             </div>
         </div>

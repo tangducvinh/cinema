@@ -9,9 +9,9 @@ const movieSchema = new mongoose.Schema({
     genres: {
         type: Array
     },
-    original_language: {
-        type: String
-    },
+    // original_language: {
+    //     type: String
+    // },
     original_title: {
         type: String
     },
