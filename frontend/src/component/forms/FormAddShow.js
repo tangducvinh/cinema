@@ -175,7 +175,7 @@ const FormAddShow = ({data}) => {
     return (
         <div 
             ref={containerElement}
-            className="w-[700px] mx-auto mt-[50px] bg-white animate-back-up rounded-md overflow-hidden"
+            className="w-[700px] mx-auto bg-white animate-back-up rounded-md overflow-hidden"
             onMouseDown={(e) => e.stopPropagation()}
         >
             <div className="w-full bg-main justify-center relative py-4 flex items-center" >

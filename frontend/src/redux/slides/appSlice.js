@@ -4,6 +4,7 @@ const initialState = {
   children: null,
   renderManagerMovie: false,
   renderManagerShow: false,
+  renderManagerUser: false,
 };
 
 export const appSlice = createSlice({
@@ -20,11 +21,15 @@ export const appSlice = createSlice({
     setRenderManagerShow: (state) => {
     
       state.renderManagerShow = !state.renderManagerShow
+    },
+    setRenderManagerUser: (state) => {
+    
+      state.renderManagerUser = !state.renderManagerUser
     }
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setChidlren, setRenderManagerMovie, setRenderManagerShow } = appSlice.actions;
+export const { setChidlren, setRenderManagerMovie, setRenderManagerShow, setRenderManagerUser } = appSlice.actions;
 
 export default appSlice.reducer;

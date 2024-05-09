@@ -2,12 +2,14 @@ import clsx from 'clsx'
 import { MdEmail, MdOutlineDelete, MdOutlineRestorePage} from "react-icons/md"
 import default_avatar from '../../component/assest/images/defaul_avatar.jpg'
 import { useDispatch } from 'react-redux'
+import swal from 'sweetalert'
 
-import { setChidlren } from '../../redux/slides/appSlice'
+import { setChidlren, setRenderManagerUser } from '../../redux/slides/appSlice'
 import { FormEditUser } from '../../component/forms'
+import * as apis from '../../apis'
 
 
-const ItemUserInfor = ({ name, email, phone, role, image }) => {
+const ItemUserInfor = ({ name, email, phone, role, image, _id }) => {
     console.log(role)
     const dispatch = useDispatch()
 
@@ -17,10 +19,29 @@ const ItemUserInfor = ({ name, email, phone, role, image }) => {
             email,
             phone,
             role,
-            image
+            image,
+            uid: _id
         }
 
         dispatch(setChidlren(<FormEditUser data={dataPass} />))
+    }
+
+    const handleDeleteUser = async() => {
+        const willDelete = await swal({
+            title: "Xoá phim",
+            text: "Bạn có chắn chắc muốn xoá phim không?",
+            icon: "warning",
+            dangerMode: true,
+            buttons: true,
+        });
+            
+        if (willDelete) {
+            const response = await apis.deleteUser(_id)
+            swal(response.success ? "Deleted!" : "Error", response.mes || 'Đã có lỗi xảy ra', response.success ? 'success' : 'error')
+            if (response.success) {
+                dispatch(setRenderManagerUser())
+            }
+        }
     }
 
     return (
@@ -39,7 +60,10 @@ const ItemUserInfor = ({ name, email, phone, role, image }) => {
                 className='cursor-pointer'
                 onClick={handleEditUser}
             ><MdOutlineRestorePage size='22px' /></li>
-            <li className='ml-2 cursor-pointer'><MdOutlineDelete size='22px'/></li>
+            <li 
+                className='ml-2 cursor-pointer'
+                onClick={handleDeleteUser}
+            ><MdOutlineDelete size='22px'/></li>
         </ul>
     )
 }

@@ -221,6 +221,23 @@ const getAllUser = async (req, res) => {
   }
 };
 
+const updateUser = async(req, res) => {
+  try {
+    console.log(req.body)
+    const { name, email, phone, role, uid } = req.body
+
+    const response = await User.findByIdAndUpdate({_id: uid}, {name, email, phone, role: Number(role)}, {new: true})
+
+    return res.status(200).json({
+      success: response ? true : false,
+      mes: response ? 'Cập nhật thông tin thành công' : 'Cập nhật thông tin thất bại'
+    })
+
+  } catch(e) {
+    return res.status(500).json(e)
+  }
+}
+
 // xoa tai khoan
 const deleteUser = async (req, res) => {
   try {
@@ -231,7 +248,7 @@ const deleteUser = async (req, res) => {
 
     return res.status(200).json({
       success: response ? true : false,
-      mes: response ? "Delete user successfully" : "Something went wrong",
+      mes: response ? "Xoá người tài khoản thành công" : "Thực hiện xoá tài khoản thất bại",
     });
   } catch (e) {
     res.status(500).json(e);
@@ -248,4 +265,5 @@ module.exports = {
   getUser,
   sendNewPassword,
   changePassword,
+  updateUser,
 };

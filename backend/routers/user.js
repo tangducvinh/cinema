@@ -11,6 +11,7 @@ const {
   getUser,
   sendNewPassword,
   changePassword,
+  updateUser,
 } = require("../controllers/user");
 
 // lay thong tin cua toan bo user
@@ -23,6 +24,7 @@ router.post("/refresh", refreshToken);
 router.post("/logout", logout);
 router.post("/send-password", sendNewPassword);
 router.post("/change-password", [verifyAccessToken], changePassword);
-router.delete("/:uid", [verifyAccessToken, isAdmin], deleteUser);
+router.put('/', updateUser)
+router.delete("/:uid", deleteUser);
 
 module.exports = router;

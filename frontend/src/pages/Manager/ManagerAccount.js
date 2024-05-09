@@ -1,11 +1,13 @@
 import { useState, useEffect, Fragment } from 'react'
 import { MdClear } from 'react-icons/md'
 import { useDebounce } from 'use-debounce'
+import { useSelector } from 'react-redux'
 
 import { ItemUserInfor } from '../../component/itemInfor'
 import * as apis from '../../apis'
 
 const ManagerAccount = () => {
+    const { renderManagerUser } = useSelector(state => state.app)
     const [value, setValue ] = useState('')
     const [ dataUsers, setDataUsers ] = useState([])
     const [ textSearch ] = useDebounce(value, 800)
@@ -24,7 +26,7 @@ const ManagerAccount = () => {
             dataPass.title = textSearch
         }
         fecthDataUsers(dataPass)
-    }, [textSearch])
+    }, [textSearch, renderManagerUser])
 
     console.log(dataUsers)
 
@@ -76,6 +78,7 @@ const ManagerAccount = () => {
                         phone={item.phone}
                         role={item.role}
                         image={item.avatar}
+                        _id={item._id}
                     />
                 </Fragment>
             ))}
