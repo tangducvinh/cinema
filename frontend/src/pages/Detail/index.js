@@ -18,6 +18,8 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Content from "../../component/Content/Content";
 import ItemMovie from "../../component/Content/ItemMovie/ItemMovie";
+import { useDispatch } from "react-redux";
+import { updateShow } from "../../redux/slides/showSlide";
 
 function Detail() {
   const [activeCalender, setActiveCalender] = useState(0);
@@ -28,7 +30,10 @@ function Detail() {
   };
   const [detailMovie, setDetailMovie] = useState(null);
   const [listShow, setListShow] = useState([]);
+
+  const dispatch = useDispatch();
   const { mid } = useParams();
+
   const fetchDetailMovie = async (mid) => {
     const res = await MovieServices.getDetailMovie(mid);
     setDetailMovie(res.data);
@@ -45,6 +50,7 @@ function Detail() {
       fetchListShow(detailMovie._id, date[`${activeCalender}`].slice(0, 10));
     }
   }, [detailMovie, activeCalender]);
+
   const handleTrailer = () => {
     setTrailer(!trailer);
   };
@@ -60,6 +66,7 @@ function Detail() {
   });
 
   const navigate = useNavigate();
+
   return (
     <div>
       {detailMovie !== null && (
@@ -226,7 +233,17 @@ function Detail() {
                               <button
                                 className="px-4 py-3 border border-gray-400 mr-2 rounded-lg hover:bg-blue-900  hover:text-white"
                                 onClick={() => {
-                                  navigate("/booking");
+                                  navigate(`/booking/${item._id}`);
+                                  console.log("itemmm", item);
+                                  dispatch(
+                                    updateShow({
+                                      ...item,
+                                    })
+                                  );
+                                  localStorage.setItem(
+                                    "timeShow",
+                                    item.begin_time
+                                  );
                                 }}
                               >
                                 {converTimeShow(item.begin_time)}

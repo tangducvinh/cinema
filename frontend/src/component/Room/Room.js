@@ -1,50 +1,29 @@
-function Room({ row = 10, col = 7 }) {
-  var numbers = [];
+import Seat from "../Seat/Seat";
 
-  // Lặp theo hàng
-  for (var i = 0; i < col; i++) {
-    numbers[i] = [];
-    var x = 1;
-    // Lặp theo cột, số cộ từ 0 -> số lượng phần tử của hàng i
-    for (var j = 0; j < row; j++) {
-      numbers[i][j] = x;
-      x++;
-    }
-  }
-
-  console.log("mảng: ", numbers);
-
+function Room({ roomId }) {
+  const room = roomId;
   return (
-    <div className="flex items-center">
-      <table className="w-full">
-        {numbers.map((col, index) => {
-          return (
-            <div className="flex items-center justify-between">
-              <tr>
-                <p className="leading-none w-5 h-5 my-auto text-center font-semibold text-[text-primary] uppercase">
-                  {String.fromCharCode(97 + index)}
-                </p>
-              </tr>
-              <tr>
-                {col.map((row) => {
-                  return (
-                    <td className="leading-none ">
-                      <p className="min-h-5 mx-1 my-2 min-w-5 border border-gray-300 text-center rounded-md">
-                        {row}
-                      </p>
-                    </td>
-                  );
-                })}
-              </tr>
-              <tr>
-                <p className="leading-none w-5 h-5 text-center my-auto font-semibold text-[text-primary] uppercase">
-                  {String.fromCharCode(97 + index)}
-                </p>
-              </tr>
-            </div>
-          );
-        })}
-      </table>
+    <div className="mt-5 px-4 py-4 bg-white">
+      <div>
+        <Seat row={Number(roomId.row)} col={Number(roomId.column)} />
+        <div className="pb-3 pt-10 text-center border-b-4 border-b-orange-600 text-gray-400">
+          Màn hình
+        </div>
+      </div>
+      <div className="my-10 flex justify-around">
+        <div className="flex items-center">
+          <div className="w-5 h-5 bg-slate-500 rounded-md mr-2"></div>
+          <span>Ghế đã bán</span>
+        </div>
+        <div className="flex items-center">
+          <div className="w-5 h-5 bg-orange-600 rounded-md mr-2"></div>
+          <span>Ghế đang chọn</span>
+        </div>
+        <div className="flex items-center">
+          <div className="w-5 h-5 border border-gray-500 rounded-md mr-2"></div>
+          <span>Ghế </span>
+        </div>
+      </div>
     </div>
   );
 }

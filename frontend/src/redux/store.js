@@ -10,10 +10,12 @@ const userConfig = {
   whitelist: ['currentUser']
 }
 
+import showReducer from "./slides/showSlide";
 export const store = configureStore({
   reducer: {
     app: appSlice,
     user: persistReducer(userConfig, userReducer),
+    show: showReducer,
   },
 });
 

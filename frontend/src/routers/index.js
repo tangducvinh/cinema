@@ -13,7 +13,7 @@ const publicRouters = [
     component: Detail,
   },
   {
-    path: "/booking",
+    path: "/booking/:sid",
     component: Booking,
   },
 ];
