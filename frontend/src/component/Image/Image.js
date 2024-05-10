@@ -8,8 +8,6 @@ const Image = forwardRef(({ src, alt, id = "", ...props }, ref) => {
     setFallback(images.noImage);
   };
 
-  console.log(src)
-
   return (
     <img
       ref={ref}
