@@ -13,6 +13,7 @@ import { setChidlren, setRenderManagerUser } from '../../redux/slides/appSlice'
 const FormEditUser = ({data}) => {
     const dispatch = useDispatch()
     const { register, handleSubmit, setValue, watch, reset, formState: {errors} } = useForm()
+    const [ showSubmit, setShowSubmit ] = useState(false)
 
     useEffect(() => {
         setValue('name', data.name)
@@ -21,15 +22,23 @@ const FormEditUser = ({data}) => {
         setValue('role', data.role)
     }, [data])
 
+    // handle listen data submit
+    useEffect(() => {
+        if (watch('name') !== data.name || watch('phone') !== data.phone || watch('role') !== data.role) {
+            setShowSubmit(true)
+        } else {
+            setShowSubmit(false)
+        }
+    }, [watch('name'), watch('email'), watch('phone'), watch('role')])
+
+
+
+
     const onSubmit = async(dataForm) => {
         const dataPass = { ...dataForm}
         dataPass.uid = data.uid
 
-        console.log(dataPass)
-
         const response = await apis.updateUser(dataPass)
-
-        console.log(response)
             
         swal(response.success ? 'Updated' : 'Error', response.mes || 'Đã có lỗi xảy ra', response.success ? 'success' : 'error')
         if (response.success) {
@@ -73,7 +82,8 @@ const FormEditUser = ({data}) => {
                     <input 
                         className='ml-2 border-b-[1px] p-1 border-gray-300 rounded-md flex-1 outline-none' 
                         placeholder='Nhập tên'
-                        {...register("email", {required: true, pattern: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/})}
+                        value={data.email}
+                        // {...register("email", {required: true, pattern: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/})}
                         // value={dataMovie.original_title} 
                         // onChange={(e) => (setDataMovie((prev) => ({...prev, original_title: e.target.value})))}
                     ></input>
@@ -86,7 +96,7 @@ const FormEditUser = ({data}) => {
                     <label className='font-medium'>Số điện thoại</label>
                     <input 
                         className='ml-2 border-b-[1px] p-1 border-gray-300 rounded-md flex-1 outline-none' 
-                        placeholder='Nhập tên'
+                        placeholder='Nhập số điện thoại'
                         {...register("phone", {required: true, minLength: 10, maxLength: 10})}
                         // value={dataMovie.original_title} 
                         // onChange={(e) => (setDataMovie((prev) => ({...prev, original_title: e.target.value})))}
@@ -108,7 +118,7 @@ const FormEditUser = ({data}) => {
 
                 <div className='flex justify-center mt-6 pb-[20px]'>
                     <button 
-                        className={'py-2 mx-auto font-medium rounded-md w-[500px] bg-main'}
+                        className={clsx('py-2 mx-auto font-medium rounded-md w-[500px]', {'bg-main': showSubmit}, {'bg-gray-400 text-white': !showSubmit})}
                     >{data ? 'Cập nhật' : 'Thêm'}</button>
                 </div>
             </form>

@@ -24,6 +24,10 @@ const type = [
     {
         name: 'Sắp chiếu',
         value: 'soon'
+    },
+    {
+        name: 'Đã chiếu',
+        value: 'showed'
     }
 ]
 
@@ -46,7 +50,7 @@ const ManagerMovie = () => {
     useEffect(() => {
         const dataPass = {}
         if (text) {
-            dataPass.title = text
+            dataPass.title = text.trim()
         }
         if (status) {
             dataPass.status = status
@@ -66,7 +70,7 @@ const ManagerMovie = () => {
 
             <div className="mt-5 flex items-center justify-between">
                 <div className="flex items-center">
-                    <form className="relative w-[300px]">
+                    <div className="relative w-[300px]">
                         <input 
                             className="border-[2px] w-full shadow-sm px-2 py-1 rounded-md outline-none" 
                             placeholder='Tên phim'
@@ -81,13 +85,16 @@ const ManagerMovie = () => {
                             >
                                 <MdClear size="18px"/>
                             </span>}
-                    </form>
+                    </div>
 
-                    <select value={status} onChange={(e) => setStatus(e.target.value)} className="ml-3">
-                        {type.map((item) => (
-                            <option key={item.value} value={item.value}>{item.name}</option>
-                        ))}
-                    </select>
+                    <div>
+                        <label className="font-medium mr-2 ml-5">Trạng thái phim</label>
+                        <select value={status} onChange={(e) => setStatus(e.target.value)} className="ml-3">
+                            {type.map((item) => (
+                                <option key={item.value} value={item.value}>{item.name}</option>
+                            ))}
+                        </select>
+                    </div>
                 </div>
 
                 <div>
@@ -143,7 +150,7 @@ const ManagerMovie = () => {
                                 id={item?.id} 
                                 name={item?.original_title} 
                                 runtime={item?.runtime} 
-                                status={item?.status === 'showing' ? 1 : 2}
+                                status={item?.status}
                                 image={item?.poster_path}
                                 release={item?.release_date}
                             />

@@ -17,7 +17,7 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="w-[250px] flex flex-col">
+    <div className="flex flex-col">
       {menu.map((item, index) => (
         <NavLink
           to={item.path}

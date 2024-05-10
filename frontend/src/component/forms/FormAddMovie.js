@@ -177,7 +177,6 @@ const FormAddMovie = ({ id }) => {
         dataPass.poster_path = valuePosterSave
 
         const convertToArray = Object.entries(dataPass)
-        console.log(convertToArray)
         for (let i = 0; i < convertToArray.length; i++) {
             if (convertToArray[i][1]?.length === 0) {
                 swal('Error', 'Vui lòng nhập đầy đủ thông tin', 'error')
@@ -195,8 +194,6 @@ const FormAddMovie = ({ id }) => {
             }
         } else {
             const response = await apis.createMovie(dataPass)
-
-            console.log(response)
 
             swal(response.success ? 'Created' : 'Error', response.mes || 'Đã có lỗi xảy ra', response.success ? 'success' : 'error')
             if (response.success) {
@@ -224,7 +221,7 @@ const FormAddMovie = ({ id }) => {
             <div className='overflow-y-scroll h-full w-full pb-[50px]'>
                 <div className='mt-4 p-4 relative flex gap-4'>
                     <div className='flex-3'>
-                        <img className='w-[100%] h-[400px] object-cover border-[1px] shadow-sm rounded-md' src={valueBackground?.slice(0, 4) === 'http' ? valueBackground : valueBackground?.slice(0, 4) === 'data' ? valueBackground : `${process.env.REACT_APP_IMAGE_URL}${valueBackground}`}></img>
+                        <img className='w-[100%] h-[400px] object-cover border-b-[1px] shadow-sm rounded-md' src={valueBackground?.slice(0, 4) === 'http' ? valueBackground : valueBackground?.slice(0, 4) === 'data' ? valueBackground : `${process.env.REACT_APP_IMAGE_URL}${valueBackground}`}></img>
 
                         <img className='absolute bottom-0 w-[25%] h-[250px] object-cover rounded-md ml-5' src={valuePoster?.slice(0, 4) === 'http' ? valuePoster : valuePoster?.slice(0, 4) === 'data' ? valuePoster : `${process.env.REACT_APP_IMAGE_URL}${valuePoster}`}></img>
                     </div>
@@ -276,7 +273,7 @@ const FormAddMovie = ({ id }) => {
                         <div>
                             <label className='font-medium'>ID Phim</label>
                             <input 
-                                className='ml-2 border-[1px] rounded-md p-1 border-gray-300 outline-none' 
+                                className='ml-2 border-b-[1px] rounded-md p-1 border-gray-300 outline-none' 
                                 placeholder='Nhập id' 
                                 value={dataMovie.id}
                                 onChange={(e) => (setDataMovie((prev) => ({...prev, id: e.target.value})))}
@@ -286,7 +283,7 @@ const FormAddMovie = ({ id }) => {
                         <div>
                             <label className='font-medium'>Ngôn ngữ</label>
                             <input 
-                                className='ml-2 border-[1px] rounded-md p-1 border-gray-300 outline-none capitalize' 
+                                className='ml-2 border-b-[1px] rounded-md p-1 border-gray-300 outline-none capitalize' 
                                 placeholder='Nhập ngôn ngữ' 
                                 value={dataMovie.original_language}
                                 onChange={(e) => (setDataMovie((prev) => ({...prev, original_language: e.target.value})))}
@@ -297,7 +294,7 @@ const FormAddMovie = ({ id }) => {
                     <div className='flex-1 flex items-center mt-4'>
                         <label className='font-medium'>Tên phim</label>
                         <input 
-                            className='ml-2 border-[1px] p-1 border-gray-300 rounded-md flex-1 outline-none' 
+                            className='ml-2 border-b-[1px] p-1 border-gray-300 rounded-md flex-1 outline-none' 
                             placeholder='Nhập tên'
                             value={dataMovie.original_title} 
                             onChange={(e) => (setDataMovie((prev) => ({...prev, original_title: e.target.value})))}
@@ -308,7 +305,7 @@ const FormAddMovie = ({ id }) => {
                     <div className='flex items-center w-full mt-4'>
                         <label className='font-medium'>Thể loại</label>
                         <input 
-                            className='ml-2 border-gray-300 rounded-md border-[1px] flex-1 p-1 outline-none' 
+                            className='ml-2 border-gray-300 rounded-md border-b-[1px] flex-1 p-1 outline-none' 
                             placeholder='Nhập thể loại: Hành động,...' 
                             value={valueGenre} 
                             onChange={(e) => setValueGenre(e.target.value)}
@@ -318,7 +315,7 @@ const FormAddMovie = ({ id }) => {
                     <div className='flex items-center w-full mt-4'>
                         <label className='font-medium'>Đạo diễn</label>
                         <input 
-                            className='ml-2 border-gray-300 rounded-md border-[1px] flex-1 p-1 outline-none' 
+                            className='ml-2 border-gray-300 rounded-md border-b-[1px] flex-1 p-1 outline-none' 
                             placeholder='Nhập tên: James Cameron,...' 
                             value={valueDirector} 
                             onChange={(e) => setValueDirector(e.target.value)}
@@ -337,7 +334,7 @@ const FormAddMovie = ({ id }) => {
                     <div className='flex items-center w-full py-4'>
                         <label className='font-medium'>Tên các công ty: </label>
                         <input 
-                            className='ml-2 border-gray-300 rounded-md border-[1px] flex-1 p-1 outline-none' 
+                            className='ml-2 border-gray-300 rounded-md border-b-[1px] flex-1 p-1 outline-none' 
                             placeholder='Nhập tên: Cinema,...' 
                             value={valueCompany} 
                             onChange={(e) => setValueCompany(e.target.value)}
@@ -349,7 +346,7 @@ const FormAddMovie = ({ id }) => {
                             <label className='font-medium'>Ngày phát hành</label>
                             <input 
                                 onClick={() => setShowCalendar(!showCalendar)}
-                                className='ml-2 border-[1px] rounded-md p-1 border-gray-300 outline-none' 
+                                className='ml-2 border-b-[1px] rounded-md p-1 border-gray-300 outline-none' 
                                 placeholder='Nhập ngày' 
                                 value={moment(valueCalendar).format('DD/MM/YYYY')}
                             ></input>
@@ -367,7 +364,7 @@ const FormAddMovie = ({ id }) => {
                         <div className='ml-4'>
                             <label className='font-medium'>Thời lượng</label>
                             <input 
-                                className='ml-2 border-[1px] rounded-md p-1 w-[100px] border-gray-300 outline-none' 
+                                className='ml-2 border-b-[1px] rounded-md p-1 w-[100px] border-gray-300 outline-none' 
                                 placeholder='Nhập thời lượng' 
                                 type='number'
                                 value={dataMovie.runtime}
@@ -380,6 +377,7 @@ const FormAddMovie = ({ id }) => {
                             <select onChange={(e) => setValueStatus(e.target.value)} value={valueStatus}>
                                 <option value='soon'>Sắp chiếu</option>
                                 <option value='showing'>Đang chiếu</option>
+                                <option value='showed'>Đã chiếu</option>
                             </select>
                         </div>
                     </div>
@@ -387,7 +385,7 @@ const FormAddMovie = ({ id }) => {
                     {/* <div className='flex items-center gap-1 mt-6'>
                         <label className='font-medium'>Ngôn ngữ nói:</label>
                         <input 
-                            className='ml-2 border-gray-300 rounded-md border-[1px] flex-1 p-1 outline-none' 
+                            className='ml-2 border-gray-300 rounded-md border-b-[1px] flex-1 p-1 outline-none' 
                             placeholder='Nhập tên: English,...' 
                             value={spokenLanguage}
                             onChange={(e) => setValueSpokenLanguage(e.target.value)}
@@ -397,7 +395,7 @@ const FormAddMovie = ({ id }) => {
                     <div className='flex items-center flex-1 mt-auto pt-4'>
                         <label className='font-medium'>Tagline</label>
                         <input 
-                            className='ml-2 border-[1px] rounded-md p-1 w-full border-gray-300 outline-none' 
+                            className='ml-2 border-b-[1px] rounded-md p-1 w-full border-gray-300 outline-none' 
                             placeholder='Nhập tagline' 
                             value={dataMovie.tagline}
                             onChange={(e) => (setDataMovie((prev) => ({...prev, tagline: e.target.value})))}
@@ -407,7 +405,7 @@ const FormAddMovie = ({ id }) => {
                     <div className='flex items-center gap-1 mt-6'>
                         <label className='font-medium'>Danh sách key video:</label>
                         <input 
-                            className='ml-2 border-gray-300 rounded-md border-[1px] flex-1 p-1 outline-none' 
+                            className='ml-2 border-gray-300 rounded-md border-b-[1px] flex-1 p-1 outline-none' 
                             placeholder='Nhập tên: usdfsarehe,...' 
                             value={valueKeyVideo}
                             onChange={(e) => setValueKeyVideo(e.target.value)} 
@@ -417,7 +415,7 @@ const FormAddMovie = ({ id }) => {
                     <div className='flex items-center gap-1 mt-6'>
                         <label className='font-medium'>Danh sách diễn viên:</label>
                         <input 
-                            className='ml-2 border-gray-300 rounded-md border-[1px] flex-1 p-1 outline-none' 
+                            className='ml-2 border-gray-300 rounded-md border-b-[1px] flex-1 p-1 outline-none' 
                             placeholder='Nhập tên: davil, sosen,...' 
                             value={valueNameCast}
                             onChange={(e) => setValueNameCast(e.target.value)} 

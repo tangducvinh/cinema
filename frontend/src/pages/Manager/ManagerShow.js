@@ -96,7 +96,7 @@ const ManagerShow = () => {
         dispatch(setChidlren(<FormAddShow />))
     }
 
-    console.log(valueSelectRoom)
+    console.log(dataShows)
 
     return (
         <div className="w-full" ref={containerElement}>
@@ -107,7 +107,7 @@ const ManagerShow = () => {
                     className="border-[2px] w-full shadow-sm px-2 py-1 rounded-md outline-none" 
                     placeholder='Tên phim'
                     value={value}
-                    onChange={(e) => setValue(e.target.value)}
+                    onChange={(e) => setValue(e.target.value.trim())}
                 >
                 </input>
                 {value && 
@@ -211,12 +211,13 @@ const ManagerShow = () => {
                                     timeEnd={item.end_time}
                                     image={item.movieId.poster_path}
                                     roomName={item.roomId.name}
-                                    totalBlock={12}
+                                    totalBlock={item.block_seats.length}
                                     total={50}
                                     onDelete={handleDeleteShow}
                                     price={item?.price}
                                     roomId={item?.roomId._id}
                                     movieId={item?.movieId._id}
+                                    block={item.block_seats.length}
                                 />
                             </Fragment>
                         ))
@@ -233,7 +234,7 @@ const ManagerShow = () => {
                                         timeEnd={item.end_time}
                                         image={item.movieId.poster_path}
                                         roomName={item.roomId.name}
-                                        totalBlock={12}
+                                        totalBlock={item.block_seats.length}
                                         total={50}
                                         onDelete={handleDeleteShow}
                                         price={item?.price}

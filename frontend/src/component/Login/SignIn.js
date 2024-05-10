@@ -6,8 +6,14 @@ import * as UserServices from "../../services/UserServices";
 import { useMutationHooks } from "../../hooks/useMutationHook";
 import Loading from "../LoadingComponent/Loading";
 import Swal from "sweetalert2";
+import { updateUser } from '../../redux/slides/userSlide'
+import { useDispatch } from 'react-redux'
+
 function SignIn() {
+  const dispatch = useDispatch()
+
   const mutationSingIn = useMutationHooks((data) =>
+    // call api login
     UserServices.signInUser(data)
   );
   const [isShowPassword, setIsShowPassword] = useState(false);
@@ -28,7 +34,9 @@ function SignIn() {
         text: "Đăng nhập thành công!",
         icon: "success",
       });
-      console.log("data", data);
+      if (data) {
+        dispatch(updateUser(data.data))
+      }
       // localStorage.setItem("access_token ", data.accessToken);
     } else if (isError) {
       Swal.fire({

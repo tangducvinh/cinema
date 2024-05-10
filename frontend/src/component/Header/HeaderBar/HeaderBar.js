@@ -4,7 +4,11 @@ function HeaderBar({ data }) {
   return (
     <div className="flex items-center">
       {data.map((item) => {
-        return <HeaderBarItem data={item.title} />;
+        return (
+          <div onClick={() => console.log('hello')}>
+            <HeaderBarItem data={item.title} />
+            </div>
+        );
       })}
     </div>
   );

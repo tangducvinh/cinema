@@ -3,18 +3,21 @@ const Show = require("../models/show");
 // tao xuat chieu
 const createShow = async(req, res) => {
     try {
+        console.log('h 1')
         const { begin_time, roomId, end_time, movieId } = req.body
 
         const check1 = await Show.find({roomId, begin_time: {"$lte": new Date(begin_time)}, end_time: {"$gte": new Date(begin_time)},})
         const check2 = await Show.find({roomId, begin_time: {"$lte": new Date(end_time)}, end_time: {"$gte": new Date(end_time)},})
         const check3 = await Show.find({roomId, begin_time: {"$gte": new Date(begin_time)}, end_time: {"$lte": new Date(end_time)},})
 
+        console.log('h 2')
         
         if(check1.length > 0 || check2.length > 0 || check3.length > 0) return res.status(200).json({
             success: false,
             mes: 'Bị trùng giờ chiếu'
         })
 
+        console.log('h3')
         const response = await Show.create(req.body)
         return res.status(200).json({
             success: response ? true : false,
@@ -121,14 +124,35 @@ const updateShow = async(req, res) => {
     try {
         const { sid, begin_time, end_time, movieId, price, roomId } = req.body
 
-        const check1 = await Show.find({roomId, begin_time: {"$lte": new Date(begin_time)}, end_time: {"$gte": new Date(begin_time)},})
-        const check2 = await Show.find({roomId, begin_time: {"$lte": new Date(end_time)}, end_time: {"$gte": new Date(end_time)},})
-        const check3 = await Show.find({roomId, begin_time: {"$gte": new Date(begin_time)}, end_time: {"$lte": new Date(end_time)},})
-        
-        if(check1.length > 0 || check2.length > 0 || check3.length > 0) return res.status(200).json({
+
+        let check1 = await Show.find({roomId, begin_time: {"$lte": new Date(begin_time)}, end_time: {"$gte": new Date(begin_time)},})
+        let check2 = await Show.find({roomId, begin_time: {"$lte": new Date(end_time)}, end_time: {"$gte": new Date(end_time)},})
+        let check3 = await Show.find({roomId, begin_time: {"$gte": new Date(begin_time)}, end_time: {"$lte": new Date(end_time)},})
+
+        console.log('h2')
+
+        if (check1[0]?._id.toString() === sid) {
+            check1 = ''
+        }
+        if (check2[0]?._id.toString() === sid) {
+            check2 = ''
+        } 
+        if (check3[0]?._id.toString() === sid) {
+            check3 = ''
+        }
+
+        console.log('h3')
+
+
+        if(check1.length > 0 || check2.length > 0 || check3.length > 0 ) return res.status(200).json({
             success: false,
             mes: 'Bị trùng giờ chiếu'
         })
+
+        // if((check1.length > 0 && check1?._id.toString() === sid) || (check2?.length > 0 && check2?._id.toString() === sid)  || (check3.length > 0 && check3?._id.toString() === sid)) return res.status(200).json({
+        //     success: false,
+        //     mes: 'Bị trùng giờ chiếu'
+        // })
 
         const response = await Show.findByIdAndUpdate({_id: sid}, {begin_time, end_time, movieId, price, roomId}, {new: true})
 
@@ -136,8 +160,6 @@ const updateShow = async(req, res) => {
             success: response ? true : false,
             mes: response ? 'Thực hiện cập nhật thông tin thành công' : 'Thực hiện cập nhật thất bại'
         })
-
-
     } catch(e) {
         return res.status(500).json(e)
     }

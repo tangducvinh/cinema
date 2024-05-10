@@ -7,8 +7,9 @@ import swal from 'sweetalert'
 import { FormAddMovie, FormEditMovie } from '../../component/forms'
 import { setChidlren, setRenderManagerMovie } from '../../redux/slides/appSlice'
 import * as apis from '../../apis'
+import { statusMovie } from '../../ultis/options'
 
-const ItemMovieInfor = ({ id, name, runtime, status, image, release}) => {
+const ItemMovieInfor = ({ id, name, runtime, status, image, release }) => {
     const dispatch = useDispatch()
 
     const handleUpdateMovie = () => {
@@ -39,10 +40,10 @@ const ItemMovieInfor = ({ id, name, runtime, status, image, release}) => {
             <li>
                 <img className="w-[35px] h-[35px] rounded-sm mr-2 object-cover" src={image.slice(0, 4) === 'http' ? image :`${process.env.REACT_APP_IMAGE_URL}${image}`}></img>
             </li>
-            <li className="flex-2 font-medium">{name}</li>
+            <li className="flex-2 font-medium">{name.length < 27 ? name : `${name.slice(0, 25)}...`}</li>
             <li className="flex-1 font-medium">{`${runtime} phút`}</li>
             <li className="flex-1 font-medium">{moment(release).format('DD/MM/YYYY')}</li>
-            <li className={clsx('flex-1 font-medium', {'text-green-500': status === 1}, {'text-main': status === 2})}>{status == 1 ? 'Đang chiếu' : 'Sắp chiếu'}</li>
+            <li className={clsx('flex-1 font-medium', {'text-green-500': status === 'showing'}, {'text-main': status === 'soon'}, {'text-red-500': status === 'showed'})}>{statusMovie.find(item => item.value === status).name}</li>
             <li 
                 className='cursor-pointer'
                 onClick={handleUpdateMovie}

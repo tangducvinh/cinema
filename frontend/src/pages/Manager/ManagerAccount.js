@@ -5,30 +5,50 @@ import { useSelector } from 'react-redux'
 
 import { ItemUserInfor } from '../../component/itemInfor'
 import * as apis from '../../apis'
+import Pagiantion from '../../component/pagination/Pagination'
+import { listRole } from '../../ultis/options'
 
 const ManagerAccount = () => {
     const { renderManagerUser } = useSelector(state => state.app)
-    const [value, setValue ] = useState('')
+    const [ value, setValue ] = useState('')
     const [ dataUsers, setDataUsers ] = useState([])
     const [ textSearch ] = useDebounce(value, 800)
+    const [ total, setTotal ] = useState()
+    const [ page, setPage ] = useState(1)
+    const [ valueRole, setValueRole ] = useState()
 
     const fecthDataUsers = async(data) => {
         const response = await apis.getAllUsers(data)
 
         if (response.success) {
             setDataUsers(response.data)
+            setTotal(response.counts)
         }
     }
 
     useEffect(() => {
         const dataPass = {}
         if (textSearch) {
-            dataPass.title = textSearch
+            dataPass.title = textSearch.trim()
+        }
+        if (page) {
+            dataPass.page = page
+        }
+        if (valueRole !== 'all') {
+            dataPass.role = valueRole
         }
         fecthDataUsers(dataPass)
-    }, [textSearch, renderManagerUser])
+    }, [textSearch, renderManagerUser, page, valueRole])
 
-    console.log(dataUsers)
+    useEffect(() => {
+        setPage(1)
+    }, [textSearch])
+
+    useEffect(() => {
+        setPage(1)
+    }, [valueRole])
+
+    console.log(valueRole)
 
     return (
         <div className='w-full'>
@@ -53,11 +73,15 @@ const ManagerAccount = () => {
                             </span>}
                     </form>
 
-                    {/* <select className="ml-3">
-                        <option>Tất cả</option>
-                        <option>Đang chiếu</option>
-                        <option>Sắp chiếu</option>
-                    </select> */}
+                    <div>
+                        <label className="font-medium mr-2 ml-5">Vai trò</label>
+                        <select className="ml-3" onChange={(e) => setValueRole(e.target.value)}>
+                            <option value='all'>Tất cả</option>
+                            {listRole.map((item, inex) => (
+                                <option value={item.value}>{item.name}</option>
+                            ))}
+                        </select>
+                    </div>
                 </div>
             </div>
 
@@ -71,7 +95,7 @@ const ManagerAccount = () => {
             </ul>
 
             {dataUsers.map((item, index) => (
-                <Fragment>
+                <Fragment key={index}>
                     <ItemUserInfor 
                         name={item.name}
                         email={item.email}
@@ -83,6 +107,11 @@ const ManagerAccount = () => {
                 </Fragment>
             ))}
 
+            {total > 15 &&
+                <div className='flex justify-center mt-[30px] pb-[50px]' >
+                    <Pagiantion total={total} sizePage={15} page={page} setPage={setPage}/>
+                </div>
+            }
         </div>
     )
 }

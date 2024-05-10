@@ -7,10 +7,9 @@ import swal from 'sweetalert'
 import { setChidlren, setRenderManagerUser } from '../../redux/slides/appSlice'
 import { FormEditUser } from '../../component/forms'
 import * as apis from '../../apis'
-
+import { listRole } from '../../ultis/options'
 
 const ItemUserInfor = ({ name, email, phone, role, image, _id }) => {
-    console.log(role)
     const dispatch = useDispatch()
 
     const handleEditUser = () => {
@@ -45,7 +44,7 @@ const ItemUserInfor = ({ name, email, phone, role, image, _id }) => {
     }
 
     return (
-        <ul className={clsx('flex items-center px-4 w-full mt-3 rounded-md border-b-2 border-l-4  py-1 shadow-md', {'border-l-main': role === 9}, {'border-l-green-500': role === 3})}>
+        <ul className={clsx('flex items-center px-4 w-full mt-3 rounded-md border-b-2 border-l-4  py-1 shadow-md', {'border-l-main': +role === 9}, {'border-l-green-500': +role === 3}, {'border-l-blue-500': +role === 7})}>
             <li className='rounded-sm'>
                 <img 
                     className="w-[35px] h-[35px] mr-2 object-cover rounded-sm" 
@@ -53,9 +52,9 @@ const ItemUserInfor = ({ name, email, phone, role, image, _id }) => {
                 ></img>
             </li>
             <li className="flex-1 font-medium">{name}</li>
-            <li className="flex-1 font-medium">{email}</li>
+            <li className="flex-1 font-medium line-clamp-1 pr-2">{email.length < 28 ? email : `${email.slice(0, 26)}...`}</li>
             <li className="flex-1 font-medium">{phone}</li>
-            <li className="flex-1 font-medium">{+role === 3 ? 'Khách hàng' : 'Quản lí'}</li>
+            <li className="flex-1 font-medium">{listRole.find(item => item.value === +role).name}</li>
             <li 
                 className='cursor-pointer'
                 onClick={handleEditUser}

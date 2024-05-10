@@ -7,14 +7,32 @@ const {
 const crypto = require("crypto");
 const { generatePassword, hashPassword } = require("../ultis/password");
 const sendMail = require("../config/sendMail");
+const { skipMiddlewareFunction } = require("mongoose");
 
 // dang ky tai khoan
 const register = async (req, res) => {
   try {
     const { email, password, name, phone } = req.body;
 
-    if (!email || !password || !name || !phone)
+    if (!email || !password || !name || !phone) {
       return res.status(500).json("Missing input");
+    }
+
+    const checkEmail = await User.findOne({email})
+    if (checkEmail) {
+      return res.status(200).json({
+        success: false,
+        mes: 'Email đã tồn tại'
+      })
+    }
+
+    const checkPhone = await User.findOne({phone})
+    if (checkPhone) {
+      return res.status(200).json({
+        succss: false,
+        mes: 'Số điện thoại đã tồn tại'
+      })
+    }
 
     const hashed = bcrypt.hashSync(password, 10);
 
@@ -28,7 +46,7 @@ const register = async (req, res) => {
     return res.status(200).json({
       success: response ? true : false,
       data: response ? response : "no data",
-      mes: response ? "Register is successfully" : "Resgister is faided",
+      mes: response ? "Đăng kí tài khoản thành công" : "Đăng kí tài khoản thất bại",
     });
   } catch (e) {
     res.status(500).json(e);
@@ -60,11 +78,11 @@ const login = async (req, res) => {
       const refreshToken = generateRefreshToken(response._id);
       // gan refreshToken vao cookie
       res.cookie("refreshToken", refreshToken, { httpOnly: true });
-      const { password, role, ...userData } = response.toObject();
+      const { password, role, phone, email, ...userData } = response.toObject();
+      userData.accessToken = accessToken
       return res.status(200).json({
         success: true,
         data: response ? userData : "no data",
-        accessToken,
       });
     }
   } catch (e) {
@@ -97,7 +115,10 @@ const refreshToken = async (req, res) => {
 const logout = async (req, res) => {
   try {
     res.clearCookie("refreshToken");
-    return res.status(200).json("Logout successfully");
+    return res.status(200).json({
+      success: true,
+      mes: 'Logout thành công'
+    });
   } catch (e) {
     return res.status(500).json(e);
   }
@@ -199,24 +220,43 @@ const changePassword = async (req, res) => {
 // lay danh sach nguoi dung
 const getAllUser = async (req, res) => {
   try {
-    const { title } = req.query
+    const { title, role } = req.query
 
     const query = {}
     if (title) {
-      if (title.slice(0, 1) === '0') {
+      if (Number(title)) {
         query.phone = {$regex: title, $options: 'i'}
       } else {
         query.email = {$regex: title, $options: 'i'}
       }
     }
 
-    const response = await User.find(query);
+    if (role) {
+      query.role = role
+    }
 
-    return res.status(200).json({
-      success: response ? true : false,
-      data: response ? response : "no data",
-    });
-  } catch (e) {
+    let queryCommand = User.find(query);
+
+    const page = +req.query.page || 1
+    const limit = +req.query.limit || 15
+    const skip = (page - 1) * limit
+
+    queryCommand.skip(skip).limit(limit)
+
+    queryCommand.exec()
+      .then(async(response) => {
+        const counts = await User.find(query).countDocuments()
+        
+        return res.status(200).json({
+          success: response ? true : false,
+          data: response ? response : 'no data',
+          counts
+        })
+
+
+      })
+      .catch(err => res.status(500).json(e))
+   } catch (e) {
     res.status(500).json(e);
   }
 };

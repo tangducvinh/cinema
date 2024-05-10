@@ -1,6 +1,7 @@
 import Tippy from "@tippyjs/react/headless";
 import { Wrapper as PopperWrapper } from "../index";
 import MenuItem from "./MenuItem";
+
 function Menu({ children, items }) {
   const renderItem = () => {
     return items.map((item, index) => <MenuItem key={index} data={item} />);

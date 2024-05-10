@@ -14,12 +14,19 @@ const ManagerLayout = () => {
         <div className='relative'>
             {children && <ShowModal children={children} />}
 
-            <Header />
+            <div className='fixed bg-white w-full z-20'><Header /></div>
+            <div className='h-[130px]'></div>
 
-            <div className='w-[1400px] flex mx-auto border-t border-main pt-5'>
-                <Sidebar />
+            <div className='w-[75%] flex mx-auto border-t'>
+                <div className='w-[260px] fixed'>
+                    <Sidebar />
+                </div>
 
-                <Outlet />
+                <div className='w-[260px]'></div>
+
+                <div className='flex-1'>
+                    <Outlet />
+                </div>
             </div>
 
         </div>

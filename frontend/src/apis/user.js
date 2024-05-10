@@ -1,5 +1,11 @@
 import axios from '../axios'
 
+export const register = async(data) => await axios({
+    url: 'user/register',
+    method: 'post',
+    data
+})
+
 export const getAllUsers = async(data) => await axios({
     url: 'user/all',
     method: 'get',

@@ -4,7 +4,7 @@ const seatSchema = new mongoose.Schema({
     status: {
         type: String,
         required: true,
-        enum: ['activity', 'empty']
+        enum: ['activity', 'empty', 'fix']
     },
     name: {
         type: String,

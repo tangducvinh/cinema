@@ -6,6 +6,10 @@ import * as UserServices from "../../services/UserServices";
 import { useMutationHooks } from "../../hooks/useMutationHook";
 import Loading from "../LoadingComponent/Loading";
 import Swal from "sweetalert2";
+import swal from 'sweetalert'
+
+import * as apis from '../../apis'
+
 function SignUp() {
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [isShowConfirmPassword, setIsShowConfirmPassword] = useState(false);
@@ -16,6 +20,8 @@ function SignUp() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [validatePass, setValidatePass] = useState(false);
   const [validateEmail, setValidateEmail] = useState(false);
+
+  const [ isPending, setIsPending ] = useState(false)
 
   const handleOnChangeEmail = (e) => {
     setEmail(e.target.value);
@@ -36,11 +42,26 @@ function SignUp() {
     setPhone(e.target.value);
   };
 
-  const mutationSignUp = useMutationHooks((data) =>
-    UserServices.signUpUser(data)
-  );
-  const { isPending } = mutationSignUp;
-  const handleSignUp = () => {
+  // const mutationSignUp = useMutationHooks((data) =>
+  //   {
+  //     const response = UserServices.signUpUser(data)
+
+  //     // swal(response.success ? 'Thành công' : 'Thất bại', response.mes || 'Đã có lỗi xảy ra', response.success ? 'success' : 'error')
+  //     return response
+  //   }
+  // );
+  // const { isPending, isSuccess, data } = mutationSignUp;
+
+  // // listen when signup success
+  // useEffect(() => {
+  //   if (isSuccess) {
+  //     console.log(data)
+  //   }
+  // }, [isSuccess])
+
+
+
+  const handleSignUp = async() => {
     const reg =
       /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
     console.log("email 123 ", !reg.test(email));
@@ -49,16 +70,21 @@ function SignUp() {
     } else if (!reg.test(email)) {
       setValidateEmail(true);
     } else {
-      mutationSignUp.mutate({
-        name: name,
-        email: email,
-        password: password,
-        phone: phone,
-      });
-      Swal.fire({
-        text: "Bạn đã đăng kí thành công!",
-        icon: "success",
-      });
+      // mutationSignUp.mutate({
+      //   name: name,
+      //   email: email,
+      //   password: password,
+      //   phone: phone,
+      // })
+      setIsPending(true)
+      const response = await apis.register({name, email, password, phone})
+      setIsPending(false)
+
+      swal(response.success ? 'Thành công' : 'Thất bại', response.mes || 'Đã có lỗi xảy ra', response.success ? 'success' : 'error')
+      // Swal.fire({
+      //   text: "Bạn đã đăng kí thành công!",
+      //   icon: "success",
+      // });
     }
   };
 

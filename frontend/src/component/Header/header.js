@@ -3,15 +3,29 @@ import HeaderBar from "./HeaderBar/HeaderBar";
 import { IoSearch } from "react-icons/io5";
 import Button from "../Button/Button";
 import Login from "../Login/Login";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "../Image/Image";
 import { GiRibbonMedal } from "react-icons/gi";
 import Tippy from "@tippyjs/react/headless";
 import { History, LogOut, Profile } from "../Icons";
 import { Wrapper as PopperWrapper } from "../Popper";
 import Menu from "../Popper/Menu/Menu";
+
+import { useSelector } from 'react-redux'
+
 function Header() {
-  const oke = true;
+  const { currentUser } = useSelector(state => state.user)
+  const [ showLogin, setShowLogin ] = useState(true)
+
+  useEffect(() => {
+    if (currentUser?.accessToken) {
+      setShowLogin(false)
+      setLogin(false)
+    } else {
+      setShowLogin(true)
+    }
+  }, [currentUser])
+
   const menu = [
     {
       title: "Phim",
@@ -84,7 +98,7 @@ function Header() {
         <div className="flex items-center">
           <IoSearch />
 
-          {oke ? (
+          {showLogin ? (
             <button
               className="text-[-16] text-gray-500 ml-7"
               onClick={handleLogin}
@@ -97,13 +111,13 @@ function Header() {
                 <Image
                   alt="avatar"
                   src="https://upload.wikimedia.org/wikipedia/commons123/thumb/d/d7/Cristiano_Ronaldo_playing_for_Al_Nassr_FC_against_Persepolis%2C_September_2023_%28cropped%29.jpg/800px-Cristiano_Ronaldo_playing_for_Al_Nassr_FC_against_Persepolis%2C_September_2023_%28cropped%29.jpg"
-                  className=" w-9 h-9 border-4 border-gray-200 rounded-[-50%] "
+                  className=" w-9 h-9 border-4 border-gray-200 rounded-[-50%]"
                 />
               </Menu>
               <div className="flex items-center">
                 <GiRibbonMedal className="text-3xl text-[text-primary]" />
                 <div className="ml-2 hover:text-[text-primary] hover:cursor-pointer">
-                  <p className="text-[-16] font-semibold ">Trần Văn Thịnh</p>
+                  <p className="text-[-16] font-semibold ">{currentUser?.name}</p>
                   <span className="text-xs ">Star</span>
                 </div>
               </div>

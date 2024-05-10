@@ -55,11 +55,11 @@ const FormAddShow = ({data}) => {
 
     useEffect(() => {
         if (data) {
-            console.log(data.movieId)
             setValueSelectMovie(data.movieId)
             setValueSelectRoom(data.roomId)
             setBeginTime(moment(data.timeStart).format('HH:mm'))
             setValueCalendar(data.timeStart)
+            setEndTime(moment(data.timeEnd).format('HH:mm'))
             setValuePrice(data.price)
         }
     }, [data]) 
@@ -68,14 +68,35 @@ const FormAddShow = ({data}) => {
         fecthData()
     }, [])
 
-    // listen enter type full
+//listen enter type full
     useEffect(() => {
-        if (valuePrice) {
-            setShowSubmit(true)
-        } else {
-            setShowSubmit(false)
+        if (!data) {
+            if (valuePrice) {
+                console.log('hello')
+                setShowSubmit(true)
+            } else {
+                setShowSubmit(false)
+            }
         }
-    }, [valuePrice])
+    }, [valuePrice, data])
+
+    // listen datasubmit
+    useEffect(() => {
+        if (endTime.split(':')[0].length === 1) {
+            setEndTime(prev => `0${prev}`)
+        }
+        console.log(moment(valueCalendar).format('YYYY-MM-DD'))
+        console.log(moment(data?.timeStart).format('YYYY-MM-DD'))
+        if (data) {
+            if (valueSelectMovie !== data.movieId || valueSelectRoom !== data.roomId || endTime !== moment(data.timeEnd).format('HH:mm')
+             || valuePrice != data.price || moment(valueCalendar).format('YYYY-MM-DD') !== moment(data.timeStart).format('YYYY-MM-DD')
+            ) {
+                setShowSubmit(true)
+            } else {
+                setShowSubmit(false)
+            }
+        }
+    }, [valueSelectMovie, valueSelectRoom, endTime, valueCalendar, valuePrice, data])
 
     //handle click out calendar is hidden
     useEffect(() => {
@@ -151,6 +172,8 @@ const FormAddShow = ({data}) => {
             console.log(dataPass)
 
             const response = await apis.updateShow(dataPass)
+
+            console.log(response)
             
             swal(response.success ? 'Updated' : 'Error', response.mes || 'Đã có lỗi xảy ra', response.success ? 'success' : 'error')
             if (response.success) {
