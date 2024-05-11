@@ -5,7 +5,7 @@ import { SliderLayout } from "../component/Layout";
 
 const publicRouters = [
   {
-    path: "/",
+    path: "*",
     component: Home,
   },
   {
@@ -19,3 +19,11 @@ const publicRouters = [
 ];
 
 export { publicRouters };
+
+
+export const paths = {
+  home: '*',
+  manager: '/manager',
+  movie: '/movie',
+  account: '/account'
+}

@@ -10,21 +10,29 @@ const instance = axios.create({
 // Add a request interceptor
 instance.interceptors.request.use(function(config) {
     // Do something before request is sent
-
+    console.log('hello1')
     let dataLocalStorage = window.localStorage.getItem('persist:user')
     // console.log(dataLocalStorage)
+    dataLocalStorage = JSON.parse(dataLocalStorage)
 
-    if (dataLocalStorage && typeof dataLocalStorage === 'string') {
-      dataLocalStorage = JSON.parse(dataLocalStorage)
-      if (dataLocalStorage.accessToken) {
-        const token = JSON.parse(dataLocalStorage.accessToken)
+    if (dataLocalStorage?.currentUser !== 'null') {
+      const token = JSON.parse(dataLocalStorage.currentUser).accessToken
 
-        config.headers = `Bearer ${token}`
+      if (token) {
+        console.log(token)
+        config.headers['token'] = `Bearer ${token}`
+
+        console.log('hello 4')
         return config
       }
+      console.log('heelo 1')
+      return config
+    } else {
+      return config
     }
 
-  return config
+    // console.log('hello end')
+  // return config
 }, function (error) {
   // Do something with request error
   // return Promise.resolve(error.response.data);

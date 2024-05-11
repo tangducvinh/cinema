@@ -3,6 +3,7 @@ import appSlice from "./slides/appSlice";
 import userReducer from "./slides/userSlide";
 import storage from 'redux-persist/lib/storage'
 import { persistReducer, persistStore } from 'redux-persist'
+import showReducer from "./slides/showSlide";
 
 const userConfig = {
   key: 'user',
@@ -10,7 +11,6 @@ const userConfig = {
   whitelist: ['currentUser']
 }
 
-import showReducer from "./slides/showSlide";
 export const store = configureStore({
   reducer: {
     app: appSlice,

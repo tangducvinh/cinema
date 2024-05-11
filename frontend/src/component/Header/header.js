@@ -10,6 +10,8 @@ import Tippy from "@tippyjs/react/headless";
 import { History, LogOut, Profile } from "../Icons";
 import { Wrapper as PopperWrapper } from "../Popper";
 import Menu from "../Popper/Menu/Menu";
+import { GrUserManager } from "react-icons/gr"
+import { Link } from 'react-router-dom'
 
 import { useSelector } from 'react-redux'
 
@@ -25,6 +27,8 @@ function Header() {
       setShowLogin(true)
     }
   }, [currentUser])
+
+  console.log(currentUser)
 
   const menu = [
     {
@@ -66,6 +70,7 @@ function Header() {
   const handleLogin = () => {
     setLogin(true);
   };
+
   return (
     <div className="">
       {login && (
@@ -77,13 +82,13 @@ function Header() {
       )}
       <div className="mx-80 h-28 flex items-center justify-between">
         <div className="flex items-center">
-          <div className="w-52">
+          <Link to={'/'} className="w-52">
             <img
               className="w-16 h-16 object-cover"
               alt="logo-cinema"
               src={images.logo.default}
             />
-          </div>
+          </Link>
 
           <div className="flex items-center">
             <img
@@ -121,6 +126,13 @@ function Header() {
                   <span className="text-xs ">Star</span>
                 </div>
               </div>
+
+              {(currentUser?.role === '7' || currentUser?.role === '9') &&
+                <Link to={'/manager/movie'} className="flex flex-col items-center ml-8 border p-2 rounded-md hover:bg-main">
+                  <GrUserManager size='20px' />
+                  <p className="font-medium">Quản lí</p>
+                </Link>
+              }
             </div>
           )}
         </div>

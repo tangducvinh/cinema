@@ -34,6 +34,8 @@ function SignIn() {
         text: "Đăng nhập thành công!",
         icon: "success",
       });
+
+      console.log(data)
       if (data) {
         dispatch(updateUser(data.data))
       }
