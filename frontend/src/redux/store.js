@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import appSlice from "./slides/appSlice";
 import userReducer from "./slides/userSlide";
 import storage from "redux-persist/lib/storage";
+import showReducer from "./slides/showSlide";
 import { persistReducer, persistStore } from "redux-persist";
 
 const userConfig = {
