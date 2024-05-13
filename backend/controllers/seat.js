@@ -5,6 +5,8 @@ const createSeat = async (req, res) => {
   try {
     const response = await Seat.create(req.body);
 
+    console.log(req.body)
+
     return res.status(200).json({
       success: response ? true : false,
       data: response ? response : "no data",
@@ -36,7 +38,27 @@ const getListSeat = async (req, res) => {
   }
 };
 
+const updateSeat = async(req, res) => {
+  try {
+    const { id, status, name } = req.body
+
+    const response = await Seat.findByIdAndUpdate({_id: id}, {status: status, name: name}, {new: true})
+
+    console.log(response)
+
+    return res.status(200).json({
+      success: response ? true : false,
+      data: response ? response : 'no data',
+      mes: response ? 'Cập nhật trạng thái ghế thành công' : 'Cập nhật trạng thái ghế thất bại'
+    })
+
+  } catch(e) {
+    res.status(500).json(e)
+  }
+}
+
 module.exports = {
   createSeat,
   getListSeat,
+  updateSeat
 };

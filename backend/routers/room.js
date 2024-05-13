@@ -1,8 +1,8 @@
 const router = require('express').Router()
-const { verifyAccessToken, isAdmin } = require('../middlewares/verifyToken')
+const { verifyAccessToken, isAdmin, checkRole } = require('../middlewares/verifyToken')
 const { createRoom, getListRoom } = require('../controllers/room')
 
-router.post('/create', createRoom)
-router.get('/list', getListRoom)
+router.post('/create', verifyAccessToken, checkRole, createRoom)
+router.get('/list', verifyAccessToken, checkRole, getListRoom)
 
 module.exports = router

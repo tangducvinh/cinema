@@ -39,7 +39,7 @@ const ManagerShow = () => {
         }
     }
 
-    const fecthListRoom = async(day) => {
+    const fecthListRoom = async() => {
         const response = await apis.getListRoom()
 
         if (response.success) {

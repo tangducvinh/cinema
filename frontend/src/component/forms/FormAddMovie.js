@@ -195,8 +195,8 @@ const FormAddMovie = ({ id }) => {
         } else {
             const response = await apis.createMovie(dataPass)
 
-            swal(response.success ? 'Created' : 'Error', response.mes || 'Đã có lỗi xảy ra', response.success ? 'success' : 'error')
-            if (response.success) {
+            swal(response?.success ? 'Created' : 'Error', response?.mes || 'Đã có lỗi xảy ra', response?.success ? 'success' : 'error')
+            if (response?.success) {
                 dispatch(setChidlren(null))
                 dispatch(setRenderManagerMovie())
             }
