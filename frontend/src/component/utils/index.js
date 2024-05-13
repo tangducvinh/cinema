@@ -67,8 +67,8 @@ export const converTimeShow = (dateString) => {
     // Chuyển chuỗi ISO thành đối tượng Date
     const dateObject = new Date(dateString);
     // Trích xuất giờ và phút
-    const hour = dateObject.getUTCHours();
-    const minute = dateObject.getUTCMinutes();
+    const hour = dateObject.getHours();
+    const minute = dateObject.getMinutes();
     // Trả về chuỗi định dạng giờ:phút
     return `${hour.toString().padStart(2, "0")}:${minute
       .toString()

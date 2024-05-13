@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { converTimeShow, convertCalender } from "../../component/utils";
 import { useMutationHooks } from "../../hooks/useMutationHook";
 import * as ShowServices from "../../services/ShowServices";
-import * as SeatServices from "../../services/SeatServices";
+
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateShow } from "../../redux/slides/showSlide";
@@ -48,11 +48,6 @@ function Booking() {
     setDataShowDetail(res.data);
   });
 
-  // const mutationListSeat = useMutationHooks(async (idRoom) => {
-  //   const res = await SeatServices.getListSeat(idRoom);
-  //   setListSeat(res.data);
-  // });
-
   const mutationListShow = useMutationHooks(async (data) => {
     const { movieId, day } = data;
     const res = await ShowServices.getListShow(movieId, day);
@@ -61,6 +56,19 @@ function Booking() {
 
   useEffect(() => {
     mutationDetailShow.mutate(sid);
+    if (dataShowDetail.length !== 0) {
+      const value = {
+        movieId: dataShowDetail.movieId._id,
+        total_pay: 0,
+        seats: [],
+        userId: "66212212a8f0f37c788e917f",
+        showId: dataShowDetail._id,
+        roomId: dataShowDetail.roomId._id,
+        status: "none",
+        method_pay: "none",
+      };
+      localStorage.setItem("booking", JSON.stringify(value));
+    }
   }, [sid]);
 
   useEffect(() => {
@@ -70,9 +78,20 @@ function Booking() {
         movieId: dataShowDetail.movieId._id,
         day: day,
       });
-      // mutationListSeat.mutate(dataShowDetail.roomId._id);
+      // const value = {
+      //   movieId: dataShowDetail.movieId._id,
+      //   total_pay: 0,
+      //   seats: [],
+      //   userId: "66212212a8f0f37c788e917f",
+      //   showId: dataShowDetail._id,
+      //   roomId: dataShowDetail.roomId._id,
+      //   status: "none",
+      //   method_pay: "none",
+      // };
+      // localStorage.setItem("booking", JSON.stringify(value));
     }
   }, [dataShowDetail]);
+
   console.log("datashow detail", dataShowDetail);
 
   return (
@@ -122,7 +141,7 @@ function Booking() {
             </div>
 
             {/* Ghế  */}
-            {<Room roomId={dataShowDetail.roomId} />}
+            {<Room show={dataShowDetail} sid={sid} />}
           </div>
 
           {/* Hóa đơn */}

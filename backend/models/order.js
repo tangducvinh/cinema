@@ -1,26 +1,31 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
-const orderSchema = new mongoose.Schema({
-    movieID: {
-        type: mongoose.Types.ObjectId, ref: 'Movie'
+const orderSchema = new mongoose.Schema(
+  {
+    movieId: {
+      type: mongoose.Types.ObjectId,
+      ref: "Movie",
     },
     total_pay: {
-        type: Number
+      type: Number,
     },
     seats: {
-        type: Array,
+      type: Array,
     },
     status: {
-        type: String,
+      type: String,
     },
     userId: {
-        type: mongoose.Types.ObjectId, ref: 'User'
+      type: mongoose.Types.ObjectId,
+      ref: "User",
     },
-    method_pay: string,
+    method_pay: { type: String },
     showId: {
-        type: mongoose.Types.ObjectId, ref: 'Show'
-    }
+      type: mongoose.Types.ObjectId,
+      ref: "Show",
+    },
+  },
+  { timestamps: true }
+);
 
-}, {timestamps: true})
-
-module.exports = mongoose.model('Order', orderSchema)
+module.exports = mongoose.model("Order", orderSchema);

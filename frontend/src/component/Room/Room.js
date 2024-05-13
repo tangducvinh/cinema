@@ -1,11 +1,31 @@
+import { useMutationHooks } from "../../hooks/useMutationHook";
 import Seat from "../Seat/Seat";
+import * as SeatServices from "../../services/SeatServices";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
-function Room({ roomId }) {
-  const room = roomId;
+function Room({ show, sid }) {
+  const [listSeat, setListSeat] = useState([]);
+  const data = show;
+
+  const mutationListSeat = useMutationHooks(async (idRoom) => {
+    const res = await SeatServices.getListSeat(idRoom);
+    setListSeat(res.data);
+  });
+  useEffect(() => {
+    mutationListSeat.mutate(data.roomId._id);
+  }, [data]);
+
   return (
     <div className="mt-5 px-4 py-4 bg-white">
       <div>
-        <Seat row={Number(roomId.row)} col={Number(roomId.column)} />
+        <Seat
+          row={Number(data.roomId.row)}
+          col={Number(data.roomId.column)}
+          blockSeat={data.block_seats}
+          listSeat={listSeat}
+          sid={sid}
+        />
         <div className="pb-3 pt-10 text-center border-b-4 border-b-orange-600 text-gray-400">
           Màn hình
         </div>

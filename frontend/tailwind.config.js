@@ -30,14 +30,15 @@ module.exports = {
       },
       colors: {
         main: "#F97316",
-        'overlay': 'rgba(0, 0, 0, 0.7)',
-        'overlay-red': 'rgba(176, 60, 66, 0.8)',
+        overlay: "rgba(0, 0, 0, 0.7)",
+        "overlay-red": "rgba(176, 60, 66, 0.8)",
       },
       fontSize: {
         "[-16]": "16px",
         "[-14]": "14px",
         "[-18]": "18px",
         "[-20]": "20px",
+        "[-12]": "12px",
       },
       borderRadius: {
         "[-92]": "92px",
@@ -45,28 +46,28 @@ module.exports = {
         "[-50%]": "50%",
       },
       flex: {
-        '1': '1 1 0%',
-        '2': '2 2 0%',
-        '3': '3 3 0%',
-        '4': '4 4 0%',
-        '5': '5 5 0%',
-        '6': '6 6 0%',
-        '7': '7 7 0%',
+        1: "1 1 0%",
+        2: "2 2 0%",
+        3: "3 3 0%",
+        4: "4 4 0%",
+        5: "5 5 0%",
+        6: "6 6 0%",
+        7: "7 7 0%",
       },
       animation: {
-        'back-up': 'back-up 0.3s ease-in'
+        "back-up": "back-up 0.3s ease-in",
       },
       keyframes: {
-        'back-up': {
-          'from': {
-            transform: 'translateY(50px)',
-            opacity: '0'
+        "back-up": {
+          from: {
+            transform: "translateY(50px)",
+            opacity: "0",
           },
-          'to': {
-            transform: 'translateY(0px)',
-            opacity: '1'
-          }
-        }
+          to: {
+            transform: "translateY(0px)",
+            opacity: "1",
+          },
+        },
       },
       boxShadow: {
         trailer: "0 0 75px 86px rgba(0, 0 , 0, 0.6) inset",
