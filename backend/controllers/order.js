@@ -3,7 +3,7 @@ const Order = require("../models/order");
 
 const createOrder = async (req, res) => {
   try {
-    console.log("boyd ", req.body);
+
     const {
       movieID,
       total_pay,
@@ -15,7 +15,17 @@ const createOrder = async (req, res) => {
       roomId,
     } = req.body;
 
-    const response = await Order.create(req.body);
+    let codeNumber
+
+    do {
+      console.log('hello')
+      codeNumber = Math.round(Math.random() * 10000000)
+      var order = Order.findOne({orderNumber: codeNumber})
+    } while(order.length > 0)
+
+    console.log(codeNumber)
+
+    const response = await Order.create({...req.body, orderNumber: codeNumber});
     return res.status(200).json({
       success: response ? true : false,
       data: response ? response : "Dat ve that bai",
@@ -58,15 +68,26 @@ const detailOrder = async (req, res) => {
 const allOrder = async (req, res) => {
   try {
     // sid: id cua xuat chieu (show)
-    const { oid } = req.params;
-    const response = await Order.find().populate([
+
+    const { day, title } = req.query
+
+    const minTime = new Date(`${day} 00:00:00`);
+    const maxTime = new Date(`${day} 23:59:00`);
+
+    const query = {};
+    console.log(title)
+    if (title) {
+      query.orderNumber = title
+    }
+
+    const response = await Order.find({...query, createdAt: { $gte: minTime, $lt: maxTime }}).populate([
       {
         path: "movieId",
         select: "original_title",
       },
       {
         path: "userId",
-        select: "name email",
+        select: "name email phone",
       },
       {
         path: "showId",

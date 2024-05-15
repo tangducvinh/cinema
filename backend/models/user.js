@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         // 9: admin
         // 7: nhan vien
-        // 3: nguoi dung user
+        // 3: nguoi dung usercd 
         enum: [7, 3, 9],
         default: 3,
     },

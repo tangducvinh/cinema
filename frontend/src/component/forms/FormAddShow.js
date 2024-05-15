@@ -181,6 +181,7 @@ const FormAddShow = ({data}) => {
                 dispatch(setRenderManagerShow())
             }
         } else {
+            console.log(dataPass)
             const response = await apis.createShow(dataPass)
 
             swal(response.success ? 'Created' : 'Error', response.mes || 'Đã có lỗi xảy ra', response.success ? 'success' : 'error')

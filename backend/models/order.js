@@ -12,6 +12,10 @@ const orderSchema = new mongoose.Schema(
     seats: {
       type: Array,
     },
+    orderNumber: {
+      type: Number,
+      unique: true,
+    },
     status: {
       type: String,
     },

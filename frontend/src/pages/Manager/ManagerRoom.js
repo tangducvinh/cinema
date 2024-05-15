@@ -17,6 +17,7 @@ const ManagerRoom = () => {
 
         if (response.success) {
             setListRoom(response.data.map(item => ({roomId: item._id, name: item.name, width: item.column, height: item.row})))
+            console.log(response)
             setValueSelectRoom(response.data[0]._id)
         }
     }

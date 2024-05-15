@@ -4,7 +4,7 @@ const Show = require("../models/show");
 const createShow = async (req, res) => {
   try {
     console.log("h 1");
-    const { begin_time, roomId, end_time, movieId } = req.body;
+    const { begin_time, roomId, end_time, movieId, day } = req.body;
 
     const check1 = await Show.find({
       roomId,
@@ -23,6 +23,8 @@ const createShow = async (req, res) => {
     });
 
     console.log("h 2");
+
+    console.log({check1, check2, check3})
 
     if (check1.length > 0 || check2.length > 0 || check3.length > 0)
       return res.status(200).json({
