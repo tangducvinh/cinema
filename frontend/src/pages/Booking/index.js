@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import Button from "../../component/Button/Button";
 import Image from "../../component/Image/Image";
-
+import { BsQrCode } from "react-icons/bs";
 import { Table } from "antd";
 import { useQuery } from "@tanstack/react-query";
 import { converTimeShow, convertCalender } from "../../component/utils";
@@ -14,11 +14,17 @@ import { updateShow } from "../../redux/slides/showSlide";
 import Swal from "sweetalert2";
 import Cart from "../../component/Cart/Cart";
 import Room from "../../component/Room/Room";
+import { updateOrder } from "../../redux/slides/orderSlide";
+import Bill from "../../component/Bill/Bill";
 
 function Booking() {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.currentUser);
   const [state, setState] = useState(0);
+  const [check, setCheck] = useState(false);
+  const [bill, setBill] = useState(false);
 
-  const actions = [
+  let actions = [
     {
       name: "Chọn phim/ Rạp / Xuất",
       status: true,
@@ -29,11 +35,11 @@ function Booking() {
     },
     {
       name: "Thanh toán",
-      status: false,
+      status: check,
     },
     {
       name: "Xác nhận",
-      status: false,
+      status: bill,
     },
   ];
 
@@ -61,8 +67,8 @@ function Booking() {
         movieId: dataShowDetail.movieId._id,
         total_pay: 0,
         seats: [],
-        userId: "66212212a8f0f37c788e917f",
-        showId: dataShowDetail._id,
+        userId: user._id,
+        showId: sid,
         roomId: dataShowDetail.roomId._id,
         status: "none",
         method_pay: "none",
@@ -70,6 +76,10 @@ function Booking() {
       localStorage.setItem("booking", JSON.stringify(value));
     }
   }, [sid]);
+
+  // const countinue = () => {
+  //   setCheck(true);
+  // };
 
   useEffect(() => {
     if (dataShowDetail.length !== 0) {
@@ -89,6 +99,14 @@ function Booking() {
       //   method_pay: "none",
       // };
       // localStorage.setItem("booking", JSON.stringify(value));
+      dispatch(
+        updateOrder({
+          movieId: dataShowDetail.movieId._id,
+          showId: dataShowDetail._id,
+          roomId: dataShowDetail.roomId._id,
+          seats: [],
+        })
+      );
     }
   }, [dataShowDetail]);
 
@@ -111,43 +129,115 @@ function Booking() {
           })}
         </div>
       </div>
+      {bill === false ? (
+        <div>
+          {dataShowDetail.length !== 0 && (
+            <div className="mx-80 mt-6 flex">
+              <div className="w-[-860] h-28 ">
+                {check === false ? (
+                  <div>
+                    {/* Xuất chiếu */}
+                    <div className="flex py-3 px-3 bg-white rounded-md items-center">
+                      <span className="min-w-32 ml-5 font-semibold">
+                        Đổi xuất chiếu
+                      </span>
+                      <div className="flex flex-wrap">
+                        {listShow.length !== 0 &&
+                          listShow.map((item) => {
+                            return (
+                              <button
+                                className={`px-4 py-3 border border-gray-400 mr-4 mb-1 rounded-lg hover:bg-blue-900  hover:text-white ${
+                                  item.begin_time ===
+                                    dataShowDetail.begin_time &&
+                                  "bg-blue-900 text-white"
+                                }`}
+                                onClick={() => {
+                                  navigate(`/booking/${item._id}`);
+                                  const value = {
+                                    movieId: "",
+                                    total_pay: 0,
+                                    seats: [],
+                                    userId: "",
+                                    showId: "",
+                                    roomId: "",
+                                    status: "none",
+                                    method_pay: "none",
+                                  };
+                                  localStorage.setItem(
+                                    "booking",
+                                    JSON.stringify(value)
+                                  );
+                                }}
+                              >
+                                {converTimeShow(item.begin_time)}
+                              </button>
+                            );
+                          })}
+                      </div>
+                    </div>
 
-      {dataShowDetail.length !== 0 && (
-        <div className="mx-80 mt-6 flex">
-          <div className="w-[-860] h-28 ">
-            {/* Xuất chiếu */}
-            <div className="flex py-3 px-3 bg-white rounded-md items-center">
-              <span className="min-w-32 ml-5 font-semibold">
-                Đổi xuất chiếu
-              </span>
-              <div className="flex flex-wrap">
-                {listShow.length !== 0 &&
-                  listShow.map((item) => {
-                    return (
-                      <button
-                        className={`px-4 py-3 border border-gray-400 mr-4 mb-1 rounded-lg hover:bg-blue-900  hover:text-white ${
-                          item.begin_time === dataShowDetail.begin_time &&
-                          "bg-blue-900 text-white"
-                        }`}
+                    {/* Ghế  */}
+                    <Room show={dataShowDetail} sid={sid} />
+                  </div>
+                ) : (
+                  <div className="flex flex-col justify-center items-center bg-white py-10">
+                    <div className="text-4xl mb-7">Quét để thanh toán</div>
+                    <BsQrCode className="w-96 h-96" />
+                  </div>
+                )}
+              </div>
+
+              {/* Hóa đơn */}
+              <div className="flex-1">
+                <Cart dataShowDetail={dataShowDetail} />
+                <div className="flex  justify-end mt-4 ">
+                  {bill === false && (
+                    <div className="mr-3">
+                      <Button
+                        outline
                         onClick={() => {
-                          navigate(`/booking/${item._id}`);
+                          setCheck(false);
                         }}
                       >
-                        {converTimeShow(item.begin_time)}
-                      </button>
-                    );
-                  })}
+                        Quay lại
+                      </Button>
+                    </div>
+                  )}
+
+                  <div>
+                    {check === false ? (
+                      <Button
+                        primary
+                        onClick={() => {
+                          let localBooking = JSON.parse(
+                            localStorage.getItem("booking")
+                          );
+                          if (localBooking.seats.length !== 0) {
+                            setCheck(true);
+                          }
+                        }}
+                      >
+                        Tiếp tục
+                      </Button>
+                    ) : (
+                      <Button
+                        primary
+                        onClick={() => {
+                          setBill(true);
+                        }}
+                      >
+                        Thanh toán
+                      </Button>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
-
-            {/* Ghế  */}
-            {<Room show={dataShowDetail} sid={sid} />}
-          </div>
-
-          {/* Hóa đơn */}
-          <div className="flex-1">
-            <Cart dataShowDetail={dataShowDetail} />
-          </div>
+          )}
+        </div>
+      ) : (
+        <div className="mx-80 mt-6 flex justify-center">
+          <Bill />
         </div>
       )}
     </div>

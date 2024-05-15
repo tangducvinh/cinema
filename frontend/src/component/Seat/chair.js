@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
-
+import { useDispatch } from "react-redux";
+import { updateOrder } from "../../redux/slides/orderSlide";
 function Chair({ col, sold, click, cancelClick }) {
+  const dispatch = useDispatch();
   const localBooking = JSON.parse(localStorage.getItem("booking"));
 
   const [book, setBook] = useState(false);
@@ -27,6 +29,11 @@ function Chair({ col, sold, click, cancelClick }) {
       cancelClick();
     }
   };
+
+  // if (book === true) {
+  //   dispatch(updateOrder({ seats: col }));
+  // }
+
   return (
     <div>
       {col !== undefined ? (

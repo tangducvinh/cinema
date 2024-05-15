@@ -10,25 +10,25 @@ import Tippy from "@tippyjs/react/headless";
 import { History, LogOut, Profile } from "../Icons";
 import { Wrapper as PopperWrapper } from "../Popper";
 import Menu from "../Popper/Menu/Menu";
-import { GrUserManager } from "react-icons/gr"
-import { Link } from 'react-router-dom'
+import { GrUserManager } from "react-icons/gr";
+import { Link } from "react-router-dom";
 
-import { useSelector } from 'react-redux'
+import { useSelector } from "react-redux";
 
 function Header() {
-  const { currentUser } = useSelector(state => state.user)
-  const [ showLogin, setShowLogin ] = useState(true)
+  const { currentUser } = useSelector((state) => state.user);
+  const [showLogin, setShowLogin] = useState(true);
 
   useEffect(() => {
     if (currentUser?.accessToken) {
-      setShowLogin(false)
-      setLogin(false)
+      setShowLogin(false);
+      setLogin(false);
     } else {
-      setShowLogin(true)
+      setShowLogin(true);
     }
-  }, [currentUser])
+  }, [currentUser]);
 
-  console.log(currentUser)
+  console.log(currentUser);
 
   const menu = [
     {
@@ -53,12 +53,12 @@ function Header() {
     {
       title: "Thông tin cá nhân",
       icon: <Profile />,
-      to: "/",
+      to: "/profile",
     },
     {
       title: "Lịch sử",
       icon: <History />,
-      to: "/",
+      to: "/history",
     },
     {
       title: "Đăng xuất",
@@ -82,7 +82,7 @@ function Header() {
       )}
       <div className="mx-80 h-28 flex items-center justify-between">
         <div className="flex items-center">
-          <Link to={'/'} className="w-52">
+          <Link to={"/"} className="w-52">
             <img
               className="w-16 h-16 object-cover"
               alt="logo-cinema"
@@ -115,24 +115,29 @@ function Header() {
               <Menu items={userMenu}>
                 <Image
                   alt="avatar"
-                  src="https://upload.wikimedia.org/wikipedia/commons123/thumb/d/d7/Cristiano_Ronaldo_playing_for_Al_Nassr_FC_against_Persepolis%2C_September_2023_%28cropped%29.jpg/800px-Cristiano_Ronaldo_playing_for_Al_Nassr_FC_against_Persepolis%2C_September_2023_%28cropped%29.jpg"
+                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/768px-User-avatar.svg.png"
                   className=" w-9 h-9 border-4 border-gray-200 rounded-[-50%]"
                 />
               </Menu>
               <div className="flex items-center">
                 <GiRibbonMedal className="text-3xl text-[text-primary]" />
                 <div className="ml-2 hover:text-[text-primary] hover:cursor-pointer">
-                  <p className="text-[-16] font-semibold ">{currentUser?.name}</p>
+                  <p className="text-[-16] font-semibold ">
+                    {currentUser?.name}
+                  </p>
                   <span className="text-xs ">Star</span>
                 </div>
               </div>
 
-              {(currentUser?.role === '7' || currentUser?.role === '9') &&
-                <Link to={'/manager/movie'} className="flex flex-col items-center ml-8 border p-2 rounded-md hover:bg-main">
-                  <GrUserManager size='20px' />
+              {(currentUser?.role === "7" || currentUser?.role === "9") && (
+                <Link
+                  to={"/manager/movie"}
+                  className="flex flex-col items-center ml-8 border p-2 rounded-md hover:bg-main"
+                >
+                  <GrUserManager size="20px" />
                   <p className="font-medium">Quản lí</p>
                 </Link>
-              }
+              )}
             </div>
           )}
         </div>

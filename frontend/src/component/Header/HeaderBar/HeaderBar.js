@@ -5,9 +5,9 @@ function HeaderBar({ data }) {
     <div className="flex items-center">
       {data.map((item) => {
         return (
-          <div onClick={() => console.log('hello')}>
+          <div onClick={() => console.log("hello")}>
             <HeaderBarItem data={item.title} />
-            </div>
+          </div>
         );
       })}
     </div>

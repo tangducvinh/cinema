@@ -13,3 +13,11 @@ export const getDetailShow = async (showId) => {
   );
   return res.data;
 };
+
+export const updateBlockSeats = async (data) => {
+  const res = await axios.put(
+    `${process.env.REACT_APP_API_URl}/show/block-seat`,
+    data
+  );
+  return res.data;
+};

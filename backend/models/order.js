@@ -24,6 +24,10 @@ const orderSchema = new mongoose.Schema(
       type: mongoose.Types.ObjectId,
       ref: "Show",
     },
+    roomId: {
+      type: mongoose.Types.ObjectId,
+      ref: "Room",
+    },
   },
   { timestamps: true }
 );

@@ -1,6 +1,7 @@
 import Home from "../pages/Home";
 import Detail from "../pages/Detail";
 import Booking from "../pages/Booking";
+import History from "../pages/History/History";
 import { SliderLayout } from "../component/Layout";
 
 const publicRouters = [
@@ -16,14 +17,17 @@ const publicRouters = [
     path: "/booking/:sid",
     component: Booking,
   },
+  {
+    path: "/history",
+    component: History,
+  },
 ];
 
 export { publicRouters };
 
-
 export const paths = {
-  home: '*',
-  manager: '/manager',
-  movie: '/movie',
-  account: '/account'
-}
+  home: "*",
+  manager: "/manager",
+  movie: "/movie",
+  account: "/account",
+};

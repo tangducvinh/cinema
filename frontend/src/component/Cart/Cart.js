@@ -1,9 +1,20 @@
-import { useSelector } from "react-redux";
 import Image from "../Image/Image";
 import { converTimeShow, convertCalender } from "../utils";
+import { useEffect, useState } from "react";
 import Button from "../Button/Button";
+import { useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
 
 function Cart({ dataShowDetail }) {
+  const { sid } = useParams();
+  const localBooking = JSON.parse(localStorage.getItem("booking"));
+  const [buy, setBuy] = useState([]);
+  const quantity = Number(buy.length * 60000);
+  useEffect(() => {
+    setBuy(localBooking.seats);
+    return;
+  }, [localBooking]);
+
   return (
     <div>
       <div className="bg-white ml-3  rounded-lg border-t-8 border-t-yellow-600 px-4 py-5">
@@ -32,17 +43,38 @@ function Cart({ dataShowDetail }) {
           </div>
         </div>
         <div className="border-t border-t-orange-600 border-dashed my-5"></div>
+        {buy.length !== 0 && (
+          <div>
+            <div className="flex justify-between">
+              <div>
+                <div className="flex">
+                  <p className="font-semibold">{buy.length}</p>{" "}
+                  <span> x Ghế đơn</span>
+                </div>
+                <span>
+                  Ghế:{" "}
+                  <span className="font-semibold">
+                    {buy.map((item, index) => {
+                      if (index === buy.length - 1) {
+                        return item.name;
+                      }
+                      return item.name + " , ";
+                    })}
+                  </span>
+                </span>
+              </div>
+              <p className="font-semibold">{quantity}đ</p>
+            </div>
+            <div className="border-t border-t-orange-600 border-dashed my-5"></div>
+          </div>
+        )}
+
         <div className="flex justify-between">
           <p className="font-semibold">Tổng cộng</p>
-          <p className=" text-[text-primary] font-semibold text-[-18]">0đ</p>
+          <p className=" text-[text-primary] font-semibold text-[-18]">
+            {quantity}đ
+          </p>
         </div>
-      </div>
-
-      <div className="flex  justify-end mt-4 ">
-        <div className="mr-3">
-          <Button outline>Quay lại</Button>
-        </div>
-        <Button primary>Tiếp tục</Button>
       </div>
     </div>
   );

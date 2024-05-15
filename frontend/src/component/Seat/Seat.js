@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import Chair from "./chair";
 import { useParams } from "react-router-dom";
+import { updateOrder } from "../../redux/slides/orderSlide";
+import { useDispatch, useSelector } from "react-redux";
 
 function Seat({ row = 10, col = 10, listSeat, blockSeat, sid }) {
-  // const { sid } = useParams();
   const block_seat = blockSeat;
-  console.log("blockseat ", blockSeat);
   var numbers = [];
   const oke = listSeat;
   // Lặp theo hàng
@@ -21,17 +21,23 @@ function Seat({ row = 10, col = 10, listSeat, blockSeat, sid }) {
   }
 
   // const [seatChoose, setSeatChoose] = useState([]);
+  let localBooking1 = JSON.parse(localStorage.getItem("booking"));
   let seatChoose = [];
+  if (seatChoose.length === 0) {
+    seatChoose = localBooking1.seats;
+  }
   const handleChoose = async (coll) => {
     let localBooking = JSON.parse(localStorage.getItem("booking"));
     // await setSeatChoose((prev) => [...prev, coll]);
     seatChoose.push(coll);
-    console.log("seatsss ", seatChoose);
+
     localStorage.setItem(
       "booking",
-      JSON.stringify({ ...localBooking, seats: seatChoose })
+      JSON.stringify({
+        ...localBooking,
+        seats: [...seatChoose],
+      })
     );
-    // console.log("seat ", coll);
   };
   const handleCancelChoose = (coll) => {
     let localBooking = JSON.parse(localStorage.getItem("booking"));
@@ -40,6 +46,7 @@ function Seat({ row = 10, col = 10, listSeat, blockSeat, sid }) {
     });
     // setSeatChoose([...arr]);
     seatChoose = arr;
+
     localStorage.setItem(
       "booking",
       JSON.stringify({ ...localBooking, seats: seatChoose })
@@ -49,11 +56,9 @@ function Seat({ row = 10, col = 10, listSeat, blockSeat, sid }) {
   console.log("seatChoose ", seatChoose);
   // console.log("localBooking ", localBooking.showId);
   // useEffect(() => {
-  //   localStorage.setItem(
-  //     "booking",
-  //     JSON.stringify({ ...localBooking, seats: seatChoose })
-  //   );
-  // }, [localBooking]);
+  //   let localBooking1 = JSON.parse(localStorage.getItem("booking"));
+  //   dispatch(updateOrder({ ...order, seats: localBooking1.seats }));
+  // }, [order]);
 
   return (
     <div className="flex items-center">

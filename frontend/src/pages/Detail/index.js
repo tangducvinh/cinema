@@ -18,10 +18,13 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Content from "../../component/Content/Content";
 import ItemMovie from "../../component/Content/ItemMovie/ItemMovie";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { updateShow } from "../../redux/slides/showSlide";
+import Swal from "sweetalert2";
 
 function Detail() {
+  const user = useSelector((state) => state.user.currentUser);
+  console.log("user ", user);
   const [activeCalender, setActiveCalender] = useState(0);
   const [trailer, setTrailer] = useState(false);
   const date = calender("2024-04-13");
@@ -233,17 +236,39 @@ function Detail() {
                               <button
                                 className="px-4 py-3 border border-gray-400 mr-2 rounded-lg hover:bg-blue-900  hover:text-white"
                                 onClick={() => {
-                                  navigate(`/booking/${item._id}`);
-                                  console.log("itemmm", item);
-                                  dispatch(
-                                    updateShow({
-                                      ...item,
-                                    })
-                                  );
-                                  localStorage.setItem(
-                                    "timeShow",
-                                    item.begin_time
-                                  );
+                                  if (user === null) {
+                                    Swal.fire({
+                                      title: "Login?",
+                                      text: "Đăng nhập để đặt vé!!!",
+                                      icon: "error",
+                                    });
+                                  } else {
+                                    navigate(`/booking/${item._id}`);
+                                    console.log("itemmm", item);
+                                    dispatch(
+                                      updateShow({
+                                        ...item,
+                                      })
+                                    );
+                                    localStorage.setItem(
+                                      "timeShow",
+                                      item.begin_time
+                                    );
+                                    const value = {
+                                      movieId: item.movieId,
+                                      total_pay: 0,
+                                      seats: [],
+                                      userId: user._id,
+                                      showId: item._id,
+                                      roomId: item.roomId,
+                                      status: "none",
+                                      method_pay: "none",
+                                    };
+                                    localStorage.setItem(
+                                      "booking",
+                                      JSON.stringify(value)
+                                    );
+                                  }
                                 }}
                               >
                                 {converTimeShow(item.begin_time)}
