@@ -3,17 +3,15 @@ const Seat = require("../models/seat");
 // tao ghe
 const createSeat = async (req, res) => {
   try {
+    const { idRoom, row, number, status, name } = req.body 
+
     console.log(req.body)
-    const { idRoom, row, number, status, name } = req.query 
 
-    const checkDup = await Seat.find({idRoom, row, number})
 
-    console.log(checkDup)
+    const checkDup = await Seat.findOne({idRoom, row, number})
 
-    if (checkDup.length === 0) {
+    if (!checkDup) {
       const response = await Seat.create(req.body);
-
-      console.log(req.body)
 
       return res.status(200).json({
         success: response ? true : false,

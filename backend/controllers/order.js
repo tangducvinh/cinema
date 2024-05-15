@@ -75,12 +75,11 @@ const allOrder = async (req, res) => {
     const maxTime = new Date(`${day} 23:59:00`);
 
     const query = {};
-    console.log(title)
     if (title) {
       query.orderNumber = title
     }
 
-    const response = await Order.find({...query, createdAt: { $gte: minTime, $lt: maxTime }}).populate([
+    const response = Order.find({...query, createdAt: { $gte: minTime, $lt: maxTime }}).populate([
       {
         path: "movieId",
         select: "original_title",
@@ -99,10 +98,24 @@ const allOrder = async (req, res) => {
       },
     ]);
 
-    return res.status(200).json({
-      success: response ? true : false,
-      data: response ? response : "no data",
-    });
+    const page = +req.query.page || 1
+    const limit = +req.query.limit || 15
+    const skip = (page - 1) * limit
+
+    response.skip(skip).limit(limit)
+
+    response.exec()
+      .then(async(result) => {
+        const counts = await Order.find({...query, createdAt: { $gte: minTime, $lt: maxTime }}).countDocuments()
+
+        return res.status(200).json({
+          success: result ? true : false,
+          data: result ? result : "no data",
+          counts: counts
+        });
+      })
+      .catch(e => res.status(500).json(e)) 
+
   } catch (e) {
     res.status(500).json(e);
   }

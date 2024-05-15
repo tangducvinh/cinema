@@ -43,6 +43,8 @@ const FormEditSeat = ({data, rid, onSet}) => {
         } else {
             const response = await apis.createSeat({idRoom: rid, row: data.row + 1, number: data.number + 1, status: data.status, name: data.name})
 
+            console.log(response)
+
             swal(response.success ? 'Created' : 'Error', response.mes || 'Đã có lỗi xảy ra', response.success ? 'success' : 'error')
             if (response.success) {
                 onSet(prev => !prev)

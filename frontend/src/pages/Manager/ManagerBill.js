@@ -5,6 +5,8 @@ import Calendar from 'react-calendar'
 import { ItemBillInfor } from '../../component/itemInfor'
 import { IoSearchOutline } from "react-icons/io5"
 
+import Pagiantion from '../../component/pagination/Pagination'
+
 import * as apis from '../../apis'
 
 const ManagerBill = () => {
@@ -12,8 +14,11 @@ const ManagerBill = () => {
     const containerElement = useRef()
 
     const [ listBill, setListBill ] = useState([])
+    const [ total, setTotal ] = useState()
+    const [ page, setPage ] = useState(1)
+    const [ search, setSearch ] = useState(false)
 
-    const [ value, setValue ] = useState()
+    const [ value, setValue ] = useState('')
     const [ showCalendar, setShowCalendar ] = useState(false)
     const [ valueCalendar, setValueCalendar ] = useState(new Date())
 
@@ -23,18 +28,25 @@ const ManagerBill = () => {
 
         if (response.success) {
             setListBill(response.data)
+            setTotal(response.counts)
         }
     }
 
-
     useEffect(() => {
-        fecthListBill({day: moment(valueCalendar).format('YYYY/MM/DD')})
-    }, [valueCalendar, value === ''])
+        const dataPass = {}
+        if (page) {
+            dataPass.page = page
+        }
+
+        if (value?.length === 0) {
+            fecthListBill({day: moment(valueCalendar).format('YYYY/MM/DD'), ...dataPass})
+        }
+    }, [valueCalendar, search, page, value])
 
     const handleSearch = () => {
-        fecthListBill({day: moment(valueCalendar).format('YYYY/MM/DD'), title: value})
+        fecthListBill({day: moment(valueCalendar).format('YYYY/MM/DD'), title: value, page: 1})
+        setPage(1)
     }
-
 
     //handle click out calendar is hidden
     useEffect(() => {
@@ -115,14 +127,20 @@ const ManagerBill = () => {
                         idBill={item.orderNumber}
                         movieName={item.movieId?.original_title}
                         roomName={item.roomId.name}
-                        timeStart={moment(item.showId.begin_time).format('HH:MM')}
+                        timeStart={moment(item.showId.begin_time).format('HH:MM DD/MM/YYYY')}
                         day={moment(item.createdAt).format('DD/MM/YYYY')}
-                        seats={item.seats.map(item => item.name).toString()}
+                        seats={item.seats.map(item => item.name.toUpperCase()).toString()}
                         phone={item.userId.phone}
                         status={'Đã thanh toán'}
                     />
                 </Fragment>
             ))}
+
+            {total > 15 &&
+                <div className='flex justify-center mt-[30px] pb-[50px]' >
+                    <Pagiantion total={total} sizePage={15} page={page} setPage={setPage}/>
+                </div>
+            }
         </div>
     )
 }
