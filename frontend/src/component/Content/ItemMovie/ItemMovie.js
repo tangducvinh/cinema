@@ -8,6 +8,7 @@ import Trailer from "../../trailer/trailer";
 
 function ItemMovie({ data }) {
   const [hoverPoster, setHoverPoster] = useState(false);
+  const [hoverBg, setHoverBg] = useState(false);
   const [trailer, setTrailer] = useState(false);
   const navigate = useNavigate();
   const handleDetailMovie = () => {
@@ -25,18 +26,28 @@ function ItemMovie({ data }) {
         className="w-[-290] h-[-435] object-cover rounded-xl relative"
         onMouseEnter={() => {
           setHoverPoster(true);
+          setHoverBg(true);
         }}
         onMouseLeave={() => {
           setHoverPoster(false);
+          setHoverBg(false);
         }}
       >
         <div className="relative w-full h-full" onClick={handleDetailMovie}>
           <Image
             alt="oke"
-            src={data.poster_path.slice(0, 4) === 'http' ? data.poster_path : `${process.env.REACT_APP_IMAGE_URL}${data.poster_path}`}
+            src={
+              data.poster_path.slice(0, 4) === "http"
+                ? data.poster_path
+                : `${process.env.REACT_APP_IMAGE_URL}${data.poster_path}`
+            }
             className="w-[-290] h-[-435] object-cover rounded-xl "
           />
-          <div className="absolute w-full h-full top-0 hover:bg-black hover:bg-opacity-45 rounded-xl "></div>
+          <div
+            className={`absolute w-full h-full top-0  rounded-xl ${
+              hoverBg && "bg-black bg-opacity-45"
+            }`}
+          ></div>
         </div>
         {hoverPoster && (
           <div className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 z-20 traslate-y-1/2 flex flex-col items-center justify-center">
@@ -46,6 +57,10 @@ function ItemMovie({ data }) {
                 primary
                 small
                 onClick={handleDetailMovie}
+                onMouseEnter={() => {
+                  setHoverBg(true);
+                }}
+                onMouseLeave={() => {}}
               >
                 Mua vé
               </Button>

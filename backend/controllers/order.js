@@ -94,24 +94,26 @@ const listOrderUser = async (req, res) => {
     const newId = new ObjectId(uid);
     const response = await Order.find({
       userId: newId,
-    }).populate([
-      {
-        path: "movieId",
-        select: "original_title",
-      },
-      {
-        path: "userId",
-        select: "name email",
-      },
-      {
-        path: "showId",
-        select: "begin_time",
-      },
-      {
-        path: "roomId",
-        select: "name",
-      },
-    ]);
+    })
+      .limit(10)
+      .sort({ createdAt: -1 })
+      .populate([
+        {
+          path: "movieId",
+          select: "original_title",
+        },
+        {
+          path: "userId",
+          select: "name email",
+        },
+        {
+          path: "showId",
+        },
+        {
+          path: "roomId",
+          select: "name",
+        },
+      ]);
 
     return res.status(200).json({
       success: response ? true : false,
