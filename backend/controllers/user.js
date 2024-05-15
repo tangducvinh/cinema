@@ -18,20 +18,20 @@ const register = async (req, res) => {
       return res.status(500).json("Missing input");
     }
 
-    const checkEmail = await User.findOne({email})
+    const checkEmail = await User.findOne({ email });
     if (checkEmail) {
       return res.status(200).json({
         success: false,
-        mes: 'Email đã tồn tại'
-      })
+        mes: "Email đã tồn tại",
+      });
     }
 
-    const checkPhone = await User.findOne({phone})
+    const checkPhone = await User.findOne({ phone });
     if (checkPhone) {
       return res.status(200).json({
         succss: false,
-        mes: 'Số điện thoại đã tồn tại'
-      })
+        mes: "Số điện thoại đã tồn tại",
+      });
     }
 
     const hashed = bcrypt.hashSync(password, 10);
@@ -46,7 +46,9 @@ const register = async (req, res) => {
     return res.status(200).json({
       success: response ? true : false,
       data: response ? response : "no data",
-      mes: response ? "Đăng kí tài khoản thành công" : "Đăng kí tài khoản thất bại",
+      mes: response
+        ? "Đăng kí tài khoản thành công"
+        : "Đăng kí tài khoản thất bại",
     });
   } catch (e) {
     res.status(500).json(e);
@@ -79,7 +81,7 @@ const login = async (req, res) => {
       // gan refreshToken vao cookie
       res.cookie("refreshToken", refreshToken, { httpOnly: true });
       const { password, phone, email, ...userData } = response.toObject();
-      userData.accessToken = accessToken
+      userData.accessToken = accessToken;
       return res.status(200).json({
         success: true,
         data: response ? userData : "no data",
@@ -117,7 +119,7 @@ const logout = async (req, res) => {
     res.clearCookie("refreshToken");
     return res.status(200).json({
       success: true,
-      mes: 'Logout thành công'
+      mes: "Logout thành công",
     });
   } catch (e) {
     return res.status(500).json(e);
@@ -220,63 +222,67 @@ const changePassword = async (req, res) => {
 // lay danh sach nguoi dung
 const getAllUser = async (req, res) => {
   try {
-    const { title, role } = req.query
+    const { title, role } = req.query;
 
-    const query = {}
+    const query = {};
     if (title) {
       if (Number(title)) {
-        query.phone = {$regex: title, $options: 'i'}
+        query.phone = { $regex: title, $options: "i" };
       } else {
-        query.email = {$regex: title, $options: 'i'}
+        query.email = { $regex: title, $options: "i" };
       }
     }
 
     if (role) {
-      query.role = role
+      query.role = role;
     }
 
     let queryCommand = User.find(query);
 
-    const page = +req.query.page || 1
-    const limit = +req.query.limit || 15
-    const skip = (page - 1) * limit
+    const page = +req.query.page || 1;
+    const limit = +req.query.limit || 15;
+    const skip = (page - 1) * limit;
 
-    queryCommand.skip(skip).limit(limit)
+    queryCommand.skip(skip).limit(limit);
 
-    queryCommand.exec()
-      .then(async(response) => {
-        const counts = await User.find(query).countDocuments()
-        
+    queryCommand
+      .exec()
+      .then(async (response) => {
+        const counts = await User.find(query).countDocuments();
+
         return res.status(200).json({
           success: response ? true : false,
-          data: response ? response : 'no data',
-          counts
-        })
-
-
+          data: response ? response : "no data",
+          counts,
+        });
       })
-      .catch(err => res.status(500).json(e))
-   } catch (e) {
+      .catch((err) => res.status(500).json(e));
+  } catch (e) {
     res.status(500).json(e);
   }
 };
 
-const updateUser = async(req, res) => {
+const updateUser = async (req, res) => {
   try {
-    console.log(req.body)
-    const { name, email, phone, role, uid } = req.body
+    console.log(req.body);
+    const { name, email, phone, role, uid } = req.body;
 
-    const response = await User.findByIdAndUpdate({_id: uid}, {name, email, phone, role: Number(role)}, {new: true})
+    const response = await User.findByIdAndUpdate(
+      { _id: uid },
+      { name, email, phone, role: Number(role) },
+      { new: true }
+    );
 
     return res.status(200).json({
       success: response ? true : false,
-      mes: response ? 'Cập nhật thông tin thành công' : 'Cập nhật thông tin thất bại'
-    })
-
-  } catch(e) {
-    return res.status(500).json(e)
+      mes: response
+        ? "Cập nhật thông tin thành công"
+        : "Cập nhật thông tin thất bại",
+    });
+  } catch (e) {
+    return res.status(500).json(e);
   }
-}
+};
 
 // xoa tai khoan
 const deleteUser = async (req, res) => {
@@ -288,7 +294,9 @@ const deleteUser = async (req, res) => {
 
     return res.status(200).json({
       success: response ? true : false,
-      mes: response ? "Xoá người tài khoản thành công" : "Thực hiện xoá tài khoản thất bại",
+      mes: response
+        ? "Xoá người tài khoản thành công"
+        : "Thực hiện xoá tài khoản thất bại",
     });
   } catch (e) {
     res.status(500).json(e);

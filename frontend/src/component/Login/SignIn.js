@@ -6,11 +6,11 @@ import * as UserServices from "../../services/UserServices";
 import { useMutationHooks } from "../../hooks/useMutationHook";
 import Loading from "../LoadingComponent/Loading";
 import Swal from "sweetalert2";
-import { updateUser } from '../../redux/slides/userSlide'
-import { useDispatch } from 'react-redux'
+import { updateUser } from "../../redux/slides/userSlide";
+import { useDispatch } from "react-redux";
 
 function SignIn() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const mutationSingIn = useMutationHooks((data) =>
     // call api login
@@ -29,24 +29,29 @@ function SignIn() {
 
   const { data, isPending, isSuccess, isError } = mutationSingIn;
   useEffect(() => {
-    if (isSuccess) {
-      Swal.fire({
-        text: "Đăng nhập thành công!",
-        icon: "success",
-      });
+    if (data) {
+      if (
+        data.data === "Account didn't exist" ||
+        data.data === "Wrong password"
+      ) {
+        Swal.fire({
+          text: "Thất bại!",
+          icon: "warning",
+        });
+      } else {
+        Swal.fire({
+          text: "Đăng nhập thành công!",
+          icon: "success",
+        });
 
-      console.log(data)
-      if (data) {
-        dispatch(updateUser(data.data))
+        console.log(data);
+        if (data) {
+          dispatch(updateUser(data.data));
+        }
+        // localStorage.setItem("access_token ", data.accessToken);
       }
-      // localStorage.setItem("access_token ", data.accessToken);
-    } else if (isError) {
-      Swal.fire({
-        text: "Thất bại!",
-        icon: "warning",
-      });
     }
-  }, [isSuccess, isError]);
+  }, [data]);
   const handleSignIn = () => {
     mutationSingIn.mutate({
       account: email,

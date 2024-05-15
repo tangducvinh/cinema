@@ -14,3 +14,10 @@ export const getDetailOrder = async (oid) => {
   );
   return res.data;
 };
+
+export const getOrderOfUser = async (uid) => {
+  const res = await axios.get(
+    `${process.env.REACT_APP_API_URl}/order/listOrderUser/${uid}`
+  );
+  return res.data;
+};
