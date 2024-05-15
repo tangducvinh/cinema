@@ -63,8 +63,8 @@ const Sidebar = () => {
           to={item.path}
           className={({ isActive }) =>
             isActive
-              ? "text-xl font-medium border-l-4 px-2 border-main text-[text-primary] my-2"
-              : "px-3 text-xl my-2 hover:text-main font-medium"
+              ? "text-lg font-medium border-l-4 px-2 border-main text-[text-primary] my-2"
+              : "px-3 text-lg my-2 hover:text-main font-medium"
           }
         >
           {item.title}

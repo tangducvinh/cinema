@@ -30,14 +30,14 @@ const ManagerLayout = () => {
             <div className='fixed bg-white w-full z-20'><Header /></div>
             <div className='h-[130px]'></div>
 
-            <div className='w-[75%] flex mx-auto border-t'>
-                <div className='w-[260px] fixed'>
+            <div className='w-[75%] flex mx-auto'>
+                <div className='flex-1 fixed'>
                     <Sidebar />
                 </div>
 
-                <div className='w-[260px]'></div>
+                <div className='flex-1'></div>
 
-                <div className='flex-1'>
+                <div className='flex-5'>
                     <Outlet />
                 </div>
             </div>

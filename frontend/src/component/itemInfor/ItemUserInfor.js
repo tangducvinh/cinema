@@ -44,7 +44,7 @@ const ItemUserInfor = ({ name, email, phone, role, image, _id }) => {
     }
 
     return (
-        <ul className={clsx('flex items-center px-4 w-full mt-3 rounded-md border-b-2 border-l-4  py-1 shadow-md', {'border-l-main': +role === 9}, {'border-l-green-500': +role === 3}, {'border-l-blue-500': +role === 7})}>
+        <ul className={clsx('flex items-center text-[15px] px-4 w-full mt-3 rounded-md border-b-2 border-l-4  py-1 shadow-md', {'border-l-main': +role === 9}, {'border-l-green-500': +role === 3}, {'border-l-blue-500': +role === 7})}>
             <li className='rounded-sm'>
                 <img 
                     className="w-[35px] h-[35px] mr-2 object-cover rounded-sm" 

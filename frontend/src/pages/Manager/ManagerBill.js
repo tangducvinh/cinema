@@ -112,13 +112,13 @@ const ManagerBill = () => {
             <ul className="flex items-center bg-[#eb9651] px-4 py-2 w-full mt-3 rounded-sm">
                 <li className="w-[100px] font-semibold">Mã hoá đơn</li>
                 <li className="flex-2 font-semibold">Tên phim</li>
-                <li className="flex-1 font-semibold">Rạp</li>
+                <li className="w-[60px] font-semibold">Rạp</li>
                 <li className="flex-1 font-semibold">Thời gian</li>
                 <li className="flex-1 font-semibold">Ngày</li>
                 <li className="flex-1 font-semibold">Ghế</li>
                 <li className="flex-1 font-semibold">STĐ</li>
                 <li className="flex-1 font-semibold">Trạng thái</li>
-                <li className="w-[85px]"></li>
+                <li className="w-[40px]"></li>
             </ul>
 
             {listBill.map((item, index) => (

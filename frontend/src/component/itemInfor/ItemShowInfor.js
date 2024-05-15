@@ -37,7 +37,7 @@ const ItemShowInfor = ({id, _id, name, runtime, timeStart, timeEnd, roomName, to
     }, [roomId])
 
     return (
-        <ul className="flex items-center px-4 py-2 w-full mt-3 rounded-sm border-b-2">
+        <ul className="flex items-center text-[15px] px-4 py-2 w-full mt-3 rounded-sm border-b-2">
             <li className="w-[100px] font-medium">{`#${id}`}</li>
             <li>
                 <img className="w-[35px] h-[35px] rounded-sm mr-2 object-cover" src={image.slice(0, 4) === 'http' ? image : `${process.env.REACT_APP_IMAGE_URL}${image}`}></img>

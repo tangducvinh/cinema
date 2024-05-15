@@ -70,7 +70,7 @@ const ManagerRoom = () => {
             </div>
 
             <div className="flex mt-8 w-full">
-                <div className='flex-1'>
+                <div className='flex-3'>
                     {/* <div className={`grid w-full grid-cols-${listRoom.find(item => item?.roomId === valueSelectRoom)?.width} grid-rows-${listRoom.find(item => item.roomId === valueSelectRoom)?.height}`}>
                         <span className='w-[50px] h-[50px]'>1</span>
                         <span className='w-[50px] h-[50px]'>1</span>
@@ -85,11 +85,11 @@ const ManagerRoom = () => {
                         </tr> */}
 
                         {Array.from(Array(listRoom.find(item => item?.roomId === valueSelectRoom)?.height), (_, x) => x).map((itemRow, index) => (
-                            <tr className='flex gap-2'>
+                            <tr className='flex gap-1'>
                                 {Array.from(Array(listRoom.find(item => item?.roomId === valueSelectRoom)?.width), (_, x) => x).map((itemColumn, index) => (
                                     <td 
                                         onClick={() => hanldeChosseSeat(itemRow, itemColumn)}
-                                        className={clsx('w-[30px] mb-2 cursor-pointer text-center rounded-sm mr-1 h-[30px] border-[1px] border-gray-300 hover:bg-main', {'bg-red-400': listSeat.find(item => (+item.row - 1 === itemRow && +item.number - 1 === itemColumn))?.status === 'fix'}, {'bg-main': currentBox?.row === itemRow && currentBox?.number === itemColumn})}
+                                        className={clsx('w-[30px] mb-1 cursor-pointer text-center rounded-sm mr-1 h-[30px] border-[1px] border-gray-300 hover:bg-main', {'bg-red-400': listSeat.find(item => (+item.row - 1 === itemRow && +item.number - 1 === itemColumn))?.status === 'fix'}, {'bg-main': currentBox?.row === itemRow && currentBox?.number === itemColumn})}
                                     >{listSeat.find(item => (+item.row - 1 === itemRow && +item.number - 1 === itemColumn))?.status !== 'empty' ? listSeat.find(item => (+item.row - 1 === itemRow && +item.number - 1 === itemColumn))?.name?.toUpperCase() || 'x' : 'x'}</td>
                                 ))}
                             </tr>
@@ -98,7 +98,7 @@ const ManagerRoom = () => {
                     </table>
                 </div>
 
-                <div className="w-[350px] border-l-[2px] border-main" >
+                <div className="flex-1 border-l-[2px] border-main" >
                     <FormEditSeat data={currentSeat} rid={valueSelectRoom} onSet={setRenderListSeat}/>
                 </div>
             </div>

@@ -35,12 +35,12 @@ const ItemMovieInfor = ({ id, name, runtime, status, image, release }) => {
     }
 
     return (
-        <ul className="flex items-center px-4 py-2 w-full mt-3 rounded-sm border-b-2">
+        <ul className="flex items-center text-[15px] px-4 py-2 w-full mt-3 rounded-sm border-b-2">
             <li className="w-[100px] font-medium">{`#${id}`}</li>
             <li>
                 <img className="w-[35px] h-[35px] rounded-sm mr-2 object-cover" src={image.slice(0, 4) === 'http' ? image :`${process.env.REACT_APP_IMAGE_URL}${image}`}></img>
             </li>
-            <li className="flex-2 font-medium">{name.length < 27 ? name : `${name.slice(0, 25)}...`}</li>
+            <li className="flex-2 font-medium">{name.length < 32 ? name : `${name.slice(0, 29)}...`}</li>
             <li className="flex-1 font-medium">{`${runtime} phút`}</li>
             <li className="flex-1 font-medium">{moment(release).format('DD/MM/YYYY')}</li>
             <li className={clsx('flex-1 font-medium', {'text-green-500': status === 'showing'}, {'text-main': status === 'soon'}, {'text-red-500': status === 'showed'})}>{statusMovie.find(item => item.value === status).name}</li>
