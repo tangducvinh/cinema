@@ -2,8 +2,8 @@ import ItemMovie from "./ItemMovie/ItemMovie";
 
 function Content({ data }) {
   return (
-    <div>
-      <div class="grid grid-cols-4 gap-4">
+    <div className="w-full">
+      <div class="flex flex-wrap ">
         {data.map((item) => {
           return <ItemMovie data={item} />;
         })}

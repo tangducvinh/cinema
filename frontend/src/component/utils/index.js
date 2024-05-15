@@ -77,3 +77,12 @@ export const converTimeShow = (dateString) => {
     return "Không thể trích xuất thời gian từ chuỗi đã cho.";
   }
 };
+export const formatCash = (str) => {
+  str = str.toString();
+  return str
+    .split("")
+    .reverse()
+    .reduce((prev, next, index) => {
+      return (index % 3 ? next : next + ",") + prev;
+    });
+};

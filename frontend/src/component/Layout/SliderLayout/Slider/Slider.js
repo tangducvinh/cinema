@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { GrPrevious } from "react-icons/gr";
 import { GrNext } from "react-icons/gr";
 
@@ -8,6 +8,13 @@ function Slider({ slider }) {
   //   let refreshSlider = setInterval(() => {
   //     nextSlider();
   //   }, 5000);
+  // useEffect(() => {
+  //   setTimeout(() =>
+  //     setCurrentIndex((prevIndex) =>
+  //       prevIndex === slider.length - 1 ? 0 : prevIndex + 1
+  //     )
+  //   );
+  // }, [currentIndex]);
 
   const prevSlider = () => {
     setCurrentIndex(currentIndex === 0 ? length - 1 : currentIndex - 1);
@@ -19,7 +26,14 @@ function Slider({ slider }) {
   const goToSlideIndex = (index) => {
     setCurrentIndex(index);
   };
-
+  useEffect(() => {
+    const i = setInterval(() => {
+      nextSlider();
+    }, 3000);
+    return () => {
+      clearInterval(i);
+    };
+  }, [currentIndex]);
   return (
     <div className="overflow-hidden relative my-4">
       <div onClick={prevSlider}>
@@ -35,7 +49,7 @@ function Slider({ slider }) {
               <img
                 src={item.url}
                 alt="poster"
-                className="w-[-1500] h-[-500] px-2 object-cover mx-auto"
+                className="w-[-1500] h-[-500] px-2 object-cover mx-auto animate-back-up"
               />
             )}
           </div>

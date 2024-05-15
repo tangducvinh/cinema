@@ -204,81 +204,83 @@ function Detail() {
                       )}`}
                     </p>
                   </div>
-                  <div className="mt-10  mb-28">
-                    <h1 className="inline-block leading-none px-2 border-l-4 border-l-blue-950 text-[-20] font-semibold mr-10">
-                      Lịch chiếu phim
-                    </h1>
-                    <div className="flex mx-3 mt-3">
-                      {date.map((item, index) => {
-                        return (
-                          <button
-                            className={`px-2 py-4  mr-4 rounded-xl ${
-                              index === activeCalender &&
-                              "bg-blue-900 text-white"
-                            }`}
-                            key={index}
-                            onClick={() => {
-                              handleActiveCalender(index);
-                            }}
-                          >
-                            {/* {item} */}
-                            {convertCalender(item)}
-                          </button>
-                        );
-                      })}
-                    </div>
-                    {listShow.length !== 0 && (
-                      <div className="flex items-center mx-6 mt-3">
-                        <h1 className="mr-10">2D phụ đề</h1>
-                        <div className="flex ">
-                          {listShow.map((item) => {
-                            return (
-                              <button
-                                className="px-4 py-3 border border-gray-400 mr-2 rounded-lg hover:bg-blue-900  hover:text-white"
-                                onClick={() => {
-                                  if (user === null) {
-                                    Swal.fire({
-                                      title: "Login?",
-                                      text: "Đăng nhập để đặt vé!!!",
-                                      icon: "error",
-                                    });
-                                  } else {
-                                    navigate(`/booking/${item._id}`);
-                                    console.log("itemmm", item);
-                                    dispatch(
-                                      updateShow({
-                                        ...item,
-                                      })
-                                    );
-                                    localStorage.setItem(
-                                      "timeShow",
-                                      item.begin_time
-                                    );
-                                    const value = {
-                                      movieId: item.movieId,
-                                      total_pay: 0,
-                                      seats: [],
-                                      userId: user._id,
-                                      showId: item._id,
-                                      roomId: item.roomId,
-                                      status: "none",
-                                      method_pay: "none",
-                                    };
-                                    localStorage.setItem(
-                                      "booking",
-                                      JSON.stringify(value)
-                                    );
-                                  }
-                                }}
-                              >
-                                {converTimeShow(item.begin_time)}
-                              </button>
-                            );
-                          })}
-                        </div>
+                  {detailMovie.status === "showing" && (
+                    <div className="mt-10  mb-28">
+                      <h1 className="inline-block leading-none px-2 border-l-4 border-l-blue-950 text-[-20] font-semibold mr-10">
+                        Lịch chiếu phim
+                      </h1>
+                      <div className="flex mx-3 mt-3">
+                        {date.map((item, index) => {
+                          return (
+                            <button
+                              className={`px-2 py-4  mr-4 rounded-xl ${
+                                index === activeCalender &&
+                                "bg-blue-900 text-white"
+                              }`}
+                              key={index}
+                              onClick={() => {
+                                handleActiveCalender(index);
+                              }}
+                            >
+                              {/* {item} */}
+                              {convertCalender(item)}
+                            </button>
+                          );
+                        })}
                       </div>
-                    )}
-                  </div>
+                      {listShow.length !== 0 && (
+                        <div className="flex items-center mx-6 mt-3">
+                          <h1 className="mr-10">2D phụ đề</h1>
+                          <div className="flex ">
+                            {listShow.map((item) => {
+                              return (
+                                <button
+                                  className="px-4 py-3 border border-gray-400 mr-2 rounded-lg hover:bg-blue-900  hover:text-white"
+                                  onClick={() => {
+                                    if (user === null) {
+                                      Swal.fire({
+                                        title: "Login?",
+                                        text: "Đăng nhập để đặt vé!!!",
+                                        icon: "error",
+                                      });
+                                    } else {
+                                      navigate(`/booking/${item._id}`);
+                                      console.log("itemmm", item);
+                                      dispatch(
+                                        updateShow({
+                                          ...item,
+                                        })
+                                      );
+                                      localStorage.setItem(
+                                        "timeShow",
+                                        item.begin_time
+                                      );
+                                      const value = {
+                                        movieId: item.movieId,
+                                        total_pay: 0,
+                                        seats: [],
+                                        userId: user._id,
+                                        showId: item._id,
+                                        roomId: item.roomId,
+                                        status: "none",
+                                        method_pay: "none",
+                                      };
+                                      localStorage.setItem(
+                                        "booking",
+                                        JSON.stringify(value)
+                                      );
+                                    }
+                                  }}
+                                >
+                                  {converTimeShow(item.begin_time)}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="">

@@ -4,7 +4,8 @@ import { useMutationHooks } from "../../hooks/useMutationHook";
 import * as OrderServices from "../../services/OrderServices";
 import * as ShowServices from "../../services/ShowServices";
 import Image from "../Image/Image";
-import { converTimeShow, convertCalender } from "../utils";
+import { converTimeShow, convertCalender, formatCash } from "../utils";
+import Button from "../Button/Button";
 function Bill() {
   const navigate = useNavigate();
 
@@ -97,7 +98,11 @@ function Bill() {
               <div className="flex mt-2">
                 <Image
                   alt="poster"
-                  src={`${process.env.REACT_APP_IMAGE_URL}${order.movieId.poster_path}`}
+                  src={
+                    order.movieId.poster_path.slice(0, 4) === "http"
+                      ? order.movieId.poster_path
+                      : `${process.env.REACT_APP_IMAGE_URL}${order.movieId.poster_path}`
+                  }
                   className="w-32 h-48 object-cover rounded-lg"
                 />
                 <div className="ml-2 flex flex-col">
@@ -110,7 +115,7 @@ function Bill() {
               <div className="mt-2">
                 <div className="text-[-20] font-semibold text-orange-600">
                   <span className="">Mã vé: </span>
-                  <span className="">{order._id}</span>
+                  <span className="">{order.orderNumber}</span>
                 </div>
                 <div className="font-semibold">{order.roomId.name}</div>
                 <div className="mt-1">
@@ -145,7 +150,7 @@ function Bill() {
                     </span>
                   </div>
                   <p className="font-semibold">
-                    {Number(order.seats.length * 60000)}
+                    {formatCash(Number(order.seats.length * 60000))}
                   </p>
                 </div>
                 <div className="border-t border-t-orange-600 border-dashed my-5"></div>
@@ -154,8 +159,18 @@ function Bill() {
               <div className="flex justify-between">
                 <p className="font-semibold">Tổng cộng</p>
                 <p className=" text-[text-primary] font-semibold text-[-18]">
-                  {Number(order.seats.length * 60000)}
+                  {formatCash(Number(order.seats.length * 60000))}
                 </p>
+              </div>
+              <div className="flex justify-end mt-3">
+                <Button
+                  primary
+                  onClick={() => {
+                    navigate("/");
+                  }}
+                >
+                  Home
+                </Button>
               </div>
             </div>
           </div>

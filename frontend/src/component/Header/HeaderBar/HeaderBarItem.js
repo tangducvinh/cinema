@@ -1,15 +1,11 @@
 import { FaAngleDown } from "react-icons/fa";
-
 function HeaderBarItem({ data }) {
-
-
   const handleLogout = () => {
-    console.log('hello')
-    console.log(data)
-  }
+    console.log(data);
+  };
 
   return (
-    <div 
+    <div
       className="flex items-center px-3 cursor-pointer text-gray-600  hover:text-[text-primary]"
       onClick={handleLogout}
     >

@@ -23,7 +23,7 @@ function ItemMovie({ data }) {
         <Trailer keyFrame={data.video[0].key} onClick={handleTrailer} />
       )}
       <div
-        className="w-[-290] h-[-435] object-cover rounded-xl relative"
+        className="w-[-290] h-[-435] object-cover rounded-xl relative mr-4"
         onMouseEnter={() => {
           setHoverPoster(true);
           setHoverBg(true);

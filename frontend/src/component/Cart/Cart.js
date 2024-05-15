@@ -1,5 +1,5 @@
 import Image from "../Image/Image";
-import { converTimeShow, convertCalender } from "../utils";
+import { converTimeShow, convertCalender, formatCash } from "../utils";
 import { useEffect, useState } from "react";
 import Button from "../Button/Button";
 import { useDispatch } from "react-redux";
@@ -12,7 +12,6 @@ function Cart({ dataShowDetail }) {
   const quantity = Number(buy.length * 60000);
   useEffect(() => {
     setBuy(localBooking.seats);
-    return;
   }, [localBooking]);
 
   return (
@@ -21,7 +20,11 @@ function Cart({ dataShowDetail }) {
         <div className="flex mt-2">
           <Image
             alt="poster"
-            src={`${process.env.REACT_APP_IMAGE_URL}${dataShowDetail.movieId.poster_path}`}
+            src={
+              dataShowDetail.movieId.poster_path.slice(0, 4) === "http"
+                ? dataShowDetail.movieId.poster_path
+                : `${process.env.REACT_APP_IMAGE_URL}${dataShowDetail.movieId.poster_path}`
+            }
             className="w-32 h-48 object-cover rounded-lg"
           />
           <div className="ml-2 flex flex-col">
@@ -63,7 +66,7 @@ function Cart({ dataShowDetail }) {
                   </span>
                 </span>
               </div>
-              <p className="font-semibold">{quantity}đ</p>
+              <p className="font-semibold">{formatCash(quantity)}đ</p>
             </div>
             <div className="border-t border-t-orange-600 border-dashed my-5"></div>
           </div>
@@ -72,7 +75,7 @@ function Cart({ dataShowDetail }) {
         <div className="flex justify-between">
           <p className="font-semibold">Tổng cộng</p>
           <p className=" text-[text-primary] font-semibold text-[-18]">
-            {quantity}đ
+            {formatCash(quantity)}đ
           </p>
         </div>
       </div>

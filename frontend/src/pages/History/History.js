@@ -6,7 +6,11 @@ import { useNavigate } from "react-router-dom";
 import * as OrderServices from "../../services/OrderServices";
 import { useMutationHooks } from "../../hooks/useMutationHook";
 import { PiFlagPennantFill } from "react-icons/pi";
-import { converTimeShow, convertCalender } from "../../component/utils";
+import {
+  converTimeShow,
+  convertCalender,
+  formatCash,
+} from "../../component/utils";
 import { FaUser } from "react-icons/fa";
 function History() {
   const oke = window.location.href.split("/");
@@ -90,7 +94,7 @@ function History() {
                   {"Tổng chi tiêu " + date.getFullYear()}
                 </span>
                 <span className="font-semibold text-[text-primary]">
-                  {sum + "đ"}
+                  {formatCash(sum) + "đ"}
                 </span>
               </div>
             </div>
@@ -135,7 +139,7 @@ function History() {
               </div>
             </div>
             {action === true ? (
-              <div>
+              <div className="">
                 {listOrder !== null && (
                   <div>
                     <p className="text-center my-2 text-gray-400 font-semibold italic">
@@ -154,57 +158,61 @@ function History() {
                                     convertCalender(item.createdAt)}
                                 </span>
                               </div>
-                              <div className="flex ">
-                                <span className="font-semibold w-36 ">
-                                  Mã vé:
-                                </span>
-                                <span className="font-semibold text-[text-primary]">
-                                  {item._id}
-                                </span>
-                              </div>
-                              <div className="flex ">
-                                <span className="font-semibold w-36 ">
-                                  Phim:
-                                </span>
-                                <span className="font-semibold text-[text-primary]">
-                                  {item.movieId.original_title}
-                                </span>
-                              </div>
-                              <div className="flex ">
-                                <span className="font-semibold w-36 ">
-                                  Ghế:
-                                </span>
-                                {item.seats.map((seat, index) => {
-                                  if (index === item.seats.length - 1) {
+                              <div className="ml-8">
+                                <div className="flex ">
+                                  <span className="font-semibold w-36 ">
+                                    Mã vé:
+                                  </span>
+                                  <span className="font-semibold text-[text-primary]">
+                                    {item.orderNumber}
+                                  </span>
+                                </div>
+                                <div className="flex ">
+                                  <span className="font-semibold w-36 ">
+                                    Phim:
+                                  </span>
+                                  <span className="font-semibold text-[text-primary]">
+                                    {item.movieId.original_title}
+                                  </span>
+                                </div>
+                                <div className="flex ">
+                                  <span className="font-semibold w-36 ">
+                                    Ghế:
+                                  </span>
+                                  {item.seats.map((seat, index) => {
+                                    if (index === item.seats.length - 1) {
+                                      return (
+                                        <span className="font-semibold text-[text-primary]">
+                                          {seat.name}
+                                        </span>
+                                      );
+                                    }
                                     return (
-                                      <span className="font-semibold text-[text-primary]">
-                                        {seat.name}
+                                      <span className="font-semibold text-[text-primary] mr-1">
+                                        {seat.name + " , "}
                                       </span>
                                     );
-                                  }
-                                  return (
-                                    <span className="font-semibold text-[text-primary] mr-1">
-                                      {seat.name + " , "}
-                                    </span>
-                                  );
-                                })}
-                              </div>
-                              <div className="flex ">
-                                <span className="font-semibold w-36 ">
-                                  Xuất:
-                                </span>
-                                <span className="font-semibold text-[text-primary]">
-                                  {converTimeShow(item.showId.begin_time)}
-                                </span>
-                              </div>
-                              <p className="font-semibold w-36 ">Rạp 3</p>
-                              <div className="flex ">
-                                <span className="font-semibold w-36 ">
-                                  Thanh toán:
-                                </span>
-                                <span className="font-semibold text-[text-primary]">
-                                  {item.total_pay + "đ"}
-                                </span>
+                                  })}
+                                </div>
+                                <div className="flex ">
+                                  <span className="font-semibold w-36 ">
+                                    Xuất:
+                                  </span>
+                                  <span className="font-semibold text-[text-primary]">
+                                    {converTimeShow(item.showId.begin_time) +
+                                      " - " +
+                                      convertCalender(item.showId.begin_time)}
+                                  </span>
+                                </div>
+                                <p className="font-semibold w-36 ">Rạp 3</p>
+                                <div className="flex ">
+                                  <span className="font-semibold w-36 ">
+                                    Thanh toán:
+                                  </span>
+                                  <span className="font-semibold text-[text-primary]">
+                                    {formatCash(item.total_pay) + "đ"}
+                                  </span>
+                                </div>
                               </div>
                             </div>
                           </div>

@@ -28,7 +28,7 @@ function MenuItem({ data, onClick, ...pastProps }) {
   };
   return (
     <Comp
-      className="flex items-center justify-center py-2 px-2 hover:border-l-4 hover:text-[text-primary] hover:border-yellow-500 cursor-pointer"
+      className="flex items-center justify-center py-2 px-2 hover:border-l-4 hover:text-[text-primary] hover:border-yellow-500 hover:bg-orange-100 cursor-pointer"
       {...props}
       onClick={handleLogout}
       to={data.to}
