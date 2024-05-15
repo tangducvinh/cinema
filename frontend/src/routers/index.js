@@ -21,6 +21,10 @@ const publicRouters = [
     path: "/history",
     component: History,
   },
+  {
+    path: "/profile",
+    component: History,
+  },
 ];
 
 export { publicRouters };

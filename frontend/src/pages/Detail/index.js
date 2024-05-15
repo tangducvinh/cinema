@@ -27,7 +27,7 @@ function Detail() {
   console.log("user ", user);
   const [activeCalender, setActiveCalender] = useState(0);
   const [trailer, setTrailer] = useState(false);
-  const date = calender("2024-04-13");
+  const date = calender(Date());
   const handleActiveCalender = (index) => {
     setActiveCalender(index);
   };
