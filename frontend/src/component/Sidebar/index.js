@@ -23,6 +23,10 @@ const Sidebar = () => {
       title: "Phòng chiếu",
       path: "/manager/room",
     },
+    {
+      title: "Hoá đơn",
+      path: "/manager/bill"
+    }
   ];
 
   const menuEmployes = [
@@ -38,6 +42,10 @@ const Sidebar = () => {
       title: "Phòng chiếu",
       path: "/manager/room",
     },
+    {
+      title: "Hoá đơn",
+      path: "/manager/bill"
+    }
   ]
 
   useEffect(() => {

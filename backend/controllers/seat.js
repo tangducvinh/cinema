@@ -3,15 +3,29 @@ const Seat = require("../models/seat");
 // tao ghe
 const createSeat = async (req, res) => {
   try {
-    const response = await Seat.create(req.body);
-
     console.log(req.body)
+    const { idRoom, row, number, status, name } = req.query 
 
-    return res.status(200).json({
-      success: response ? true : false,
-      data: response ? response : "no data",
-      mes: response ? "Thanh cong" : "That bai",
-    });
+    const checkDup = await Seat.find({idRoom, row, number})
+
+    console.log(checkDup)
+
+    if (checkDup.length === 0) {
+      const response = await Seat.create(req.body);
+
+      console.log(req.body)
+
+      return res.status(200).json({
+        success: response ? true : false,
+        data: response ? response : "no data",
+        mes: response ? "Thanh cong" : "That bai",
+      });
+    } else {
+      res.status(200).json({
+        success: false,
+        mes: 'Ghế đã tồn tại'
+      })
+    }
   } catch (e) {
     res.status(500).json(e);
   }
