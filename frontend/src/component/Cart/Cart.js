@@ -9,7 +9,7 @@ function Cart({ dataShowDetail }) {
   const { sid } = useParams();
   const localBooking = JSON.parse(localStorage.getItem("booking"));
   const [buy, setBuy] = useState([]);
-  const quantity = Number(buy.length * 60000);
+  const quantity = Number(buy.length * dataShowDetail.price);
   useEffect(() => {
     setBuy(localBooking.seats);
   }, [localBooking]);

@@ -78,7 +78,7 @@ export const converTimeShow = (dateString) => {
   }
 };
 export const formatCash = (str) => {
-  str = str.toString();
+  str = str?.toString();
   return str
     .split("")
     .reverse()

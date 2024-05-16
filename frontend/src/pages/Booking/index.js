@@ -237,7 +237,7 @@ function Booking() {
         </div>
       ) : (
         <div className="mx-80 mt-6 flex justify-center">
-          <Bill />
+          <Bill data1={dataShowDetail} />
         </div>
       )}
     </div>

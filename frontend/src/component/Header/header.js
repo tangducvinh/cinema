@@ -72,7 +72,7 @@ function Header() {
   };
 
   return (
-    <div className="">
+    <div className="w-full ">
       {login && (
         <Login
           onClick={() => {
@@ -80,66 +80,66 @@ function Header() {
           }}
         />
       )}
-      <div className="mx-80 h-28 flex items-center justify-between">
-        <div className="flex items-center">
-          <Link to={"/"} className="w-52">
-            <img
-              className="w-16 h-16 object-cover"
-              alt="logo-cinema"
-              src={images.logo.default}
-            />
-          </Link>
-
+      <div className=" flex justify-center ">
+        <div className="h-28 flex items-center justify-between w-3/4">
           <div className="flex items-center">
-            <img
-              alt="ticket"
-              src="https://www.galaxycine.vn/_next/static/media/btn-ticket.42d72c96.webp"
-              className="w-28 h-9 mr-3"
-            />
-            <HeaderBar data={menu} />
-          </div>
-        </div>
+            <Link to={"/"} className="w-52">
+              <img
+                className="w-16 h-16 object-cover"
+                alt="logo-cinema"
+                src={images.logo.default}
+              />
+            </Link>
 
-        <div className="flex items-center">
-          <IoSearch />
-
-          {showLogin ? (
-            <button
-              className="text-[-16] text-gray-500 ml-7"
-              onClick={handleLogin}
-            >
-              Đăng nhập
-            </button>
-          ) : (
-            <div className="flex items-center ml-2">
-              <Menu items={userMenu}>
-                <Image
-                  alt="avatar"
-                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/768px-User-avatar.svg.png"
-                  className=" w-9 h-9 border-4 border-gray-200 rounded-[-50%]"
-                />
-              </Menu>
-              <div className="flex items-center">
-                <GiRibbonMedal className="text-3xl text-[text-primary]" />
-                <div className="ml-2 hover:text-[text-primary] hover:cursor-pointer">
-                  <p className="text-[-16] font-semibold ">
-                    {currentUser?.name}
-                  </p>
-                  <span className="text-xs ">Star</span>
-                </div>
-              </div>
-
-              {(currentUser?.role === "7" || currentUser?.role === "9") && (
-                <Link
-                  to={"/manager/movie"}
-                  className="flex flex-col items-center ml-8 border p-2 rounded-md hover:bg-main"
-                >
-                  <GrUserManager size="20px" />
-                  <p className="font-medium">Quản lí</p>
-                </Link>
-              )}
+            <div className="flex items-center">
+              <img
+                alt="ticket"
+                src="https://www.galaxycine.vn/_next/static/media/btn-ticket.42d72c96.webp"
+                className="w-28 h-9 mr-3"
+              />
+              <HeaderBar data={menu} />
             </div>
-          )}
+          </div>
+
+          <div className="flex items-center ">
+            {showLogin ? (
+              <button
+                className="text-[-16] text-gray-500 ml-7"
+                onClick={handleLogin}
+              >
+                Đăng nhập
+              </button>
+            ) : (
+              <div className="flex items-center ml-2">
+                <Menu items={userMenu}>
+                  <Image
+                    alt="avatar"
+                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/768px-User-avatar.svg.png"
+                    className=" w-9 h-9 border-4 border-gray-200 rounded-[-50%]"
+                  />
+                </Menu>
+                <div className="flex items-center">
+                  <GiRibbonMedal className="text-3xl text-[text-primary]" />
+                  <div className="ml-2 hover:text-[text-primary] hover:cursor-pointer">
+                    <p className="text-[-16] font-semibold ">
+                      {currentUser?.name}
+                    </p>
+                    <span className="text-xs ">Star</span>
+                  </div>
+                </div>
+
+                {(currentUser?.role === "7" || currentUser?.role === "9") && (
+                  <Link
+                    to={"/manager/movie"}
+                    className="flex flex-col items-center ml-8 border p-2 rounded-md hover:bg-main"
+                  >
+                    <GrUserManager size="20px" />
+                    <p className="font-medium">Quản lí</p>
+                  </Link>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

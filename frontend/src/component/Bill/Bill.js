@@ -6,7 +6,8 @@ import * as ShowServices from "../../services/ShowServices";
 import Image from "../Image/Image";
 import { converTimeShow, convertCalender, formatCash } from "../utils";
 import Button from "../Button/Button";
-function Bill() {
+function Bill({ data1 }) {
+  console.log("123123 ", data1);
   const navigate = useNavigate();
 
   const [bill, setBill] = useState(JSON.parse(localStorage.getItem("booking")));
@@ -25,7 +26,7 @@ function Bill() {
       showId,
       roomId,
     } = data;
-    const total_pay = Number(data.seats.length * 60000);
+    const total_pay = Number(data.seats.length * (data1.price || 70000));
     const res = await OrderServices.createOrder({
       movieId,
       seats,
@@ -150,7 +151,7 @@ function Bill() {
                     </span>
                   </div>
                   <p className="font-semibold">
-                    {formatCash(Number(order.seats.length * 60000))}
+                    {formatCash(Number(order.seats.length * data1.price))}
                   </p>
                 </div>
                 <div className="border-t border-t-orange-600 border-dashed my-5"></div>
@@ -159,7 +160,7 @@ function Bill() {
               <div className="flex justify-between">
                 <p className="font-semibold">Tổng cộng</p>
                 <p className=" text-[text-primary] font-semibold text-[-18]">
-                  {formatCash(Number(order.seats.length * 60000))}
+                  {formatCash(Number(order.seats.length * data1.price))}
                 </p>
               </div>
               <div className="flex justify-end mt-3">

@@ -49,7 +49,7 @@ function Home() {
   return (
     <div>
       <Slider slider={sliders} />
-      <div className="mx-80 px-4 py-12">
+      <div className="mx-80 px-4 py-12 ">
         <div className="flex items-center mb-10">
           <h1 className="uppercase inline-block leading-none px-2 border-l-4 border-l-blue-950 text-[-20] font-semibold mr-10">
             Phim
@@ -85,9 +85,6 @@ function Home() {
             {listSoon !== undefined && <Content data={listSoon.data} />}
           </div>
         )}
-
-        {/* code ngu */}
-        {/* <div>HELLO WORLD</div> */}
       </div>
     </div>
   );
