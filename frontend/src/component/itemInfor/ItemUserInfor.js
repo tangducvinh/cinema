@@ -1,16 +1,19 @@
 import clsx from 'clsx'
 import { MdEmail, MdOutlineDelete, MdOutlineRestorePage} from "react-icons/md"
 import default_avatar from '../../component/assest/images/defaul_avatar.jpg'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import swal from 'sweetalert'
 
 import { setChidlren, setRenderManagerUser } from '../../redux/slides/appSlice'
 import { FormEditUser } from '../../component/forms'
 import * as apis from '../../apis'
 import { listRole } from '../../ultis/options'
+import { createInstance } from '../../axios'
 
 const ItemUserInfor = ({ name, email, phone, role, image, _id }) => {
     const dispatch = useDispatch()
+    const { currentUser } = useSelector(state => state.user)
+    let axiosJWT = createInstance(dispatch, currentUser)
 
     const handleEditUser = () => {
         const dataPass = {
@@ -35,7 +38,7 @@ const ItemUserInfor = ({ name, email, phone, role, image, _id }) => {
         });
             
         if (willDelete) {
-            const response = await apis.deleteUser(_id)
+            const response = await apis.deleteUser(_id, axiosJWT)
             swal(response.success ? "Deleted!" : "Error", response.mes || 'Đã có lỗi xảy ra', response.success ? 'success' : 'error')
             if (response.success) {
                 dispatch(setRenderManagerUser())

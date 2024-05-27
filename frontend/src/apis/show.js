@@ -1,6 +1,6 @@
-import axios from '../axios'
+import { axios1 as axios } from '../axios'
 
-export const createShow = async(data) => await axios({
+export const createShow = async(data, axiosJWT) => await axiosJWT({
     url: 'show/create',
     data: data,
     method: 'post'
@@ -12,13 +12,13 @@ export const getAllShow = async(day) => await axios({
     method: 'get',
 })
 
-export const updateShow = async(data) => await axios({
+export const updateShow = async(data, axiosJWT) => await axiosJWT({
     url: 'show',
     data,
     method: 'put'
 })
 
-export const deleteShow = async(sid) => await axios({
+export const deleteShow = async(sid, axiosJWT) => await axiosJWT({
     url: 'show/' + sid,
     method: 'delete'
 })

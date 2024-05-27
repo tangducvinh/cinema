@@ -1,4 +1,4 @@
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector  } from 'react-redux'
 import { MdClear } from 'react-icons/md'
 import { useForm } from 'react-hook-form'
 import { useEffect, useState } from 'react'
@@ -9,11 +9,14 @@ import * as apis from '../../apis'
 import avatar from '../assest/images/defaul_avatar.jpg'
 import { listRole } from '../../ultis/options'
 import { setChidlren, setRenderManagerUser } from '../../redux/slides/appSlice'
+import { createInstance } from '../../axios'
 
 const FormEditUser = ({data}) => {
     const dispatch = useDispatch()
     const { register, handleSubmit, setValue, watch, reset, formState: {errors} } = useForm()
     const [ showSubmit, setShowSubmit ] = useState(false)
+    const { currentUser } = useSelector(state => state.user)
+    let axiosJWT = createInstance(dispatch, currentUser)
 
     useEffect(() => {
         setValue('name', data.name)
@@ -38,7 +41,7 @@ const FormEditUser = ({data}) => {
         const dataPass = { ...dataForm}
         dataPass.uid = data.uid
 
-        const response = await apis.updateUser(dataPass)
+        const response = await apis.updateUser(dataPass, axiosJWT)
             
         swal(response.success ? 'Updated' : 'Error', response.mes || 'Đã có lỗi xảy ra', response.success ? 'success' : 'error')
         if (response.success) {

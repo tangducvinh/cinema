@@ -28,8 +28,6 @@ function Header() {
     }
   }, [currentUser]);
 
-  console.log(currentUser);
-
   const menu = [
     {
       title: "Phim",

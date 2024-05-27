@@ -16,6 +16,8 @@ function MenuItem({ data, onClick, ...pastProps }) {
     if (data.title === "Đăng xuất") {
       const response = await logoutUser();
 
+      console.log(response)
+
       if (response.success) {
         dispatch(updateUser(null));
       }

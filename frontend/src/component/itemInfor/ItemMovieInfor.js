@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import { MdOutlineDelete, MdOutlineRestorePage } from "react-icons/md"
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector  } from 'react-redux'
 import moment from 'moment'
 import swal from 'sweetalert'
 
@@ -8,9 +8,13 @@ import { FormAddMovie, FormEditMovie } from '../../component/forms'
 import { setChidlren, setRenderManagerMovie } from '../../redux/slides/appSlice'
 import * as apis from '../../apis'
 import { statusMovie } from '../../ultis/options'
+import { createInstance } from '../../axios'
 
 const ItemMovieInfor = ({ id, name, runtime, status, image, release }) => {
     const dispatch = useDispatch()
+    const { currentUser } = useSelector(state => state.user)
+
+    let axiosJWT = createInstance(dispatch, currentUser)
 
     const handleUpdateMovie = () => {
         dispatch(setChidlren(<FormAddMovie id={id}/>))
@@ -26,7 +30,7 @@ const ItemMovieInfor = ({ id, name, runtime, status, image, release }) => {
         });
            
         if (willDelete) {
-            const response = await apis.deleteMovie(id)
+            const response = await apis.deleteMovie(id, axiosJWT)
             swal(response.success ? "Deleted!" : "Error", response.mes || 'Đã có lỗi xảy ra', response.success ? 'success' : 'error')
             if (response.success) {
                 dispatch(setRenderManagerMovie())

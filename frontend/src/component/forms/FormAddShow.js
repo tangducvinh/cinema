@@ -1,5 +1,5 @@
 import { MdClear } from 'react-icons/md'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState, useRef } from 'react'
 import moment from 'moment'
 import { Calendar } from 'react-calendar'
@@ -11,11 +11,15 @@ import clsx from 'clsx'
 
 import { setChidlren, setRenderManagerShow } from '../../redux/slides/appSlice'
 import * as apis from '../../apis'
+import { createInstance } from '../../axios'
 
 const FormAddShow = ({data}) => {
     const dispatch = useDispatch()
     const calendarElement = useRef()
     const containerElement = useRef()
+    const { currentUser } = useSelector(state => state.user)
+    let axiosJWT = createInstance(dispatch, currentUser)
+
     const [ listMovie, setListMovie ] = useState([])
     const [ valueSelectMovie, setValueSelectMovie ] = useState()
     const [ listRoom, setListRoom ] = useState([])
@@ -38,14 +42,14 @@ const FormAddShow = ({data}) => {
             apis.getListRoom()
         ])
 
-        if (resMovie.success) {
+        if (resMovie?.success) {
             setListMovie(resMovie.data.map(item => ({movieId: item._id, name: item.original_title, image: item.poster_path, runtime: item.runtime})))
             if (!data) {
                 setValueSelectMovie(resMovie.data[0]._id)
             }
         }
 
-        if (resRoom.success) {
+        if (resRoom?.success) {
             setListRoom(resRoom.data.map(item => ({roomId: item._id, name: item.name})))
             if (!data) {
                 setValueSelectRoom(resRoom.data[0]._id)
@@ -169,23 +173,19 @@ const FormAddShow = ({data}) => {
 
         if (data) {
             dataPass.sid = data._id
-            console.log(dataPass)
 
-            const response = await apis.updateShow(dataPass)
-
-            console.log(response)
+            const response = await apis.updateShow(dataPass, axiosJWT)
             
-            swal(response.success ? 'Updated' : 'Error', response.mes || 'Đã có lỗi xảy ra', response.success ? 'success' : 'error')
-            if (response.success) {
+            swal(response?.success ? 'Updated' : 'Error', response?.mes || 'Đã có lỗi xảy ra', response?.success ? 'success' : 'error')
+            if (response?.success) {
                 dispatch(setChidlren(null))
                 dispatch(setRenderManagerShow())
             }
         } else {
-            console.log(dataPass)
-            const response = await apis.createShow(dataPass)
+            const response = await apis.createShow(dataPass, axiosJWT)
 
-            swal(response.success ? 'Created' : 'Error', response.mes || 'Đã có lỗi xảy ra', response.success ? 'success' : 'error')
-            if (response.success) {
+            swal(response?.success ? 'Created' : 'Error', response?.mes || 'Đã có lỗi xảy ra', response?.success ? 'success' : 'error')
+            if (response?.success) {
                 dispatch(setChidlren(null))
                 dispatch(setRenderManagerShow())
 
@@ -193,8 +193,6 @@ const FormAddShow = ({data}) => {
             }
         }
     }
-
-    console.log({valueSelectMovie})
 
     return (
         <div 

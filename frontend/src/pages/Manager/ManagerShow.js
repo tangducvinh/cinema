@@ -9,11 +9,13 @@ import { ItemShowInfor } from '../../component/itemInfor'
 import * as apis from '../../apis'
 import { setChidlren } from '../../redux/slides/appSlice'
 import { FormAddShow } from '../../component/forms'
-
+import { createInstance } from '../../axios'
 
 const ManagerShow = () => {
     const dispatch = useDispatch()
     const { renderManagerShow } = useSelector(state => state.app)
+    const { currentUser } = useSelector(state => state.user)
+    let axiosJWT = createInstance(dispatch, currentUser)
     
     const calendarElement = useRef()
     const containerElement = useRef()
@@ -68,7 +70,7 @@ const ManagerShow = () => {
         });
            
         if (willDelete) {
-            const response = await apis.deleteShow(_id)
+            const response = await apis.deleteShow(_id, axiosJWT)
 
             console.log(response)
 
@@ -210,12 +212,12 @@ const ManagerShow = () => {
                                     timeStart={item.begin_time} 
                                     timeEnd={item.end_time}
                                     image={item.movieId.poster_path}
-                                    roomName={item.roomId.name}
+                                    roomName={item.roomId?.name}
                                     totalBlock={item.block_seats.length}
                                     total={50}
                                     onDelete={handleDeleteShow}
                                     price={item?.price}
-                                    roomId={item?.roomId._id}
+                                    roomId={item?.roomId?._id}
                                     movieId={item?.movieId._id}
                                     block={item.block_seats.length}
                                 />

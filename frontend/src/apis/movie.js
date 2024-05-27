@@ -1,4 +1,4 @@
-import axios from '../axios'
+import { axios1 as axios} from '../axios'
 
 export const getAllMoives = async(data) => await axios({
     url: 'movie/all',
@@ -16,10 +16,11 @@ export const getListMovie = async(status) => await axios({
     method: 'get'
 })
 
-export const updateMovie = async(data) => await axios({
+export const updateMovie = async(data, axiosJWT) => await axiosJWT({
     url: 'movie/update',
     method: 'put',
-    data
+    data,
+    withCredentials: true,
 })
 
 export const uploadImage = async(data) => await axios({
@@ -28,15 +29,17 @@ export const uploadImage = async(data) => await axios({
     data
 })
 
-export const createMovie = async(data) => await axios({
+export const createMovie = async(data, axiosJWT ) => await axiosJWT({
     url: 'movie/create',
     method: 'post',
-    data
+    data,
+    withCredentials: true,
 })
 
-export const deleteMovie = async(id) => await axios({
+export const deleteMovie = async(id, axiosJWT) => await axiosJWT({
     url: 'movie/' + id,
-    method: 'delete'
+    method: 'delete',
+    withCredentials: true,
 })
 
 

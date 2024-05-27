@@ -20,7 +20,8 @@ const ManagerAccount = () => {
     const fecthDataUsers = async(data) => {
         const response = await apis.getAllUsers(data)
 
-        if (response.success) {
+        console.log(response)
+        if (response?.success) {
             setDataUsers(response.data)
             setTotal(response.counts)
         }

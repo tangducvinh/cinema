@@ -1,7 +1,7 @@
 import { FaAngleDown } from "react-icons/fa";
 function HeaderBarItem({ data }) {
   const handleLogout = () => {
-    console.log(data);
+    console.log('hello')
   };
 
   return (

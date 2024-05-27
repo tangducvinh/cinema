@@ -1,4 +1,4 @@
-import axios from '../axios'
+import { axios1 as axios} from '../axios'
 
 export const getAllOrder = async(data) => await axios({
     url: 'order/allOrder',

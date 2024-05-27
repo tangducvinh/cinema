@@ -1,5 +1,5 @@
 import axios from "axios";
-import axios1 from '../axios'
+import { axios1 } from '../axios'
 
 export const axiosJWT = axios.create();
 
@@ -11,8 +11,11 @@ export const signInUser = async (data) => {
 
   const res = await axios1.post(
     `${process.env.REACT_APP_API_URl}/user/login`,
-    data
+    data,
+    {withCredentials: true},
   );
+
+
 
 
   return res;

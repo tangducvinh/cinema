@@ -1,21 +1,26 @@
 import { MdClear, MdPostAdd } from 'react-icons/md'
 import { FaTrash } from "react-icons/fa"
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { FiUpload } from "react-icons/fi"
 import { useEffect, useState, useRef } from 'react'
 import moment from 'moment'
 import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
 import swal from 'sweetalert'
+import { useNavigate } from 'react-router-dom'
 
 import { setChidlren, setRenderManagerMovie } from '../../redux/slides/appSlice'
 import * as apis from '../../apis'
 import { getBase64 } from '../../component/utils/helpers'
+import { createInstance } from '../../axios'
 
 const FormAddMovie = ({ id }) => {
     const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const { currentUser } = useSelector(state => state.user)
     const calendarElement = useRef()
     const containerElement = useRef()
+    let axiosJWT = createInstance(dispatch, currentUser, navigate)
 
     const [ valueCompany, setValueCompany ] = useState('')
     const [ valueCalendar, setValueCalendar ] = useState(new Date())
@@ -55,7 +60,7 @@ const FormAddMovie = ({ id }) => {
 
     const fecthDataMovie = async(mid) => {
         const response = await apis.getMovieInfor(mid)
-        if (response.success) {
+        if (response?.success) {
             setDataMovie({
                 id: response.data.id,
                 genres: response.data.genres,
@@ -141,23 +146,7 @@ const FormAddMovie = ({ id }) => {
         }
     }
 
-    // handle get files images
-    // const handleFileImages = async(e) => {
-    //     if (e.target.files) {
-    //         for (let file of e.target.files) {
-    //             const url = await getBase64(file)
-    //             setValueImages(prev => [...prev, url])
-    //         }
-    //     }
-    // }
-
-    // // handle delate image
-    // const handleDeleteImage = (index) => {
-    //     const newData = [...valueImages]
-    //     newData.splice(index, 1)
-    //     setValueImages(newData)
-    // }
-
+    
     // handle submit form
     const handleSubmit = async() => {
         const dataPass = {...dataMovie}
@@ -185,15 +174,15 @@ const FormAddMovie = ({ id }) => {
         }
 
         if (id) {
-            const response = await apis.updateMovie(dataPass)
+            const response = await apis.updateMovie(dataPass, axiosJWT)
             
-            swal(response.success ? 'Updated' : 'Error', response.mes || 'Đã có lỗi xảy ra', response.success ? 'success' : 'error')
-            if (response.success) {
+            swal(response?.success ? 'Updated' : 'Error', response?.mes || 'Đã có lỗi xảy ra', response?.success ? 'success' : 'error')
+            if (response?.success) {
                 dispatch(setChidlren(null))
                 dispatch(setRenderManagerMovie())
             }
         } else {
-            const response = await apis.createMovie(dataPass)
+            const response = await apis.createMovie(dataPass, axiosJWT)
 
             swal(response?.success ? 'Created' : 'Error', response?.mes || 'Đã có lỗi xảy ra', response?.success ? 'success' : 'error')
             if (response?.success) {
@@ -238,35 +227,6 @@ const FormAddMovie = ({ id }) => {
                         </div>
                     </div>
                 </div>
-
-                {/* <div className='px-4 pt-7 pb-4'>
-                    <div className='flex items-center gap-3'>
-                        {valueImages?.map((item, index) => (
-                            <div 
-                                className='w-[60px] h-[60px] rounded-sm hover:cursor-pointer relative overflow-hidden'
-                                onMouseEnter={() => setShowTrash(index)}
-                                onClick={() => handleDeleteImage(index)}
-                            >
-                                <img 
-                                    key={index} 
-                                    className='w-full h-full rounded-sm object-cover'
-                                    src={item.slice(0, 4) === 'data' ? item : `${process.env.REACT_APP_IMAGE_URL}${item}`}
-                                ></img>
-
-                                <div className='absolute inset-0 z-10 hover:bg-overlay flex items-center justify-center'>
-                                    {showTrash === index && 
-                                        <FaTrash size="20px" color='red'/>
-                                    }
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-
-                    <div className='mt-6'>
-                        <label htmlFor='image' className='font-medium flex items-center gap-4 cursor-pointer'><FiUpload size='25px' />Chọn ảnh</label>
-                        <input className='hidden' id='image' type='file' multiple onChange={handleFileImages}></input>
-                    </div>
-                </div> */}
 
                 <div className='p-4'>
                     <div className='flex gap-4'>

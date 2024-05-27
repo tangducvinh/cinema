@@ -116,45 +116,18 @@ const ManagerMovie = () => {
             </ul>
 
             <div>
-                {/* {status === 'all' ?
-                    dataAllMovie?.map((item, index) => (
-                        <Fragment key={index}>
-                            <ItemMovieInfor 
-                                id={item?.id} 
-                                name={item?.original_title} 
-                                runtime={item?.runtime} 
-                                status={item?.status === 'showing' ? 1 : 2}
-                                image={item?.poster_path}
-                                release={item?.release_date}
-                            />
-                        </Fragment>
-                    ))  
-                    :
-                    dataAllMovie?.filter(item => item.status === status)?.map((item, index) => (
-                        <Fragment key={index}>
-                            <ItemMovieInfor 
-                                id={item?.id} 
-                                name={item?.original_title} 
-                                runtime={item?.runtime} 
-                                status={item?.status === 'showing' ? 1 : 2}
-                                image={item?.poster_path}
-                                release={item?.release_date}
-                            />
-                        </Fragment>
-                    ))
-                } */}
-
-                    {dataAllMovie?.map((item, index) => (
-                        <Fragment key={index}>
-                            <ItemMovieInfor 
-                                id={item?.id} 
-                                name={item?.original_title} 
-                                runtime={item?.runtime} 
-                                status={item?.status}
-                                image={item?.poster_path}
-                                release={item?.release_date}
-                            />
-                        </Fragment>))}
+                {dataAllMovie?.map((item, index) => (
+                    <Fragment key={index}>
+                        <ItemMovieInfor 
+                            id={item?.id} 
+                            name={item?.original_title} 
+                            runtime={item?.runtime} 
+                            status={item?.status}
+                            image={item?.poster_path}
+                            release={item?.release_date}
+                        />
+                    </Fragment>))
+                }
             </div>
         </div>
     )
