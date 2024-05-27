@@ -1,5 +1,7 @@
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
+const jwt = require('jsonwebtoken')
+
 const {
   generateAccessToken,
   generateRefreshToken,
@@ -8,6 +10,7 @@ const crypto = require("crypto");
 const { generatePassword, hashPassword } = require("../ultis/password");
 const sendMail = require("../config/sendMail");
 const { skipMiddlewareFunction } = require("mongoose");
+const { constants } = require("fs/promises");
 
 // dang ky tai khoan
 const register = async (req, res) => {
@@ -77,7 +80,7 @@ const login = async (req, res) => {
       // tao accessToken
       const accessToken = generateAccessToken(response._id, response.role);
       // tao refreshToken
-      const refreshToken = generateRefreshToken(response._id);
+      const refreshToken = generateRefreshToken(response._id, response.role);
       // gan refreshToken vao cookie
       res.cookie("refreshToken", refreshToken, { httpOnly: true });
       const { password, phone, email, ...userData } = response.toObject();
@@ -93,25 +96,31 @@ const login = async (req, res) => {
 };
 
 const refreshToken = async (req, res) => {
-  const refreshToken = req.cookie.refreshToken;
-  if (!refreshToken) {
-    return res.status(401).json("You are not authenticated");
-  }
-  jwt.verify(refreshToken, process.env.SECRET_KEY_RF, (err, decode) => {
-    if (err) {
-      console.log(err);
+  try {
+    const refreshToken = req.cookies.refreshToken;
+    if (!refreshToken) {
+      return res.status(401).json("You are not authenticated");
     }
-    const newAccessToken = generateAccessToken(decode._id, decode.role);
-    const newRefreshToken = generateRefreshToken(decode._id, decode.role);
+    jwt.verify(refreshToken, 'dfdfdfdf', (err, decode) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json(e)
+      }
 
-    res.cookie("refreshToken", newRefreshToken, {
-      httpOnly: true,
-    });
+      const newAccessToken = generateAccessToken(decode._id, decode.role);
+      const newRefreshToken = generateRefreshToken(decode._id, decode.role);
 
-    return res.status(200).json({
-      accessToken: newAccessToken,
+      res.cookie("refreshToken", newRefreshToken, {
+        httpOnly: true,
+      });
+
+      return res.status(200).json({
+        accessToken: newAccessToken,
+      });
     });
-  });
+  } catch(e) {
+    return res.status(500).json(e)
+  }
 };
 
 const logout = async (req, res) => {

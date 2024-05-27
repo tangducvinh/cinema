@@ -3,6 +3,6 @@ const { verifyAccessToken, isAdmin, checkRole } = require('../middlewares/verify
 const { createRoom, getListRoom } = require('../controllers/room')
 
 router.post('/create', verifyAccessToken, checkRole, createRoom)
-router.get('/list', verifyAccessToken, checkRole, getListRoom)
+router.get('/list', getListRoom)
 
 module.exports = router

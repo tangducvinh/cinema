@@ -18,8 +18,6 @@ const verifyAccessToken = async(req, res, next) => {
 
 const checkRole = async(req, res, next) => {
     const { role } = req.user
-    
-    console.log('hello 1')
 
     if (role === '7') {
         return next()

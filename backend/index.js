@@ -9,7 +9,13 @@ const initRoutes = require('./routers')
 
 const app = express()
 
-app.use(cors())
+// app.use(cors())
+
+app.use(cors({
+    origin: 'http://localhost:3000',
+    methods: ["POST", 'PUT', 'GET', 'DELETE'],
+    credentials: true,
+}))
 app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))

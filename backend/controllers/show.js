@@ -140,28 +140,31 @@ const getShowDetail = async (req, res) => {
 const updateShow = async (req, res) => {
   try {
     const { sid, begin_time, end_time, movieId, price, roomId } = req.body;
-
-    const check1 = await Show.find({
+ 
+    const check1 = await Show.findOne({
       roomId,
       begin_time: { $lte: new Date(begin_time) },
       end_time: { $gte: new Date(begin_time) },
     });
-    const check2 = await Show.find({
+    const check2 = await Show.findOne({
       roomId,
       begin_time: { $lte: new Date(end_time) },
       end_time: { $gte: new Date(end_time) },
     });
-    const check3 = await Show.find({
+    const check3 = await Show.findOne({
       roomId,
       begin_time: { $gte: new Date(begin_time) },
       end_time: { $lte: new Date(end_time) },
     });
 
-    if (check1.length > 0 || check2.length > 0 || check3.length > 0)
+    console.log({sid, check1})
+
+    if ((check1 && sid !== check1?._id.toString()) || (check2 && sid !== check2?._id.toString()) || (check3 && sid !== check3?._id.toString())) {
       return res.status(200).json({
         success: false,
         mes: "Bị trùng giờ chiếu",
       });
+    }
 
     const response = await Show.findByIdAndUpdate(
       { _id: sid },
@@ -176,7 +179,8 @@ const updateShow = async (req, res) => {
         : "Thực hiện cập nhật thất bại",
     });
   } catch (e) {
-    return res.status(500).json(e);
+    console.log(e)
+    // return res.status(500).json(e);
   }
 };
 
