@@ -6,6 +6,12 @@ export const createShow = async(data, axiosJWT) => await axiosJWT({
     method: 'post'
 })
 
+export const getListShow = async(data) => await axios({
+    url: 'show/list',
+    params: data,
+    method: 'get',
+})
+
 export const getAllShow = async(day) => await axios({
     url: 'show/all',
     params: day,

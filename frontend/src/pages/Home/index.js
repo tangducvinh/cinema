@@ -3,6 +3,8 @@ import Content from "../../component/Content/Content";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import Slider from "../../component/Layout/SliderLayout/Slider/Slider";
+
+import { BoxSearch } from '../../component/search'
 function Home() {
   const [showDangChieu, setShowDangChieu] = useState(true);
 
@@ -49,6 +51,11 @@ function Home() {
   return (
     <div>
       <Slider slider={sliders} />
+
+      <div className="flex justify-center">
+        <BoxSearch />
+      </div>
+
       <div className="mx-80 px-4 py-12 ">
         <div className="flex items-center mb-10">
           <h1 className="uppercase inline-block leading-none px-2 border-l-4 border-l-blue-950 text-[-20] font-semibold mr-10">
