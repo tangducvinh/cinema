@@ -158,9 +158,71 @@ const listOrderUser = async (req, res) => {
   }
 };
 
+const getDataChart = async(req, res) => {
+  try {
+    const { type } = req.params
+
+    const result = []
+    let totalToday = 0
+
+    if (type === 'day') {
+      for (let i = 0; i < 15; i++) {
+        let currentDay = new Date(new Date().setDate(new Date().getDate() - i))
+        const min = new Date(`${currentDay.getFullYear()}-${currentDay.getMonth() + 1}-${currentDay.getDate()} 00:00:00`)
+        const max = new Date(`${currentDay.getFullYear()}-${currentDay.getMonth() + 1}-${currentDay.getDate()} 23:59:59`)
+  
+        const response = (await Order.find({createdAt: {$gte: min, $lte: max}})).reduce((accumular, current) => (accumular + current.total_pay), 0)
+  
+        result.unshift({day: `${currentDay.getDate()}-${currentDay.getMonth() + 1}`, value: response})
+        
+        if (i === 0) totalToday = response
+      }
+    } else if (type === 'month') {
+      for (let i = 0; i < 12; i++) {
+        let currentMonth = new Date(new Date().setMonth(new Date().getMonth() - i))
+  
+        const min = new Date(`${currentMonth.getFullYear()}-${currentMonth.getMonth() + 1}-${1} 00:00:00`)
+        const lastDay = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0)
+        const max = new Date(`${currentMonth.getFullYear()}-${currentMonth.getMonth() + 1}-${lastDay.getDate()} 23:59:59`)
+  
+        const response = (await Order.find({createdAt: {$gte: min, $lte: max}})).reduce((accumular, current) => (accumular + current.total_pay), 0)
+  
+        result.unshift({day: `${currentMonth.getMonth() + 1}-${currentMonth.getFullYear()}`, value: response})
+
+        if (i === 0) totalToday = response
+      }
+    } else {
+      for (let i = 0; i < 10; i++) {
+        let now = new Date(new Date())
+
+        const min = new Date(`${now.getFullYear() - i}-1-1 00:00:00`)
+        const max = new Date(`${now.getFullYear() - i}-12-31 23:59:59`)
+
+        const response = (await Order.find({createdAt: {$gte: min, $lte: max}})).reduce((accumular, current) => (accumular + current.total_pay), 0)
+
+        result.unshift({day: `${now.getFullYear() - i}`, value: response})
+
+        if (i === 0) totalToday = response
+      }
+    }
+
+    console.log(result)
+
+    return res.status(200).json({
+      success: result.length > 0 ? true : false,
+      data: result,
+      totalToday,
+    })
+
+  } catch(e) {
+    return res.status(500).json(e)
+  }
+}
+
 module.exports = {
   createOrder,
   detailOrder,
   allOrder,
   listOrderUser,
+  getDataChart,
 };

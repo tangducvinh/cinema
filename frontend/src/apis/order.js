@@ -5,3 +5,8 @@ export const getAllOrder = async(data) => await axios({
     params: data,
     method: 'get'
 })
+
+export const getDataChart = async(type) => await axios({
+    url: 'order/data-chart/' + type,
+    method: 'get',
+})

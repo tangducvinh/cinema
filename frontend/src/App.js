@@ -8,7 +8,7 @@ import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 
 import ManagerLayout from './component/Layout/ManagerLayout'
-import { ManagerAccount, ManagerMovie, ManagerShow, ManagerRoom, ManagerBill } from './pages/Manager'
+import { ManagerAccount, ManagerMovie, ManagerShow, ManagerRoom, ManagerBill, Dashboard } from './pages/Manager'
 
 function App() {
   return (
@@ -38,6 +38,7 @@ function App() {
 
           <Route path='manager' element={<ManagerLayout />}>
               <Route path='movie' element={<ManagerMovie />} />
+              <Route path='dashboard' element={<Dashboard />} />
               <Route path='show' element={<ManagerShow />} />
               <Route path='account' element={<ManagerAccount />} />
               <Route path='room' element={<ManagerRoom />} />

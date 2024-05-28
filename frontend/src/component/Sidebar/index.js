@@ -8,6 +8,10 @@ const Sidebar = () => {
   const [ dataMenu, setDataMenu ] = useState()
   const menu = [
     {
+      title: "Thống kê",
+      path: "/manager/dashboard",
+    },
+    {
       title: "Phim",
       path: "/manager/movie",
     },
