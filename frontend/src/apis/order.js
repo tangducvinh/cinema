@@ -6,7 +6,8 @@ export const getAllOrder = async(data) => await axios({
     method: 'get'
 })
 
-export const getDataChart = async(type) => await axios({
+export const getDataChart = async(type, day) => await axios({
     url: 'order/data-chart/' + type,
+    params: day,
     method: 'get',
 })

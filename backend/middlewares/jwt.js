@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 
 const generateAccessToken = (uid, role) => {
-    return jwt.sign({_id: uid, role}, 'dfdsfsdfdf', {expiresIn: '2h'})
+    return jwt.sign({_id: uid, role}, 'dfdsfsdfdf', {expiresIn: '1d'})
 }
 
 const generateRefreshToken = ( uid, role ) => {

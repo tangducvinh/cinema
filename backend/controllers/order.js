@@ -1,5 +1,6 @@
-const { ObjectId } = require("mongodb");
+const { ObjectId, MongoCryptCreateDataKeyError } = require("mongodb");
 const Order = require("../models/order");
+const Movie = require('../models/movie')
 
 const createOrder = async (req, res) => {
   try {
@@ -161,13 +162,15 @@ const listOrderUser = async (req, res) => {
 const getDataChart = async(req, res) => {
   try {
     const { type } = req.params
+    const { day } = req.query
 
     const result = []
     let totalToday = 0
+    const dataMovie = []
 
     if (type === 'day') {
       for (let i = 0; i < 15; i++) {
-        let currentDay = new Date(new Date().setDate(new Date().getDate() - i))
+        let currentDay = new Date(new Date(day).setDate(new Date(day).getDate() - i))
         const min = new Date(`${currentDay.getFullYear()}-${currentDay.getMonth() + 1}-${currentDay.getDate()} 00:00:00`)
         const max = new Date(`${currentDay.getFullYear()}-${currentDay.getMonth() + 1}-${currentDay.getDate()} 23:59:59`)
   
@@ -177,13 +180,34 @@ const getDataChart = async(req, res) => {
         
         if (i === 0) totalToday = response
       }
+
+      const listMovie = (await Movie.find({$or: [{status: 'showing'}, {status: 'showed'}]})).map(item => item._id.toString())
+      
+      for (let movieId of listMovie) {
+        const currentDay = new Date(day)
+
+        const min = new Date(`${currentDay.getFullYear()}-${currentDay.getMonth()+1}-${currentDay.getDate()} 00:00:00`)
+        const max = new Date(`${currentDay.getFullYear()}-${currentDay.getMonth()+1}-${currentDay.getDate()} 23:59:59`)
+
+        const response = (await Order.find({$and: [{movieId}, {createdAt: {$gte: min, $lte: max}}]})).reduce((acc, current) => acc + current.total_pay,0)
+
+        const inforMovie = await Movie.findOne({_id: movieId}).select('original_title poster_path release_date status id')
+
+        dataMovie.push({inforMovie, total: response})
+
+      }
+
+      dataMovie.sort((a, b) => {
+        return b.total - a.total
+      })
+
     } else if (type === 'month') {
       for (let i = 0; i < 12; i++) {
-        let currentMonth = new Date(new Date().setMonth(new Date().getMonth() - i))
-  
+        let currentMonth = new Date(new Date(day).setMonth(new Date(day).getMonth() - i))
+
         const min = new Date(`${currentMonth.getFullYear()}-${currentMonth.getMonth() + 1}-${1} 00:00:00`)
-        const lastDay = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0)
-        const max = new Date(`${currentMonth.getFullYear()}-${currentMonth.getMonth() + 1}-${lastDay.getDate()} 23:59:59`)
+        // const lastDay = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0)
+        const max = new Date(`${currentMonth.getFullYear()}-${currentMonth.getMonth() + 1}-${currentMonth.getDate()} 23:59:59`)
   
         const response = (await Order.find({createdAt: {$gte: min, $lte: max}})).reduce((accumular, current) => (accumular + current.total_pay), 0)
   
@@ -191,12 +215,34 @@ const getDataChart = async(req, res) => {
 
         if (i === 0) totalToday = response
       }
+
+      const listMovie = (await Movie.find({$or: [{status: 'showing'}, {status: 'showed'}]})).map(item => item._id.toString())
+      
+      for (let movieId of listMovie) {
+        let currentMonth = new Date(day)
+        // const lastDay = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0)
+
+        const min = new Date(`${currentMonth.getFullYear()}-${currentMonth.getMonth()+1}-1 00:00:00`)
+        const max = new Date(`${currentMonth.getFullYear()}-${currentMonth.getMonth()+1}-${currentMonth.getDate()} 23:59:59`)
+
+        const response = (await Order.find({$and: [{movieId}, {createdAt: {$gte: min, $lte: max}}]})).reduce((acc, current) => acc + current.total_pay,0)
+
+        const inforMovie = await Movie.findOne({_id: movieId}).select('original_title poster_path release_date status id')
+
+        dataMovie.push({inforMovie, total: response})
+
+      }
+
+      dataMovie.sort((a, b) => {
+        return b.total - a.total
+      })
+
     } else {
       for (let i = 0; i < 10; i++) {
-        let now = new Date(new Date())
+        let now = new Date(new Date(day))
 
         const min = new Date(`${now.getFullYear() - i}-1-1 00:00:00`)
-        const max = new Date(`${now.getFullYear() - i}-12-31 23:59:59`)
+        const max = new Date(`${now.getFullYear() - i}-${now.getMonth() + 1}-${now.getDate()} 23:59:59`)
 
         const response = (await Order.find({createdAt: {$gte: min, $lte: max}})).reduce((accumular, current) => (accumular + current.total_pay), 0)
 
@@ -204,14 +250,33 @@ const getDataChart = async(req, res) => {
 
         if (i === 0) totalToday = response
       }
-    }
 
-    console.log(result)
+      const listMovie = (await Movie.find({$or: [{status: 'showing'}, {status: 'showed'}]})).map(item => item._id.toString())
+      
+      for (let movieId of listMovie) {
+        let now = new Date(day)
+
+        const min = new Date(`${now.getFullYear()}-1-1 00:00:00`)
+        const max = new Date(`${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()} 23:59:59`)
+
+        const response = (await Order.find({$and: [{movieId}, {createdAt: {$gte: min, $lte: max}}]})).reduce((acc, current) => acc + current.total_pay,0)
+
+        const inforMovie = await Movie.findOne({_id: movieId}).select('original_title poster_path release_date status id')
+
+        dataMovie.push({inforMovie, total: response})
+      }
+
+      dataMovie.sort((a, b) => {
+        return b.total - a.total
+      })
+
+    }
 
     return res.status(200).json({
       success: result.length > 0 ? true : false,
       data: result,
       totalToday,
+      dataMovie,
     })
 
   } catch(e) {
