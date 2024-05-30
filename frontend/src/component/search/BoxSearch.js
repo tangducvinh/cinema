@@ -80,8 +80,8 @@ const BoxSearch = () => {
     }
 
     return (
-        <div className="flex items-center shadow-md">
-            <div className="flex items-center px-3 py-3 shadow-md rounded-l-sm">
+        <div className="flex items-center shadow-lg">
+            <div className="flex items-center pl-3 pr-1 py-4 rounded-l-sm">
                 <div className="mr-2 flex items-center text-sm">
                     <label className="bg-main text-white px-[6px] text-[12px] rounded-full mr-1">1</label>
                     <select className="w-[250px] outline-none cursor-pointer" value={valueMovie} onChange={(e) => setValueMovie(e.target.value)}>
@@ -102,9 +102,9 @@ const BoxSearch = () => {
                     </select>
                 </div>
 
-                <div className="mr-2 flex items-center text-sm">
+                <div className="flex items-center text-sm">
                     <label className="bg-main text-white px-[6px] text-[12px] rounded-full mr-1">3</label>
-                    <select className="w-[250px] outline-none cursor-pointer" value={valueShow} onChange={(e) => setValueShow(e.target.value)}>
+                    <select className="w-[170px] outline-none cursor-pointer" value={valueShow} onChange={(e) => setValueShow(e.target.value)}>
                         <option value=''>Chọn suất</option>
                         {listShow.length > 0 ?
                             listShow.map(item => (
@@ -117,7 +117,7 @@ const BoxSearch = () => {
                     </select>
                 </div>
             </div>
-            <button onClick={handleSearch} className={clsx('py-3 px-10 rounded-r-sm shadow-md ', {'bg-main': showSearch}, {'bg-[#F8AC6E] text-gray-500': !showSearch})}>Mua vé nhanh</button>
+            <button onClick={handleSearch} className={clsx('h-[52px] min-w-[200px] rounded-r-sm ', {'bg-main': showSearch}, {'bg-[#F8AC6E] text-gray-500': !showSearch})}>Mua vé nhanh</button>
         </div>
     )
 }

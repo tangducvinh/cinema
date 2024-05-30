@@ -129,10 +129,10 @@ function Header() {
                 {(currentUser?.role === "7" || currentUser?.role === "9") && (
                   <Link
                     to={"/manager/movie"}
-                    className="flex flex-col items-center ml-8 border p-2 rounded-md hover:bg-main"
+                    className="flex gap-2 items-center ml-8 p-2 rounded-md hover:bg-main"
                   >
-                    <GrUserManager size="20px" />
-                    <p className="font-medium">Quản lí</p>
+                    <GrUserManager size="17px" />
+                    <p>Quản lí</p>
                   </Link>
                 )}
               </div>

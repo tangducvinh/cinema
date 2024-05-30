@@ -123,14 +123,16 @@ const Dashboard = () => {
 
             <div className='flex-3 ml-10'>
                 <div className='relative'>
-                    <label className='font-medium'>Chọn ngày</label>
-                    <input 
-                        ref={containerElement}
-                        onClick={() => setShowCalendar(!showCalendar)}
-                        className='ml-2 border-[1px] rounded-md p-1 border-gray-300 outline-none' 
-                        placeholder='Nhập ngày' 
-                        value={moment(valueCalendar).format('DD/MM/YYYY')}
-                    ></input>
+                    <div className='flex items-center'>
+                        <label className='font-medium mr-2'>Chọn ngày</label>
+                        <input 
+                            ref={containerElement}
+                            onClick={() => setShowCalendar(!showCalendar)}
+                            className='border-[1px] rounded-md p-1 border-gray-300 outline-none' 
+                            placeholder='Nhập ngày' 
+                            value={moment(valueCalendar).format('DD/MM/YYYY')}
+                        ></input>
+                    </div>
 
                     {showCalendar &&
                         <div 

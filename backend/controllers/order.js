@@ -21,10 +21,8 @@ const createOrder = async (req, res) => {
     do {
       console.log('hello')
       codeNumber = Math.round(Math.random() * 10000000)
-      var order = Order.findOne({orderNumber: codeNumber})
-    } while(order.length > 0)
-
-    console.log(codeNumber)
+      var order = await Order.findOne({orderNumber: codeNumber})
+    } while(order !== null )
 
     const response = await Order.create({...req.body, orderNumber: codeNumber});
     return res.status(200).json({
@@ -83,7 +81,7 @@ const allOrder = async (req, res) => {
     const response = Order.find({...query, createdAt: { $gte: minTime, $lt: maxTime }}).populate([
       {
         path: "movieId",
-        select: "original_title",
+        select: "original_title poster_path",
       },
       {
         path: "userId",

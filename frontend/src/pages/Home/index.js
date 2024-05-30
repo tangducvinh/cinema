@@ -50,11 +50,14 @@ function Home() {
   ];
   return (
     <div>
-      <Slider slider={sliders} />
+      <div className="relative">
+        <Slider slider={sliders} />
 
-      <div className="flex justify-center">
-        <BoxSearch />
+        <div className="absolute bottom-[-40px] rounded-sm overflow-hidden shadow-lg left-[50%] translate-x-[-50%] bg-white flex justify-center">
+          <BoxSearch />
+        </div>
       </div>
+
 
       <div className="mx-80 px-4 py-12 ">
         <div className="flex items-center mb-10">

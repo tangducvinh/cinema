@@ -69,7 +69,7 @@ const FormEditSeat = ({data, rid, onSet}) => {
             <div className='flex items-center mt-8'>
                 <label className='font-medium'>Tên ghế</label>
                 <input 
-                    className='ml-2 border-[1px] rounded-md p-1 border-gray-300 outline-none' 
+                    className='ml-2 border-b-[1px] rounded-md p-1 border-gray-300 outline-none' 
                     placeholder='Nhập tên' 
                     {...register('name')}
                 ></input>

@@ -118,7 +118,7 @@ const ManagerBill = () => {
                 <li className="flex-1 font-semibold">Ghế</li>
                 <li className="flex-1 font-semibold">STĐ</li>
                 <li className="flex-1 font-semibold">Trạng thái</li>
-                <li className="w-[40px]"></li>
+                <li className="w-[23px]"></li>
             </ul>
 
             {listBill.map((item, index) => (
@@ -132,6 +132,7 @@ const ManagerBill = () => {
                         seats={item.seats.map(item => item.name.toUpperCase()).toString()}
                         phone={item.userId.phone}
                         status={'Đã thanh toán'}
+                        data={item}
                     />
                 </Fragment>
             ))}

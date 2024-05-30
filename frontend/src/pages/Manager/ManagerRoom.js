@@ -1,10 +1,15 @@
 import { useState, useEffect } from 'react'
 import clsx from 'clsx'
+import { useDispatch } from 'react-redux'
 
 import * as apis from '../../apis'
 import { FormEditSeat } from '../../component/forms'
+import { setChidlren } from '../../redux/slides/appSlice'
+import { FormAddRoom } from '../../component/forms'
 
 const ManagerRoom = () => {
+    const dispatch = useDispatch()
+    const [ reRender, setReRender ] = useState(false)
     const [ listRoom, setListRoom ] = useState([])
     const [ valueSelectRoom, setValueSelectRoom ] = useState('')
     const [ listSeat, setListSeat ] = useState([])
@@ -32,7 +37,7 @@ const ManagerRoom = () => {
 
     useEffect(() => {
         fecthListRoom()
-    }, [])
+    }, [reRender])
 
     useEffect(() => {
         fecthListSeat(valueSelectRoom)
@@ -50,6 +55,10 @@ const ManagerRoom = () => {
         // setCurrentSeat(listSeat.find(item => (+item.row - 1 === itemRow && +item.number - 1 === itemColumn)))
     }
 
+    // handle add room
+    const handleAddRoom = () => {
+        dispatch(setChidlren(<FormAddRoom reRender={setReRender}/>))
+    }
 
     // console.log(currentSeat)
 
@@ -58,7 +67,11 @@ const ManagerRoom = () => {
     //${listSeat.find(item => (+item.row - 1 === itemRow && +item.number - 1 === itemColumn))?.status === 'empty' ? 'bg-white invisible' : ''}
     return (
         <div className="w-full">
-            <h2 className="font-medium text-2xl">Sơ đồ phòng chiếu</h2>
+            <div className='flex items-center justify-between'>
+                <h2 className="font-medium text-2xl">Sơ đồ phòng chiếu</h2>
+
+                <button className='text-white px-3 py-2 bg-blue-500 opacity-70 hover:opacity-100 rounded-md' onClick={handleAddRoom}>Thêm phòng</button>
+            </div>
 
             <div className='mt-4'>
                 <label className='font-medium mr-2'>Chọn phòng: </label>

@@ -9,6 +9,7 @@ const createRoom = async (req, res) => {
     return res.status(200).json({
       success: response ? true : false,
       data: response ? response : "Tao phong that bai",
+      mes: response ? 'Tạo mới phòng thành công' : 'Tạo mới phòng thất bại'
     });
   } catch (e) {
     res.status(500).json(e);

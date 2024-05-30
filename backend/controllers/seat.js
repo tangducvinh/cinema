@@ -16,7 +16,7 @@ const createSeat = async (req, res) => {
       return res.status(200).json({
         success: response ? true : false,
         data: response ? response : "no data",
-        mes: response ? "Thanh cong" : "That bai",
+        mes: response ? "Tạo ghế thành công" : "Tạo ghế thất bại",
       });
     } else {
       res.status(200).json({
@@ -28,6 +28,26 @@ const createSeat = async (req, res) => {
     res.status(500).json(e);
   }
 };
+
+const autoCreateSeat = async(req, res) => {
+  try {
+    
+    for (let i = 1; i <= 10; i++) {
+      for (let j = 1; j <= 10; j++) {
+        const listName = ['x', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']
+        const name = `${listName[i]}${j}`
+        await Seat.create({name, idRoom: '6657df5e0e14634478dcf6d4', row: i, number: j, status: 'activity'})
+      }
+    }
+
+    return
+
+
+
+  } catch(e) {
+    return res.status(200).json(e)
+  }
+}
 
 // lay danh sach ghe tai phong nao do
 const getListSeat = async (req, res) => {
@@ -72,5 +92,6 @@ const updateSeat = async(req, res) => {
 module.exports = {
   createSeat,
   getListSeat,
-  updateSeat
+  updateSeat,
+  autoCreateSeat
 };
