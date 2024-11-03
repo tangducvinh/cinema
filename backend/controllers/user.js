@@ -1,6 +1,6 @@
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
-const jwt = require('jsonwebtoken')
+const jwt = require("jsonwebtoken");
 
 const {
   generateAccessToken,
@@ -97,14 +97,14 @@ const login = async (req, res) => {
 
 const refreshToken = async (req, res) => {
   try {
-    const refreshToken = req.cookies.refreshToken
+    const refreshToken = req.cookies.refreshToken;
     if (!refreshToken) {
       return res.status(401).json("You are not authenticated");
     }
-    jwt.verify(refreshToken, 'dfdfdfdf', (err, decode) => {
+    jwt.verify(refreshToken, "dfdfdfdf", (err, decode) => {
       if (err) {
         console.log(err);
-        return res.status(500).json(e)
+        return res.status(500).json(e);
       }
 
       const newAccessToken = generateAccessToken(decode._id, decode.role);
@@ -118,8 +118,8 @@ const refreshToken = async (req, res) => {
         accessToken: newAccessToken,
       });
     });
-  } catch(e) {
-    return res.status(500).json(e)
+  } catch (e) {
+    return res.status(500).json(e);
   }
 };
 

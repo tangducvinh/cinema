@@ -24,7 +24,7 @@ router.post("/refresh", refreshToken);
 router.post("/logout", logout);
 router.post("/send-password", sendNewPassword);
 router.post("/change-password", [verifyAccessToken], changePassword);
-router.put('/', updateUser)
+router.put("/", updateUser);
 router.delete("/:uid", verifyAccessToken, isAdmin, deleteUser);
 
 module.exports = router;
