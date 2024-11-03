@@ -4,11 +4,16 @@ import "./App.css";
 import { publicRouters } from "./routers";
 import { DefaultLayout } from "./component/Layout";
 import { Fragment, useEffect } from "react";
-import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
 
-import ManagerLayout from './component/Layout/ManagerLayout'
-import { ManagerAccount, ManagerMovie, ManagerShow, ManagerRoom, ManagerBill, Dashboard } from './pages/Manager'
+import ManagerLayout from "./component/Layout/ManagerLayout";
+import {
+  ManagerAccount,
+  ManagerMovie,
+  ManagerShow,
+  ManagerRoom,
+  ManagerBill,
+  Dashboard,
+} from "./pages/Manager";
 
 function App() {
   return (
@@ -36,13 +41,13 @@ function App() {
             );
           })}
 
-          <Route path='manager' element={<ManagerLayout />}>
-              <Route path='movie' element={<ManagerMovie />} />
-              <Route path='dashboard' element={<Dashboard />} />
-              <Route path='show' element={<ManagerShow />} />
-              <Route path='account' element={<ManagerAccount />} />
-              <Route path='room' element={<ManagerRoom />} />
-              <Route path='bill' element={<ManagerBill />} />
+          <Route path="manager" element={<ManagerLayout />}>
+            <Route path="movie" element={<ManagerMovie />} />
+            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="show" element={<ManagerShow />} />
+            <Route path="account" element={<ManagerAccount />} />
+            <Route path="room" element={<ManagerRoom />} />
+            <Route path="bill" element={<ManagerBill />} />
           </Route>
         </Routes>
       </div>

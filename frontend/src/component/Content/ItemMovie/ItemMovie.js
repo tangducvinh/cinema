@@ -18,12 +18,12 @@ function ItemMovie({ data }) {
     setTrailer(!trailer);
   };
   return (
-    <div className="mb-5">
+    <div className="flex flex-col w-full h-full">
       {trailer && (
         <Trailer keyFrame={data.video[0].key} onClick={handleTrailer} />
       )}
       <div
-        className="w-[-290] h-[-435] object-cover rounded-xl relative mr-4"
+        className="w-full h-5/6 object-cover rounded-xl relative mr-4 flex-none"
         onMouseEnter={() => {
           setHoverPoster(true);
           setHoverBg(true);
@@ -41,7 +41,7 @@ function ItemMovie({ data }) {
                 ? data.poster_path
                 : `${process.env.REACT_APP_IMAGE_URL}${data.poster_path}`
             }
-            className="w-[-290] h-[-435] object-cover rounded-xl "
+            className="w-full h-full object-cover rounded-xl "
           />
           <div
             className={`absolute w-full h-full top-0  rounded-xl ${
@@ -76,7 +76,9 @@ function ItemMovie({ data }) {
           </div>
         )}
       </div>
-      <h1 className="text-[-18] font-medium mt-2">{data.original_title}</h1>
+      <h1 className="text-[-18] font-medium mt-2 overflow-hidden line-clamp-1 ">
+        {data.original_title}
+      </h1>
     </div>
   );
 }

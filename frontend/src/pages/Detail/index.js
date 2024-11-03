@@ -71,9 +71,9 @@ function Detail() {
   const navigate = useNavigate();
 
   return (
-    <div>
+    <div className="w-screen">
       {detailMovie !== null && (
-        <div>
+        <div className="w-full">
           {trailer && (
             <Trailer
               keyFrame={detailMovie.video[0].key}
@@ -81,11 +81,11 @@ function Detail() {
             />
           )}
 
-          <div>
-            <div className="w-screen h-[-500] bg-black flex justify-center ">
-              <div className="relative">
+          <div className="w-full">
+            <div className="w-full h-auto bg-black flex justify-center ">
+              <div className="relative w-1/2">
                 <Image
-                  className="w-[-860] h-[-500] object-cover"
+                  className="w-full h-auto object-cover"
                   alt="trailer"
                   src={
                     detailMovie.backdrop_path?.slice(0, 4) === "http"
@@ -94,7 +94,7 @@ function Detail() {
                   }
                 />
                 <div
-                  className="absolute w-[-860] h-[-500] top-0 shadow-trailer flex justify-center items-center"
+                  className="absolute w-full h-full top-0 shadow-trailer flex justify-center items-center"
                   onClick={handleTrailer}
                 >
                   <MdOutlinePlayCircleFilled className="text-7xl text-white" />
@@ -102,13 +102,13 @@ function Detail() {
               </div>
             </div>
 
-            <div className="mx-80 flex  px-4 py-12">
-              <div className="flex  relative  w-[-882]">
+            <div className="w-3/5 mx-auto flex justify-between px-4 py-12 gap-3">
+              <div className="flex relative w-3/4 h-auto flex-1">
                 <div className="absolute -top-24 ">
-                  <div className="flex">
-                    <div className="w-[-278] h-[-398]  border-2 border-white mr-6 border-b-0">
+                  <div className="flex w-full">
+                    <div className="w-1/3  border-2 border-white mr-6 border-b-0">
                       <Image
-                        className="w-[-278] h-[-398] object-cover"
+                        className="w-full h-auto object-cover"
                         alt="poster"
                         src={
                           detailMovie.poster_path.slice(0, 4) === "http"
@@ -161,7 +161,7 @@ function Detail() {
                         <span className="text-gray-500 mr-3 min-w-16">
                           Thể loại:{" "}
                         </span>
-                        <div className="flex ">
+                        <div className="flex flex-wrap">
                           {detailMovie.genres.map((item) => {
                             return <Button hoverPrimary>{item}</Button>;
                           })}
@@ -189,13 +189,11 @@ function Detail() {
                       </div>
                     </div>
                   </div>
-                  <div className="mt-20">
+                  <div className="mt-10 w-full">
                     <h1 className="inline-block leading-none px-2 border-l-4 border-l-blue-950 text-[-20] font-semibold mr-10">
                       Nội dung phim
                     </h1>
-                    <p className="mt-2 text-[-14] text-justify">
-                      {detailMovie.overview}
-                    </p>
+                    <p className="mt-2 text-[-14]">{detailMovie.overview}</p>
                     <p className="mt-2 text-[-14] text-justify">
                       {`Phim mới ${
                         detailMovie.original_title
@@ -205,7 +203,7 @@ function Detail() {
                     </p>
                   </div>
                   {detailMovie.status === "showing" && (
-                    <div className="mt-10  mb-28">
+                    <div className="mt-10 mb-28">
                       <h1 className="inline-block leading-none px-2 border-l-4 border-l-blue-950 text-[-20] font-semibold mr-10">
                         Lịch chiếu phim
                       </h1>
@@ -229,9 +227,9 @@ function Detail() {
                         })}
                       </div>
                       {listShow.length !== 0 && (
-                        <div className="flex items-center mx-6 mt-3">
-                          <h1 className="mr-10">2D phụ đề</h1>
-                          <div className="flex ">
+                        <div className="flex items-center mx-6 mt-3 gap-8">
+                          <h1 className="flex-none">2D phụ đề</h1>
+                          <div className="flex-1 flex flex-wrap gap-1">
                             {listShow.map((item) => {
                               return (
                                 <button
@@ -283,13 +281,14 @@ function Detail() {
                   )}
                 </div>
               </div>
-              <div className="">
+
+              <div className="w-1/4 flex flex-col gap-3 flex-none">
                 <h1 className="uppercase inline-block leading-none px-2 border-l-4 border-l-blue-950 text-[-20] font-semibold mr-10">
                   Phim đang chiếu
                 </h1>
                 <div className="mt-3 ml-3">
                   {listShowing !== undefined && (
-                    <div>
+                    <div className="flex flex-col gap-3">
                       {listShowing.data.map((item, index) => {
                         if (index <= 1) {
                           return <ItemMovie data={item} />;

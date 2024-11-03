@@ -12,24 +12,26 @@ export const appSlice = createSlice({
   initialState,
   reducers: {
     setChidlren: (state, action) => {
-        state.children = action.payload
+      state.children = action.payload;
     },
     setRenderManagerMovie: (state) => {
-    
-      state.renderManagerMovie = !state.renderManagerMovie
+      state.renderManagerMovie = !state.renderManagerMovie;
     },
     setRenderManagerShow: (state) => {
-    
-      state.renderManagerShow = !state.renderManagerShow
+      state.renderManagerShow = !state.renderManagerShow;
     },
     setRenderManagerUser: (state) => {
-    
-      state.renderManagerUser = !state.renderManagerUser
-    }
+      state.renderManagerUser = !state.renderManagerUser;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setChidlren, setRenderManagerMovie, setRenderManagerShow, setRenderManagerUser } = appSlice.actions;
+export const {
+  setChidlren,
+  setRenderManagerMovie,
+  setRenderManagerShow,
+  setRenderManagerUser,
+} = appSlice.actions;
 
 export default appSlice.reducer;

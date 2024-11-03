@@ -12,9 +12,10 @@ import { useDispatch } from "react-redux";
 function SignIn() {
   const dispatch = useDispatch();
 
-  const mutationSingIn = useMutationHooks((data) =>
-    // call api login
-    UserServices.signInUser(data)
+  const mutationSingIn = useMutationHooks(
+    async (data) =>
+      // call api login
+      await UserServices.signInUser(data)
   );
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [email, setEmail] = useState("");
