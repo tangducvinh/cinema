@@ -6,6 +6,7 @@ import { ItemBillInfor } from '../../component/itemInfor'
 import { IoSearchOutline } from "react-icons/io5"
 
 import Pagiantion from '../../component/pagination/Pagination'
+import Loading from '../../component/common/Loading'
 
 import * as apis from '../../apis'
 
@@ -60,6 +61,8 @@ const ManagerBill = () => {
 
         return containerElement.current.removeEventListener('click', handleHiddenCalendar)
     }, [])
+
+    if (!listBill) return <Loading />
 
     return (
         <div 

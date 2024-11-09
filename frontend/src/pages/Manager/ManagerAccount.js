@@ -7,6 +7,7 @@ import { ItemUserInfor } from "../../component/itemInfor";
 import * as apis from "../../apis";
 import Pagiantion from "../../component/pagination/Pagination";
 import { listRole } from "../../ultis/options";
+import Loading from '../../component/common/Loading'
 
 const ManagerAccount = () => {
   const { renderManagerUser } = useSelector((state) => state.app);
@@ -20,7 +21,6 @@ const ManagerAccount = () => {
   const fecthDataUsers = async (data) => {
     const response = await apis.getAllUsers(data);
 
-    console.log(response);
     if (response?.success) {
       setDataUsers(response.data);
       setTotal(response.counts);
@@ -49,7 +49,7 @@ const ManagerAccount = () => {
     setPage(1);
   }, [valueRole]);
 
-  console.log(valueRole);
+  if (!dataUsers) return <Loading />
 
   return (
     <div className="w-full">
