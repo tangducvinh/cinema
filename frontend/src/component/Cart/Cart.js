@@ -10,6 +10,7 @@ function Cart({ dataShowDetail, setCheckBought, setAmount }) {
   const localBooking = JSON.parse(localStorage.getItem("booking"));
   const [buy, setBuy] = useState([]);
   const quantity = Number(buy.length * dataShowDetail.price);
+  
   useEffect(() => {
     setBuy(localBooking.seats);
     if (localBooking.seats.length !== 0) setCheckBought(false);

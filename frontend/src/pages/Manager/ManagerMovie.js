@@ -7,6 +7,7 @@ import { ItemMovieInfor } from "../../component/itemInfor";
 import * as apis from "../../apis";
 import { setChidlren } from "../../redux/slides/appSlice";
 import { FormAddMovie } from "../../component/forms";
+import Loading from "../../component/common/Loading";
 
 // all: tất cả
 // showing: đang chiếu
@@ -63,6 +64,8 @@ const ManagerMovie = () => {
   const handleAddMovie = () => {
     dispatch(setChidlren(<FormAddMovie />));
   };
+
+  if (!dataAllMovie) return <Loading />
 
   return (
     <div className="w-full">

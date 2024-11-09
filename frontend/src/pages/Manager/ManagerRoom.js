@@ -6,6 +6,7 @@ import * as apis from '../../apis'
 import { FormEditSeat } from '../../component/forms'
 import { setChidlren } from '../../redux/slides/appSlice'
 import { FormAddRoom } from '../../component/forms'
+import Loading from '../../component/common/Loading'
 
 const ManagerRoom = () => {
     const dispatch = useDispatch()
@@ -65,6 +66,8 @@ const ManagerRoom = () => {
     // console.log(listSeat)
     // console.log(listSeat.find(item => (+item.row === 1 && +item.number === 1))?.status)
     //${listSeat.find(item => (+item.row - 1 === itemRow && +item.number - 1 === itemColumn))?.status === 'empty' ? 'bg-white invisible' : ''}
+    if(!listSeat) return <Loading />
+    
     return (
         <div className="w-full">
             <div className='flex items-center justify-between'>

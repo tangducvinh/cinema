@@ -7,6 +7,7 @@ import Calendar from 'react-calendar'
 
 import * as apis from '../../apis'
 import { ItemMovieOrderInfor } from '../../component/itemInfor'
+import Loading from '../../component/common/Loading'
 
 const Dashboard = () => {
     const calendarElement = useRef()
@@ -67,6 +68,8 @@ const Dashboard = () => {
 
         return window.removeEventListener('click', handleHiddenCalendar)
     }, [])
+
+    if (!dataChart) return <Loading />
 
     return (
         <div className='flex'>
