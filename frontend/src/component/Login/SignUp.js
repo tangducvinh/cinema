@@ -6,41 +6,23 @@ import * as UserServices from "../../services/UserServices";
 import { useMutationHooks } from "../../hooks/useMutationHook";
 import Loading from "../LoadingComponent/Loading";
 import Swal from "sweetalert2";
-import swal from 'sweetalert'
-
-import * as apis from '../../apis'
+import swal from "sweetalert";
+import validate from "../../ultis/validateField";
+import * as apis from "../../apis";
 
 function SignUp() {
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [isShowConfirmPassword, setIsShowConfirmPassword] = useState(false);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [validatePass, setValidatePass] = useState(false);
-  const [validateEmail, setValidateEmail] = useState(false);
+  const [payload, setPayload] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const [invalidFields, setInvalidFields] = useState([]);
 
-  const [ isPending, setIsPending ] = useState(false)
-
-  const handleOnChangeEmail = (e) => {
-    setEmail(e.target.value);
-    setValidateEmail(false);
-  };
-  const handleOnChangeName = (e) => {
-    setName(e.target.value);
-  };
-  const handleOnChangePassword = (e) => {
-    setPassword(e.target.value);
-    setValidatePass(false);
-  };
-  const handleOnChangeConfirmPassword = (e) => {
-    setConfirmPassword(e.target.value);
-    setValidatePass(false);
-  };
-  const handleOnChangePhone = (e) => {
-    setPhone(e.target.value);
-  };
+  const [isPending, setIsPending] = useState(false);
 
   // const mutationSignUp = useMutationHooks((data) =>
   //   {
@@ -59,28 +41,24 @@ function SignUp() {
   //   }
   // }, [isSuccess])
 
-
-
-  const handleSignUp = async() => {
-    const reg =
-      /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-    console.log("email 123 ", !reg.test(email));
-    if (password !== confirmPassword) {
-      setValidatePass(true);
-    } else if (!reg.test(email)) {
-      setValidateEmail(true);
-    } else {
-      // mutationSignUp.mutate({
-      //   name: name,
-      //   email: email,
-      //   password: password,
-      //   phone: phone,
-      // })
-      setIsPending(true)
-      const response = await apis.register({name, email, password, phone})
-      setIsPending(false)
-
-      swal(response.success ? 'Thành công' : 'Thất bại', response.mes || 'Đã có lỗi xảy ra', response.success ? 'success' : 'error')
+  const handleSignUp = async () => {
+    const valid = validate(payload, setInvalidFields);
+    if (valid === 0) {
+      setIsPending(true);
+      const response = await apis.register({ ...payload });
+      setIsPending(false);
+      swal(
+        response.success ? "Thành công" : "Thất bại",
+        response.mes || "Đã có lỗi xảy ra",
+        response.success ? "success" : "error"
+      );
+      setPayload({
+        name: "",
+        phone: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+      });
       // Swal.fire({
       //   text: "Bạn đã đăng kí thành công!",
       //   icon: "success",
@@ -91,38 +69,83 @@ function SignUp() {
   return (
     <div>
       <div className="px-5">
-        <p className="text-[-18] font-bold">Họ và tên</p>
-        <input
-          type="text"
-          placeholder="họ và tên"
-          className="w-full px-3 leading-10 border border-gray-300 outline-none my-3 focus:border-black"
-          onChange={(e) => handleOnChangeName(e)}
-          value={name}
-        />
-        <p className="text-[-18] font-bold">Email</p>
-        <input
-          type="email"
-          placeholder="email"
-          className="w-full px-3 leading-10 border border-gray-300 outline-none my-3 focus:border-black "
-          onChange={(e) => handleOnChangeEmail(e)}
-          value={email}
-        />
-        <p className="text-[-18] font-bold">Phone</p>
-        <input
-          type="text"
-          placeholder="số điện thoại"
-          className="w-full px-3 leading-10 border border-gray-300 outline-none my-3 focus:border-black "
-          onChange={(e) => handleOnChangePhone(e)}
-          value={phone}
-        />
+        <div>
+          <p className="text-[-18] font-bold">Họ và tên</p>
+          <input
+            type="text"
+            placeholder="họ và tên"
+            className="w-full px-3 leading-10 border border-gray-300 outline-none mt-3 focus:border-black"
+            onChange={(e) =>
+              setPayload((prev) => ({ ...prev, name: e.target.value }))
+            }
+            value={payload.name}
+            onFocus={() => {
+              setInvalidFields([]);
+              setPayload((prev) => ({ ...prev, name: "" }));
+            }}
+          />
+          {invalidFields?.some((el) => el.name === "name") && (
+            <small className="text-red-500 italic">
+              {invalidFields.find((el) => el.name === "name").mes}
+            </small>
+          )}
+        </div>
+        <div>
+          <p className="text-[-18] font-bold">Email</p>
+          <input
+            type="email"
+            placeholder="email"
+            className="w-full px-3 leading-10 border border-gray-300 outline-none mt-3 focus:border-black "
+            onChange={(e) =>
+              setPayload((prev) => ({ ...prev, email: e.target.value }))
+            }
+            value={payload.email}
+            onFocus={() => {
+              setInvalidFields([]);
+              setPayload((prev) => ({ ...prev, email: "" }));
+            }}
+          />
+          {invalidFields?.some((el) => el.name === "email") && (
+            <small className="text-red-500 italic">
+              {invalidFields.find((el) => el.name === "email").mes}
+            </small>
+          )}
+        </div>
+        <div>
+          <p className="text-[-18] font-bold">Phone</p>
+          <input
+            type="text"
+            placeholder="số điện thoại"
+            className="w-full px-3 leading-10 border border-gray-300 outline-none mt-3 focus:border-black "
+            onChange={(e) =>
+              setPayload((prev) => ({ ...prev, phone: e.target.value }))
+            }
+            value={payload.phone}
+            onFocus={() => {
+              setInvalidFields([]);
+              setPayload((prev) => ({ ...prev, phone: "" }));
+            }}
+          />
+          {invalidFields?.some((el) => el.name === "phone") && (
+            <small className="text-red-500 italic">
+              {invalidFields.find((el) => el.name === "phone").mes}
+            </small>
+          )}
+        </div>
         <p className="text-[-18] font-bold">Password</p>
         <div className="relative">
           <input
             type={isShowPassword ? "text" : "password"}
             placeholder="password"
-            className="w-full px-3 pr-5 leading-10 border border-gray-300 outline-none my-3 focus:border-black"
-            onChange={(e) => handleOnChangePassword(e)}
-            value={password}
+            className="w-full px-3 pr-5 leading-10 border border-gray-300 outline-none mt-3 focus:border-black"
+            onChange={(e) =>
+              setPayload((prev) => ({ ...prev, password: e.target.value }))
+            }
+            value={payload.password}
+            onFocus={() => {
+              setInvalidFields([]);
+              setPayload((prev) => ({ ...prev, password: "" }));
+            }}
           />
           <div
             className="absolute top-4 right-0 px-2 py-2"
@@ -132,15 +155,29 @@ function SignUp() {
           >
             {isShowPassword ? <FaEye /> : <FaEyeSlash />}
           </div>
+          {invalidFields?.some((el) => el.name === "password") && (
+            <small className="text-red-500 italic">
+              {invalidFields.find((el) => el.name === "password").mes}
+            </small>
+          )}
         </div>
         <p className="text-[-18] font-bold">Confirm Password</p>
         <div className="relative">
           <input
             type={isShowConfirmPassword ? "text" : "password"}
             placeholder="confirm password"
-            className="w-full px-3 pr-5 leading-10 border border-gray-300 outline-none my-3 focus:border-black"
-            onChange={(e) => handleOnChangeConfirmPassword(e)}
-            value={confirmPassword}
+            className="w-full px-3 pr-5 leading-10 border border-gray-300 outline-none mt-3 focus:border-black"
+            onChange={(e) =>
+              setPayload((prev) => ({
+                ...prev,
+                confirmPassword: e.target.value,
+              }))
+            }
+            value={payload.confirmPassword}
+            onFocus={() => {
+              setInvalidFields([]);
+              setPayload((prev) => ({ ...prev, confirmPassword: "" }));
+            }}
           />
           <div
             className="absolute top-4 right-0 px-2 py-2"
@@ -150,28 +187,17 @@ function SignUp() {
           >
             {isShowConfirmPassword ? <FaEye /> : <FaEyeSlash />}
           </div>
-        </div>
-        <div>
-          {validatePass && (
-            <span className="text-red-600 italic">
-              Mất khẩu không trùng khớp
-            </span>
-          )}
-          {validateEmail && (
-            <span className="text-red-600 italic">Email không hợp lệ</span>
+          {invalidFields?.some((el) => el.name === "confirmPassword") && (
+            <small className="text-red-500 italic">
+              {invalidFields.find((el) => el.name === "confirmPassword").mes}
+            </small>
           )}
         </div>
+
         <div className="mt-3 pb-9">
           <Loading isLoading={isPending}>
             <div className="flex justify-center  border-b border-b-gray-400">
-              <Button
-                primary
-                big
-                disabled={
-                  !name || !email || !password || !phone || !confirmPassword
-                }
-                onClick={handleSignUp}
-              >
+              <Button primary big onClick={handleSignUp}>
                 HOÀN THÀNH
               </Button>
             </div>

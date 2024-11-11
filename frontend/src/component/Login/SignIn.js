@@ -8,6 +8,7 @@ import Loading from "../LoadingComponent/Loading";
 import Swal from "sweetalert2";
 import { updateUser } from "../../redux/slides/userSlide";
 import { useDispatch } from "react-redux";
+import validate from "../../ultis/validateField";
 
 function SignIn() {
   const dispatch = useDispatch();
@@ -18,15 +19,12 @@ function SignIn() {
       await UserServices.signInUser(data)
   );
   const [isShowPassword, setIsShowPassword] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
 
-  const handleOnChangeEmail = (e) => {
-    setEmail(e.target.value);
-  };
-  const handleOnChangePassword = (e) => {
-    setPassword(e.target.value);
-  };
+  const [payload, setPayload] = useState({
+    email: "",
+    password: "",
+  });
+  const [invalidFields, setInvalidFields] = useState([]);
 
   const { data, isPending, isSuccess, isError } = mutationSingIn;
   useEffect(() => {
@@ -54,39 +52,68 @@ function SignIn() {
     }
   }, [data]);
   const handleSignIn = () => {
-    mutationSingIn.mutate({
-      account: email,
-      password: password,
-    });
+    const valid = validate(payload, setInvalidFields);
+    if (valid === 0) {
+      mutationSingIn.mutate({
+        account: payload.email,
+        password: payload.password,
+      });
+    }
   };
 
   return (
     <div>
-      <div className="px-5">
-        <p className="text-[-18] font-bold">Email</p>
-        <input
-          type="email"
-          placeholder="email"
-          className="w-full px-3 leading-10 border border-gray-300 outline-none my-3 focus:border-black"
-          onChange={(e) => handleOnChangeEmail(e)}
-          value={email}
-        />
-        <p className="text-[-18] font-bold">Password</p>
-        <div className="relative">
+      <div className="px-5 flex flex-col gap-3">
+        <div>
+          <p className="text-[-18] font-bold">Email</p>
           <input
-            type={isShowPassword ? "text" : "password"}
-            placeholder="password"
-            className="w-full px-3 pr-5 leading-10 border border-gray-300 outline-none my-3 focus:border-black"
-            onChange={(e) => handleOnChangePassword(e)}
-            value={password}
-          />
-          <div
-            className="absolute top-4 right-0 px-2 py-2"
-            onClick={() => {
-              setIsShowPassword(!isShowPassword);
+            type="email"
+            placeholder="email"
+            className="w-full px-3 leading-10 border border-gray-300 outline-none mt-3 focus:border-black"
+            onChange={(e) =>
+              setPayload((prev) => ({ ...prev, email: e.target.value }))
+            }
+            value={payload.email}
+            onFocus={() => {
+              setInvalidFields([]);
+              setPayload((prev) => ({ ...prev, email: "" }));
             }}
-          >
-            {isShowPassword ? <FaEye /> : <FaEyeSlash />}
+          />
+          {invalidFields?.some((el) => el.name === "email") && (
+            <small className="text-red-500 italic">
+              {invalidFields.find((el) => el.name === "email").mes}
+            </small>
+          )}
+        </div>
+        <div>
+          <p className="text-[-18] font-bold">Password</p>
+          <div className="relative">
+            <input
+              type={isShowPassword ? "text" : "password"}
+              placeholder="password"
+              className="w-full px-3 pr-5 leading-10 border border-gray-300 outline-none mt-3 focus:border-black"
+              onChange={(e) =>
+                setPayload((prev) => ({ ...prev, password: e.target.value }))
+              }
+              value={payload.password}
+              onFocus={() => {
+                setInvalidFields([]);
+                setPayload((prev) => ({ ...prev, password: "" }));
+              }}
+            />
+            <div
+              className="absolute top-4 right-0 px-2 py-2"
+              onClick={() => {
+                setIsShowPassword(!isShowPassword);
+              }}
+            >
+              {isShowPassword ? <FaEye /> : <FaEyeSlash />}
+            </div>
+            {invalidFields?.some((el) => el.name === "password") && (
+              <small className="text-red-500 italic">
+                {invalidFields.find((el) => el.name === "password").mes}
+              </small>
+            )}
           </div>
         </div>
         <div className="mt-4 mb-3">
@@ -95,7 +122,7 @@ function SignIn() {
               <Button
                 primary
                 big
-                disabled={!email || !password}
+                // disabled={!payload.email || !payload.password}
                 onClick={handleSignIn}
               >
                 ĐĂNG NHẬP

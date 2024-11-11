@@ -1,4 +1,9 @@
-import { useNavigate, useParams } from "react-router-dom";
+import {
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import Button from "../../component/Button/Button";
 import Image from "../../component/Image/Image";
 import { BsQrCode } from "react-icons/bs";
@@ -7,7 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 import { converTimeShow, convertCalender } from "../../component/utils";
 import { useMutationHooks } from "../../hooks/useMutationHook";
 import * as ShowServices from "../../services/ShowServices";
-
+import * as PaymentServices from "../../services/PaymentServices";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateShow } from "../../redux/slides/showSlide";
@@ -16,6 +21,7 @@ import Cart from "../../component/Cart/Cart";
 import Room from "../../component/Room/Room";
 import { updateOrder } from "../../redux/slides/orderSlide";
 import Bill from "../../component/Bill/Bill";
+import Pay from "../../component/Payment/Pay";
 
 function Booking() {
   const dispatch = useDispatch();
@@ -23,6 +29,13 @@ function Booking() {
   const [state, setState] = useState(0);
   const [check, setCheck] = useState(false);
   const [bill, setBill] = useState(false);
+  const [payMethod, setPayMethod] = useState("VNpay");
+  const [checkBought, setCheckBought] = useState(true);
+  const [amount, setAmount] = useState("");
+  const [urlPayment, setUrlPayment] = useState("");
+  const [statusPay, setStatusPay] = useState(false);
+  // thời gian đem ngược của thanh toán
+  // const [counter, setCounter] = useState(589);
 
   let actions = [
     {
@@ -42,6 +55,20 @@ function Booking() {
       status: bill,
     },
   ];
+
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  useEffect(() => {
+    if (searchParams.get("status")) {
+      setCheck(true);
+      setBill(true);
+      if (searchParams.get("status") === "failed") {
+        setStatusPay(false);
+      } else if (searchParams.get("status") === "success") {
+        setStatusPay(true);
+      }
+    }
+  }, [searchParams]);
 
   const { sid } = useParams();
   const navigate = useNavigate();
@@ -77,10 +104,6 @@ function Booking() {
     }
   }, [sid]);
 
-  // const countinue = () => {
-  //   setCheck(true);
-  // };
-
   useEffect(() => {
     if (dataShowDetail.length !== 0) {
       let day = dataShowDetail.begin_time.slice(0, 10);
@@ -88,17 +111,7 @@ function Booking() {
         movieId: dataShowDetail.movieId._id,
         day: day,
       });
-      // const value = {
-      //   movieId: dataShowDetail.movieId._id,
-      //   total_pay: 0,
-      //   seats: [],
-      //   userId: "66212212a8f0f37c788e917f",
-      //   showId: dataShowDetail._id,
-      //   roomId: dataShowDetail.roomId._id,
-      //   status: "none",
-      //   method_pay: "none",
-      // };
-      // localStorage.setItem("booking", JSON.stringify(value));
+
       dispatch(
         updateOrder({
           movieId: dataShowDetail.movieId._id,
@@ -110,10 +123,40 @@ function Booking() {
     }
   }, [dataShowDetail]);
 
-  console.log("datashow detail", dataShowDetail);
+  // thời gian đem ngược của thanh toán
+  // useEffect(() => {
+  //   counter > 0 && setTimeout(() => setCounter(counter - 1), 1000);
+  // }, [counter]);
+  // console.log("method pay", payMethod);
+
+  const mutationPaymentVnpay = useMutationHooks(async (data) => {
+    const { amount, email, sid } = data;
+    const res = await PaymentServices.getCreateURLPayment({
+      amount: amount,
+      email: email,
+      sid: sid,
+    });
+    setUrlPayment(res?.data?.paymentUrl);
+
+    return res?.data;
+  });
+
+  const handleGetURLPayment = () => {
+    mutationPaymentVnpay.mutate({
+      amount: amount,
+      email: user?.email,
+      sid: sid,
+    });
+  };
+
+  useEffect(() => {
+    if (urlPayment) {
+      window.location.href = urlPayment;
+    }
+  }, [urlPayment]);
 
   return (
-    <div className="bg-slate-100 h-screen">
+    <div className="bg-slate-100 h-screen ">
       <div className="py-4 bg-white border-t-8 border-t-gray-100">
         <div className="flex items-center justify-center">
           {actions.map((item) => {
@@ -130,10 +173,10 @@ function Booking() {
         </div>
       </div>
       {bill === false ? (
-        <div>
+        <div className="">
           {dataShowDetail.length !== 0 && (
-            <div className="mx-80 mt-6 flex">
-              <div className="w-[-860] h-28 ">
+            <div className="w-3/4 mt-6 flex mx-auto gap-6">
+              <div className="w-2/3 h-28 flex-1">
                 {check === false ? (
                   <div>
                     {/* Xuất chiếu */}
@@ -146,7 +189,7 @@ function Booking() {
                           listShow.map((item) => {
                             return (
                               <button
-                                className={`px-4 py-3 border border-gray-400 mr-4 mb-1 rounded-lg hover:bg-blue-900  hover:text-white ${
+                                className={`px-4 py-2 border border-gray-400 mr-4 mb-1 rounded-sm hover:bg-blue-900  hover:text-white ${
                                   item.begin_time ===
                                     dataShowDetail.begin_time &&
                                   "bg-blue-900 text-white"
@@ -180,16 +223,20 @@ function Booking() {
                     <Room show={dataShowDetail} sid={sid} />
                   </div>
                 ) : (
-                  <div className="flex flex-col justify-center items-center bg-white py-10">
-                    <div className="text-4xl mb-7">Quét để thanh toán</div>
-                    <BsQrCode className="w-96 h-96" />
-                  </div>
+                  <Pay methodPay={payMethod} setMeThodPay={setPayMethod} />
                 )}
               </div>
 
               {/* Hóa đơn */}
-              <div className="flex-1">
-                <Cart dataShowDetail={dataShowDetail} />
+              <div className="flex-none w-1/3">
+                {/* <div>  // thời gian đem ngược của thanh toán
+                  Countdown: {Math.floor(counter / 60)} : {counter % 60}
+                </div> */}
+                <Cart
+                  dataShowDetail={dataShowDetail}
+                  setCheckBought={setCheckBought}
+                  setAmount={setAmount}
+                />
                 <div className="flex  justify-end mt-4 ">
                   {bill === false && (
                     <div className="mr-3">
@@ -216,6 +263,7 @@ function Booking() {
                             setCheck(true);
                           }
                         }}
+                        disabled={checkBought}
                       >
                         Tiếp tục
                       </Button>
@@ -223,7 +271,10 @@ function Booking() {
                       <Button
                         primary
                         onClick={() => {
-                          setBill(true);
+                          // setBill(true);
+                          if (payMethod === "VNpay") {
+                            handleGetURLPayment();
+                          }
                         }}
                       >
                         Thanh toán
@@ -237,7 +288,7 @@ function Booking() {
         </div>
       ) : (
         <div className="mx-80 mt-6 flex justify-center">
-          <Bill data1={dataShowDetail} />
+          <Bill data1={dataShowDetail} statusPay={statusPay} />
         </div>
       )}
     </div>

@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export const initialState = {
-  currentUser: null
+  currentUser: null,
 };
 
 export const userSlide = createSlice({
@@ -9,7 +9,7 @@ export const userSlide = createSlice({
   initialState,
   reducers: {
     updateUser: (state, action) => {
-      state.currentUser = action.payload
+      state.currentUser = action.payload;
     },
   },
 });

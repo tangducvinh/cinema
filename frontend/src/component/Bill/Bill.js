@@ -6,15 +6,12 @@ import * as ShowServices from "../../services/ShowServices";
 import Image from "../Image/Image";
 import { converTimeShow, convertCalender, formatCash } from "../utils";
 import Button from "../Button/Button";
-function Bill({ data1 }) {
-  console.log("123123 ", data1);
+import images from "../assest/images";
+function Bill({ data1, statusPay }) {
   const navigate = useNavigate();
-
   const [bill, setBill] = useState(JSON.parse(localStorage.getItem("booking")));
-  const [oid, setOid] = useState("");
-  const [order, setOrder] = useState(null);
-
-  console.log("bill", bill);
+  // const [oid, setOid] = useState("");
+  // const [order, setOrder] = useState(null);
 
   const mutationCreateOrder = useMutationHooks(async (data) => {
     const {
@@ -37,7 +34,7 @@ function Bill({ data1 }) {
       roomId,
       total_pay,
     });
-    setOid(res.data._id);
+    // setOid(res.data._id);
 
     return res;
   });
@@ -50,11 +47,11 @@ function Bill({ data1 }) {
     });
     return res;
   });
-  const mutationDetailOrder = useMutationHooks(async (oid) => {
-    const res = await OrderServices.getDetailOrder(oid);
-    setOrder(res.data);
-    return res;
-  });
+  // const mutationDetailOrder = useMutationHooks(async (oid) => {
+  //   const res = await OrderServices.getDetailOrder(oid);
+  //   setOrder(res.data);
+  //   return res;
+  // });
   const handleBill = async () => {
     await mutationUpdateBlockSeat.mutate({
       sid: bill.showId,
@@ -75,107 +72,83 @@ function Bill({ data1 }) {
     await localStorage.setItem("booking", JSON.stringify(value));
     // await navigate("/");
   };
+
   useEffect(() => {
-    handleBill();
-  }, [bill]);
-  const handleDetail = async () => {
-    await mutationDetailOrder.mutate(oid);
-  };
-  useEffect(() => {
-    if (oid !== "") {
-      handleDetail();
+    if (statusPay) {
+      handleBill();
     }
-  }, [oid]);
+  }, [bill, statusPay]);
+
+  // const handleDetail = async () => {
+  //   await mutationDetailOrder.mutate(oid);
+  // };
+  // useEffect(() => {
+  //   if (statusPay) {
+  //     if (oid !== "") {
+  //       handleDetail();
+  //     }
+  //   }
+  // }, [oid, statusPay]);
 
   return (
     <div>
-      <div className="">
-        {order !== null && (
-          <div className="w-[-500]">
-            <div className="bg-white  ml-3  rounded-lg border-t-8 border-t-yellow-600 px-4 py-4">
-              <p className="flex justify-center text-[-20] text-[text-primary] font-semibold">
-                Sticker Of You
-              </p>
-              <div className="flex mt-2">
-                <Image
-                  alt="poster"
-                  src={
-                    order.movieId.poster_path.slice(0, 4) === "http"
-                      ? order.movieId.poster_path
-                      : `${process.env.REACT_APP_IMAGE_URL}${order.movieId.poster_path}`
-                  }
-                  className="w-32 h-48 object-cover rounded-lg"
-                />
-                <div className="ml-2 flex flex-col">
-                  <span className="text-[-18] font-semibold">
-                    {order.movieId.original_title}
-                  </span>
-                  <span>2D phụ đề </span>
-                </div>
-              </div>
-              <div className="mt-2">
-                <div className="text-[-20] font-semibold text-orange-600">
-                  <span className="">Mã vé: </span>
-                  <span className="">{order.orderNumber}</span>
-                </div>
-                <div className="font-semibold">{order.roomId.name}</div>
-                <div className="mt-1">
-                  <span>Suất: </span>
-                  <span className="font-semibold">
-                    {converTimeShow(order.showId.begin_time) +
-                      " - " +
-                      convertCalender(order.showId.begin_time)}
-                  </span>
-                </div>
-              </div>
-              <div className="border-t border-t-orange-600 border-dashed my-5"></div>
-
+      <div className="w-screen flex justify-center">
+        <div className="w-1/2 ">
+          <div className="bg-white px-7 py-10 flex flex-col items-center justify-center gap-6">
+            <img
+              src={images.logo.default}
+              alt="123"
+              className="w-16 h-16 object-cover"
+            />
+            {statusPay ? (
               <div>
-                <div className="flex justify-between">
-                  <div>
-                    <div className="flex">
-                      <p className="font-semibold">{order.seats.length}</p>{" "}
-                      <span> x Ghế đơn</span>
-                    </div>
-                    <span>
-                      Ghế:{" "}
-                      <span className="font-semibold">
-                        {order.seats.map((item, index) => {
-                          if (index === order.seats.length - 1) {
-                            return item.name;
-                          }
+                <h2 className="text-2xl text-center font-bold">
+                  Giao dịch thanh toán thành công
+                </h2>
 
-                          return item.name + " , ";
-                        })}
-                      </span>
-                    </span>
-                  </div>
-                  <p className="font-semibold">
-                    {formatCash(Number(order.seats.length * data1.price))}
-                  </p>
-                </div>
-                <div className="border-t border-t-orange-600 border-dashed my-5"></div>
-              </div>
-
-              <div className="flex justify-between">
-                <p className="font-semibold">Tổng cộng</p>
-                <p className=" text-[text-primary] font-semibold text-[-18]">
-                  {formatCash(Number(order.seats.length * data1.price))}
+                <p className="text-[-14] mt-4">
+                  Giao dịch thanh toán của bạn đã được xử lý thành công. Vui
+                  lòng chờ nhận thông tin vé qua email mà bạn đã cung cấp!
                 </p>
               </div>
-              <div className="flex justify-end mt-3">
-                <Button
-                  primary
-                  onClick={() => {
-                    navigate("/");
-                  }}
-                >
-                  Home
-                </Button>
+            ) : (
+              <div>
+                <h2 className="text-2xl text-center font-bold">
+                  Xuất vé thất bại
+                </h2>
+
+                <p className="text-[-14] mt-4">
+                  Trường hợp giao dịch chưa thành công, quý khách vui lòng không
+                  thực hiện giao dịch online lần nữa và tới rạp Galaxy Cinema
+                  gần nhất để mua vé.
+                </p>
+
+                <p className="text-[-14] mt-4">
+                  Việc phản hồi tới quý khách có thể bị chậm trễ, mong quý khách
+                  thông cảm và kiên nhẫn cùng nhân viên CSKH của Galaxy Cinema
+                </p>
+
+                <p className="text-[-14]] mt-4">
+                  Chúng tôi cam kết sẽ hoàn lại 100% giá trị giao dịch lỗi đã bị
+                  trừ tiền sau khi đội ngũ CSKH kiểm tra và xác nhận. Vui lòng
+                  gởi thông tin giao dịch lỗi về email supports@galaxystudio.vn
+                  hoặc tin nhắn trang fanpage
+                  https://www.facebook.com/galaxycinevn
+                </p>
               </div>
+            )}
+            <div className="">
+              <Button
+                primary
+                onClick={() => {
+                  navigate("/");
+                }}
+              >
+                Quay về trang chủ
+              </Button>
             </div>
           </div>
-        )}
+        </div>
       </div>
     </div>
   );

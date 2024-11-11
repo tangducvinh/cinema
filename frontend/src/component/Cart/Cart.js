@@ -5,19 +5,22 @@ import Button from "../Button/Button";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 
-function Cart({ dataShowDetail }) {
+function Cart({ dataShowDetail, setCheckBought, setAmount }) {
   const { sid } = useParams();
   const localBooking = JSON.parse(localStorage.getItem("booking"));
   const [buy, setBuy] = useState([]);
   const quantity = Number(buy.length * dataShowDetail.price);
   useEffect(() => {
     setBuy(localBooking.seats);
+    if (localBooking.seats.length !== 0) setCheckBought(false);
+    else setCheckBought(true);
+    setAmount(quantity);
   }, [localBooking]);
 
   return (
     <div>
-      <div className="bg-white ml-3  rounded-lg border-t-8 border-t-yellow-600 px-4 py-5">
-        <div className="flex mt-2">
+      <div className="bg-white ml-3  rounded-lg border-t-8 border-t-yellow-600 px-4 py-5 w-full">
+        <div className="flex mt-2 w-full gap-5">
           <Image
             alt="poster"
             src={
@@ -25,9 +28,9 @@ function Cart({ dataShowDetail }) {
                 ? dataShowDetail.movieId.poster_path
                 : `${process.env.REACT_APP_IMAGE_URL}${dataShowDetail.movieId.poster_path}`
             }
-            className="w-32 h-48 object-cover rounded-lg"
+            className="w-32 h-auto object-contain rounded-lg "
           />
-          <div className="ml-2 flex flex-col">
+          <div className="ml-2 flex flex-col ">
             <span className="text-[-18] font-semibold">
               {dataShowDetail.movieId.original_title}
             </span>

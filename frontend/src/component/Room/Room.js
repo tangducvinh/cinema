@@ -17,7 +17,7 @@ function Room({ show, sid }) {
   }, [data]);
 
   return (
-    <div className="mt-5 px-4 py-4 bg-white">
+    <div className="mt-5 px-4 py-4 bg-white w-full">
       <div>
         <Seat
           row={Number(data.roomId.row)}

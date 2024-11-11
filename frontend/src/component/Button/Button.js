@@ -45,6 +45,11 @@ function Button({
   if (outline) {
     hoverButton = classNames("border-yellow-600 text-yellow-600 mr-0 ");
   }
+  if (disabled && primary) {
+    hoverButton = classNames(
+      "bg-[-button-primary] border-none text-white  bg-gray-400 text-white cursor-not-allowed"
+    );
+  }
 
   if (small && primary) {
     hoverButton = classNames(

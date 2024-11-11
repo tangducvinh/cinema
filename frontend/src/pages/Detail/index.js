@@ -102,13 +102,13 @@ function Detail() {
               </div>
             </div>
 
-            <div className="w-3/5 mx-auto flex justify-between px-4 py-12 gap-3">
+            <div className="w-2/3 mx-auto flex justify-between px-4 py-12 gap-3">
               <div className="flex relative w-3/4 h-auto flex-1">
                 <div className="absolute -top-24 ">
                   <div className="flex w-full">
                     <div className="w-1/3  border-2 border-white mr-6 border-b-0">
                       <Image
-                        className="w-full h-auto object-cover"
+                        className="w-full h-[-435] object-cover"
                         alt="poster"
                         src={
                           detailMovie.poster_path.slice(0, 4) === "http"
@@ -211,7 +211,7 @@ function Detail() {
                         {date.map((item, index) => {
                           return (
                             <button
-                              className={`px-2 py-4  mr-4 rounded-xl ${
+                              className={`px-4 py-2  mr-4 rounded-lg ${
                                 index === activeCalender &&
                                 "bg-blue-900 text-white"
                               }`}
@@ -233,7 +233,7 @@ function Detail() {
                             {listShow.map((item) => {
                               return (
                                 <button
-                                  className="px-4 py-3 border border-gray-400 mr-2 rounded-lg hover:bg-blue-900  hover:text-white"
+                                  className="px-4 py-2 border border-gray-400 mr-2 rounded-sm hover:bg-blue-900  hover:text-white"
                                   onClick={() => {
                                     if (user === null) {
                                       Swal.fire({

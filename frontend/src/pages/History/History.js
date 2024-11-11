@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import * as OrderServices from "../../services/OrderServices";
 import { useMutationHooks } from "../../hooks/useMutationHook";
 import { PiFlagPennantFill } from "react-icons/pi";
+import { IoMail } from "react-icons/io5";
+import { IoCall } from "react-icons/io5";
 import {
   converTimeShow,
   convertCalender,
@@ -19,6 +21,7 @@ function History() {
   let date = new Date();
   const [action, setAction] = useState(last === "history" ? true : false);
   const [listOrder, setListOrder] = useState(null);
+
   useEffect(() => {
     if (last === "history") {
       setAction(true);
@@ -48,7 +51,7 @@ function History() {
       name: "hotro@gmail.com",
     },
   ];
-  const user = useSelector((state) => state.user.currentUser);
+  const user = useSelector((state) => state?.user?.currentUser);
   const [idUser, setIdUser] = useState(user._id);
 
   const mutationOrderOfUser = useMutationHooks(async (uid) => {
@@ -223,26 +226,26 @@ function History() {
                 )}
               </div>
             ) : (
-              <div className="w-full  bg-white mt-3 px-5 pt-3 pb-10 rounded-lg ">
-                <div className="mt-4 ">
+              <div className="w-full  bg-white mt-3 px-5 pt-3 pb-10 rounded-lg flex flex-wrap justify-between">
+                <div className="mt-4  w-5/12">
                   <p>Họ Và Tên</p>
-                  <div className="flex items-center px-3 py-3 bg-slate-200 rounded-lg w-1/2">
+                  <div className="flex items-center px-3 py-3 bg-slate-200 rounded-lg w-full">
                     <FaUser />
-                    <span className="ml-2">Trần Văn Thịnh</span>
+                    <span className="ml-2">{user?.name}</span>
                   </div>
                 </div>
-                <div className="mt-4">
+                <div className="mt-4  w-5/12">
                   <p>Email</p>
-                  <div className="flex items-center px-3 py-3 bg-slate-200 rounded-lg w-1/2">
-                    <FaUser />
-                    <span className="ml-2">Trần Văn Thịnh@gmail.com</span>
+                  <div className="flex items-center px-3 py-3 bg-slate-200 rounded-lg w-full">
+                    <IoMail />
+                    <span className="ml-2">{user?.email}</span>
                   </div>
                 </div>
-                <div className="mt-4 ">
+                <div className="mt-4  w-5/12">
                   <p>Số điện thoại</p>
-                  <div className="flex items-center px-3 py-3 bg-slate-200 rounded-lg w-1/2">
-                    <FaUser />
-                    <span className="ml-2">07777777</span>
+                  <div className="flex items-center px-3 py-3 bg-slate-200 rounded-lg w-full">
+                    <IoCall />
+                    <span className="ml-2">{user?.phone}</span>
                   </div>
                 </div>
               </div>
