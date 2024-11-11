@@ -4,6 +4,7 @@ const seatRouter = require("./seat");
 const showRouter = require("./show");
 const userRouter = require("./user");
 const orderRouter = require("./order");
+const paymentRouter = require("./payment");
 
 const initRoutes = (app) => {
   app.use("/api/movie", movieRouter);
@@ -12,6 +13,7 @@ const initRoutes = (app) => {
   app.use("/api/show", showRouter);
   app.use("/api/user", userRouter);
   app.use("/api/order", orderRouter);
+  app.use("/api/payment", paymentRouter);
 };
 
 module.exports = initRoutes;

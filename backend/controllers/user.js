@@ -83,8 +83,9 @@ const login = async (req, res) => {
       const refreshToken = generateRefreshToken(response._id, response.role);
       // gan refreshToken vao cookie
       res.cookie("refreshToken", refreshToken, { httpOnly: true });
-      const { password, phone, email, ...userData } = response.toObject();
+      const { password, ...userData } = response.toObject();
       userData.accessToken = accessToken;
+
       return res.status(200).json({
         success: true,
         data: response ? userData : "no data",
