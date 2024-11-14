@@ -14,6 +14,7 @@ import {
   formatCash,
 } from "../../component/utils";
 import { FaUser } from "react-icons/fa";
+import Loading from "../../component/common/Loading";
 function History() {
   const oke = window.location.href.split("/");
   const navigate = useNavigate();
@@ -67,11 +68,18 @@ function History() {
     });
   }
 
+  const { isPending } = mutationOrderOfUser;
+
   useEffect(() => {
     mutationOrderOfUser.mutate(user._id);
   }, [idUser]);
+
+  // dung để fix lỗi thongo tin ca nhan nhung duoc roi nen kh can
+  // const test = localStorage.getItem("persist:user");
+  // console.log("123", JSON.parse(JSON.parse(test).currentUser));
   return (
-    <div className="bg-[-white-fake] h-screen">
+    <div className="bg-[-white-fake] h-screen relative">
+      {isPending && <Loading />}
       <div className="w-full h-20 bg-[-white-fake]"></div>
       <div className="">
         <div className="mx-80 flex justify-between ">
