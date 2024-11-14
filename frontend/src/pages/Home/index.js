@@ -5,23 +5,27 @@ import { useQuery } from "@tanstack/react-query";
 import Slider from "../../component/Layout/SliderLayout/Slider/Slider";
 
 import { BoxSearch } from "../../component/search";
+import Loading from "../../component/common/Loading";
 function Home() {
   const [showDangChieu, setShowDangChieu] = useState(true);
+  const [isPending, setIsPending] = useState(true);
 
   const fecthShowing = async () => {
     const res = await axios.get(
       `${process.env.REACT_APP_API_URl}/movie/list/showing`
     );
+    setIsPending(false);
     return res.data;
   };
   const fecthSoon = async () => {
     const res = await axios.get(
       `${process.env.REACT_APP_API_URl}/movie/list/soon`
     );
+    setIsPending(false);
     return res.data;
   };
 
-  const { data: listShowing } = useQuery({
+  const { data: listShowing, isLoading } = useQuery({
     queryKey: ["ListShowingMovies"],
     queryFn: fecthShowing,
   });
@@ -49,7 +53,8 @@ function Home() {
     },
   ];
   return (
-    <div className="w-screen ">
+    <div className="w-screen relative">
+      {isLoading && <Loading />}
       <div className="relative">
         <Slider slider={sliders} />
 

@@ -22,6 +22,7 @@ import Room from "../../component/Room/Room";
 import { updateOrder } from "../../redux/slides/orderSlide";
 import Bill from "../../component/Bill/Bill";
 import Pay from "../../component/Payment/Pay";
+import Loading from "../../component/common/Loading";
 
 function Booking() {
   const dispatch = useDispatch();
@@ -128,6 +129,7 @@ function Booking() {
   //   counter > 0 && setTimeout(() => setCounter(counter - 1), 1000);
   // }, [counter]);
   // console.log("method pay", payMethod);
+  const { isPending } = mutationDetailShow;
 
   const mutationPaymentVnpay = useMutationHooks(async (data) => {
     const { amount, email, sid } = data;
@@ -157,6 +159,7 @@ function Booking() {
 
   return (
     <div className="bg-slate-100 h-screen ">
+      {isPending && <Loading />}
       <div className="py-4 bg-white border-t-8 border-t-gray-100">
         <div className="flex items-center justify-center">
           {actions.map((item) => {

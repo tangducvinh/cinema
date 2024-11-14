@@ -21,12 +21,14 @@ import ItemMovie from "../../component/Content/ItemMovie/ItemMovie";
 import { useDispatch, useSelector } from "react-redux";
 import { updateShow } from "../../redux/slides/showSlide";
 import Swal from "sweetalert2";
+import Loading from "../../component/common/Loading";
 
 function Detail() {
   const user = useSelector((state) => state.user.currentUser);
   console.log("user ", user);
   const [activeCalender, setActiveCalender] = useState(0);
   const [trailer, setTrailer] = useState(false);
+  const [loading, setLoading] = useState(true);
   const date = calender(Date());
   const handleActiveCalender = (index) => {
     setActiveCalender(index);
@@ -40,6 +42,7 @@ function Detail() {
   const fetchDetailMovie = async (mid) => {
     const res = await MovieServices.getDetailMovie(mid);
     setDetailMovie(res.data);
+    setLoading(false);
   };
   const fetchListShow = async (movieId, day) => {
     const res = await ShowServices.getListShow(movieId, day);
@@ -71,7 +74,8 @@ function Detail() {
   const navigate = useNavigate();
 
   return (
-    <div className="w-screen">
+    <div className="w-screen relative">
+      {loading && <Loading />}
       {detailMovie !== null && (
         <div className="w-full">
           {trailer && (
