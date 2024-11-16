@@ -8,6 +8,7 @@ import { converTimeShow, convertCalender, formatCash } from "../utils";
 import Button from "../Button/Button";
 import images from "../assest/images";
 function Bill({ data1, statusPay }) {
+  console.log("data1", data1);
   const navigate = useNavigate();
   const [bill, setBill] = useState(JSON.parse(localStorage.getItem("booking")));
   // const [oid, setOid] = useState("");
@@ -77,7 +78,7 @@ function Bill({ data1, statusPay }) {
     if (statusPay) {
       handleBill();
     }
-  }, [bill, statusPay]);
+  }, [bill, statusPay, data1]);
 
   // const handleDetail = async () => {
   //   await mutationDetailOrder.mutate(oid);
@@ -108,7 +109,7 @@ function Bill({ data1, statusPay }) {
 
                 <p className="text-[-14] mt-4">
                   Giao dịch thanh toán của bạn đã được xử lý thành công. Vui
-                  lòng chờ nhận thông tin vé qua email mà bạn đã cung cấp!
+                  lòng vào lịch sử hoá đơn để lấy thông tin vé!
                 </p>
               </div>
             ) : (

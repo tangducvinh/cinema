@@ -88,6 +88,7 @@ function Booking() {
     setListShow(res.data);
   });
 
+  console.log("123123 ", dataShowDetail);
   useEffect(() => {
     mutationDetailShow.mutate(sid);
     if (dataShowDetail.length !== 0) {
