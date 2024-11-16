@@ -246,7 +246,9 @@ function Detail() {
                                         icon: "error",
                                       });
                                     } else {
+                                      window.scrollTo(0, 0);
                                       navigate(`/booking/${item._id}`);
+
                                       console.log("itemmm", item);
                                       dispatch(
                                         updateShow({

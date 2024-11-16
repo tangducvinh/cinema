@@ -55,7 +55,7 @@ function Home() {
   return (
     <div className="w-screen relative">
       {isLoading && <Loading />}
-      <div className="relative">
+      <div className="relative h-[-500]">
         <Slider slider={sliders} />
 
         <div className="absolute bottom-[-40px] rounded-sm overflow-hidden shadow-lg left-[50%] translate-x-[-50%] bg-white flex justify-center">

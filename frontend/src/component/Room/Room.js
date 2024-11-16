@@ -10,12 +10,13 @@ function Room({ show, sid }) {
 
   const mutationListSeat = useMutationHooks(async (idRoom) => {
     const res = await SeatServices.getListSeat(idRoom);
+
     setListSeat(res.data);
   });
   useEffect(() => {
     mutationListSeat.mutate(data.roomId._id);
-  }, [data]);
-
+  }, [show]);
+  console.log("123 ghe", show);
   return (
     <div className="mt-5 px-4 py-4 bg-white w-full">
       <div>

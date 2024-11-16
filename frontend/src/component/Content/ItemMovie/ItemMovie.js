@@ -12,6 +12,7 @@ function ItemMovie({ data }) {
   const [trailer, setTrailer] = useState(false);
   const navigate = useNavigate();
   const handleDetailMovie = () => {
+    window.scrollTo(0, 0);
     navigate(`/detail/${data.id}`);
   };
   const handleTrailer = () => {

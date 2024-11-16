@@ -16,6 +16,7 @@ function Seat({ row = 10, col = 10, listSeat, blockSeat, sid }) {
     // Lặp theo cột, số cộ từ 0 -> số lượng phần tử của hàng i
     for (var j = 0; j < col; j++) {
       numbers[i][j] = oke[t];
+      console.log(i, j, oke[t]);
       t++;
     }
   }
@@ -53,7 +54,6 @@ function Seat({ row = 10, col = 10, listSeat, blockSeat, sid }) {
     );
   };
 
-  console.log("seatChoose ", seatChoose);
   // console.log("localBooking ", localBooking.showId);
   // useEffect(() => {
   //   let localBooking1 = JSON.parse(localStorage.getItem("booking"));
@@ -85,8 +85,13 @@ function Seat({ row = 10, col = 10, listSeat, blockSeat, sid }) {
                         <Chair
                           col={coll}
                           sold={sold1}
-                          click={() => handleChoose(coll)}
-                          cancelClick={() => handleCancelChoose(coll)}
+                          click={() => {
+                            if (coll?.status !== "fix") handleChoose(coll);
+                          }}
+                          cancelClick={() => {
+                            if (coll?.status !== "fix")
+                              handleCancelChoose(coll);
+                          }}
                         />
                       </td>
                     );

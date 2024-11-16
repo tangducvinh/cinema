@@ -49,7 +49,10 @@ function Chair({ col, sold, click, cancelClick }) {
               ) : (
                 <p
                   className={`mx-1 my-2 min-w-7 py-1 border border-gray-300 text-center text-[-12] rounded-md leading-none cursor-pointer hover:bg-yellow-700 hover:text-white hover:border-yellow-700 ${
-                    book && "bg-orange-600 text-white"
+                    book && "bg-orange-600 text-white $"
+                  } ${
+                    col.status === "fix" &&
+                    "bg-gray-400 hover:bg-gray-400 hover:text-black hover:border-gray-300"
                   }`}
                   onClick={handleClick}
                 >

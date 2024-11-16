@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Image from "../Image/Image";
+import images from "../assest/images";
 
 function Pay({ methodPay, setMeThodPay }) {
   const [selected, setSelected] = useState(methodPay);
@@ -26,10 +27,7 @@ function Pay({ methodPay, setMeThodPay }) {
             checked={selected === "VNpay"}
           ></input>
           <div className="flex items-center gap-2">
-            <Image
-              src="https://cdn.brandfetch.io/idV02t6WJs/w/820/h/249/theme/dark/logo.png?c=1id64Mup7ac03k1S4NH&k=bfHSJFAPEG"
-              className="w-20 object-cover"
-            />
+            <Image src={images.logoVnpay} className="w-20 object-cover" />
             <span>VNpay</span>
           </div>
         </div>
@@ -47,7 +45,7 @@ function Pay({ methodPay, setMeThodPay }) {
           ></input>
           <div className="flex items-center gap-2">
             <Image
-              src="https://cdn.brandfetch.io/idedVswljQ/w/820/h/234/theme/dark/logo.png?c=1id64Mup7ac03k1S4NH&k=bfHSJFAPEG"
+              src={images.logoZalopay.default}
               className="w-20 object-cover"
             />
             <span className="">Zalopay</span>
