@@ -3,6 +3,8 @@ const sendMail = require("../config/sendMail");
 
 const urlClient = "https://ciiinema.vercel.app";
 const urlServer = "https://ciinema.vercel.app";
+// const urlClient = "http://localhost:3000";
+// const urlServer = "http://localhost:5000";
 const paymentVPN = async (req, res) => {
   const { amount, email, sid } = req.body;
 
