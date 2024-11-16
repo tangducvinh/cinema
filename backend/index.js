@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser");
 
 const { dbConnect } = require("./config/dbconnect");
 const initRoutes = require("./routers");
+const sendMail = require("./config/sendMail");
 
 const app = express();
 
@@ -24,6 +25,10 @@ app.use(express.urlencoded({ extended: true }));
 
 dbConnect();
 initRoutes(app);
+// const oke = async () => {
+//   await sendMail("badagor999@gmail.com", `<h1>oke123</h1>`, "oke123");
+// };
+// oke();
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
