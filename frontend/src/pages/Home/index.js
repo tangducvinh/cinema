@@ -6,6 +6,7 @@ import Slider from "../../component/Layout/SliderLayout/Slider/Slider";
 
 import { BoxSearch } from "../../component/search";
 import Loading from "../../component/common/Loading";
+import { useDispatch, useSelector } from "react-redux";
 function Home() {
   const [showDangChieu, setShowDangChieu] = useState(true);
   const [isPending, setIsPending] = useState(true);
@@ -52,6 +53,7 @@ function Home() {
       url: "https://cdn.galaxycine.vn/media/2024/4/10/cai-gia-cua-hanh-phuc-2_1712733220607.jpg",
     },
   ];
+
   return (
     <div className="w-screen relative">
       {isLoading && <Loading />}
