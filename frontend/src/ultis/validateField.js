@@ -39,11 +39,11 @@ const validate = (payload, setInvalidFields) => {
         }
         break;
       case "password":
-        if (arr[1].length < 1) {
+        if (arr[1].length < 6) {
           invalids++;
           setInvalidFields((prev) => [
             ...prev,
-            { name: arr[0], mes: "Mật khẩu ít nhất 1 kí tự" },
+            { name: arr[0], mes: "Mật khẩu ít nhất 6 kí tự" },
           ]);
         } else {
           pass = arr[1];
